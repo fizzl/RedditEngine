@@ -1,4 +1,4 @@
-package net.fizzl.redditengine;
+package net.fizzl.redditengine.impl;
 
 public class UrlUtils {
 	public static final String BASE_URL = "http://www.reddit.com";

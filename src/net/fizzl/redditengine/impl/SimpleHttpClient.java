@@ -1,4 +1,4 @@
-package net.fizzl.redditengine.engine;
+package net.fizzl.redditengine.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,7 +23,7 @@ import android.net.http.AndroidHttpClient;
 
 public class SimpleHttpClient {
 	// API
-	public InputStream get(String url, List<NameValuePair> params) throws ClientProtocolException, IOException {
+	public InputStream get(String url, List<NameValuePair> params) throws ClientProtocolException, IOException, UnexpectedHttpResponseException {
 		if(params != null) {
 			String strp = URLEncodedUtils.format(params, "UTF-8");
 			url += "?" + strp;
@@ -39,7 +39,7 @@ public class SimpleHttpClient {
 		return response.getEntity().getContent();
 	}
 	
-	public InputStream post(String url, List<NameValuePair> params) throws ClientProtocolException, IOException {
+	public InputStream post(String url, List<NameValuePair> params) throws ClientProtocolException, IOException, UnexpectedHttpResponseException {
 		HttpPost post = new HttpPost(url);
 		post.setEntity(new UrlEncodedFormEntity(params));
 		HttpResponse response = mClient.execute(post, mHttpContext);

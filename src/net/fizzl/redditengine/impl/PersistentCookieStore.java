@@ -1,4 +1,4 @@
-package net.fizzl.redditengine.engine;
+package net.fizzl.redditengine.impl;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
