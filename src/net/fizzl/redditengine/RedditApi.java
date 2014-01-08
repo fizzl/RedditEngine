@@ -126,7 +126,7 @@ public interface RedditApi {
 	public SubredditSettings getSubredditSettings(String subreddit) throws RedditEngineException;
 	public SubredditListing getMySubreddits(String where, String before, String after, int count, int limit, String show) throws RedditEngineException;
 	public SubredditListing searchSubreddits(String query, String before, String after, int count, int limit, String show) throws RedditEngineException;
-	public SubredditListing listSubreddits(String which, String before, String after, int count, int limit, String show) throws RedditEngineException;
+	public SubredditListing getSubreddits(String which, String before, String after, int count, int limit, String show) throws RedditEngineException;
 
 	// Users
 	public void friend(String user, String container, String type, String permissions, String note) throws RedditEngineException;

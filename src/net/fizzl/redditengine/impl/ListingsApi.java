@@ -28,7 +28,7 @@ public class ListingsApi extends BaseApi {
 			path.append(order);
 		}
 
-		String url = UrlUtils.getUrl(path.toString());
+		String url = UrlUtils.getGetUrl(path.toString());
 
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		if (after != null) {
@@ -62,7 +62,7 @@ public class ListingsApi extends BaseApi {
 		path.append(subreddit);
 		path.append("/comments/");
 		path.append(article);
-		String url = UrlUtils.getUrl(path.toString());
+		String url = UrlUtils.getGetUrl(path.toString());
 
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		if (comment != null) {

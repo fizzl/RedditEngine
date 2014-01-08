@@ -14,8 +14,10 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 
@@ -56,6 +58,8 @@ public class SimpleHttpClient {
 	// Singleton
 	private SimpleHttpClient() {
 		mClient = AndroidHttpClient.newInstance(USER_AGENT);
+		HttpParams params = mClient.getParams();
+		HttpClientParams.setRedirecting(params, true);
 		mCookieStore = new PersistentCookieStore();
 		mHttpContext = new BasicHttpContext();
 		mHttpContext.setAttribute(ClientContext.COOKIE_STORE, mCookieStore);
@@ -75,5 +79,5 @@ public class SimpleHttpClient {
 	private CookieStore mCookieStore;
 	
 	// Constants
-	private static final String USER_AGENT = "fizzl.net/RedditEngine/SimpleHttpClient 1.0/by fizzl";
+	private static final String USER_AGENT = "fizzl.net/RedditEngine 1.0/SimpleHttpClient 1.1/by fizzl";
 }

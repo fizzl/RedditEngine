@@ -497,7 +497,7 @@ public class DefaultRedditApi implements RedditApi {
 
 	@Override
 	public SubredditListing getMySubreddits(String where, String before,
-			String after, int count, int limit, String show) {
+			String after, int count, int limit, String show) throws RedditEngineException {
 		return mSubredditsApi.getMySubreddits(where, before, after, count,
 				limit, show);
 	}
@@ -510,9 +510,9 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public SubredditListing listSubreddits(String which, String before,
-			String after, int count, int limit, String show) {
-		return mSubredditsApi.listSubreddits(which, before, after, count,
+	public SubredditListing getSubreddits(String which, String before,
+			String after, int count, int limit, String show) throws RedditEngineException {
+		return mSubredditsApi.getSubreddits(which, before, after, count,
 				limit, show);
 	}
 
