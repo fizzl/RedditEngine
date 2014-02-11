@@ -19,8 +19,10 @@ public class ListingsApi extends BaseApi {
 			String topScope, String before, String after, int limit)
 			throws RedditEngineException {
 		StringBuilder path = new StringBuilder();
-		path.append("/r/");
-		path.append(subreddit);
+		if(subreddit != null) {
+			path.append("/r/");
+			path.append(subreddit);
+		}
 
 		// hot/new/etc...
 		if (order != null) {
