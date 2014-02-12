@@ -20,7 +20,7 @@ public class ModlogListing extends Listing<ModlogListingData> {
 	
 	public static ModlogListing fromString(String str) {
 		GsonBuilder builder = new GsonBuilder();
-		builder.registerTypeAdapter(EditedType.class, new EditedType.EditedTypeAdapter());
+		builder.registerTypeAdapter(EditedType.class, new EditedType.TypeAdapter());
 		Gson gson = builder.create();
 		ModlogListing ret = gson.fromJson(str, ModlogListing.class);
 		return ret;

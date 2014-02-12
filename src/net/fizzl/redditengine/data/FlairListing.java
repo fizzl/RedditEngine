@@ -20,7 +20,7 @@ public class FlairListing extends Listing<FlairListingData> {
 	
 	public static FlairListing fromString(String str) {
 		GsonBuilder builder = new GsonBuilder();
-		builder.registerTypeAdapter(EditedType.class, new EditedType.EditedTypeAdapter());
+		builder.registerTypeAdapter(EditedType.class, new EditedType.TypeAdapter());
 		Gson gson = builder.create();
 		FlairListing ret = gson.fromJson(str, FlairListing.class);
 		return ret;

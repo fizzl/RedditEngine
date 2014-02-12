@@ -20,7 +20,7 @@ public class MessageListing extends Listing<MessageListingData> {
 	
 	public static MessageListing fromString(String str) {
 		GsonBuilder builder = new GsonBuilder();
-		builder.registerTypeAdapter(EditedType.class, new EditedType.EditedTypeAdapter());
+		builder.registerTypeAdapter(EditedType.class, new EditedType.TypeAdapter());
 		Gson gson = builder.create();
 		MessageListing ret = gson.fromJson(str, MessageListing.class);
 		return ret;

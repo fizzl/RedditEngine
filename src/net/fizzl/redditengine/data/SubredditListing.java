@@ -20,7 +20,7 @@ public class SubredditListing extends Listing<SubredditListingData> {
 	
 	public static SubredditListing fromString(String str) {
 		GsonBuilder builder = new GsonBuilder();
-		builder.registerTypeAdapter(EditedType.class, new EditedType.EditedTypeAdapter());
+		builder.registerTypeAdapter(EditedType.class, new EditedType.TypeAdapter());
 		Gson gson = builder.create();
 		SubredditListing ret = gson.fromJson(str, SubredditListing.class);
 		return ret;

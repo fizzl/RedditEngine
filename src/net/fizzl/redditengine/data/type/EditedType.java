@@ -14,7 +14,7 @@ public class EditedType {
 	boolean edited = false;
 	double editTime = 0;
 	
-	public static class EditedTypeAdapter implements JsonSerializer<EditedType>,
+	public static class TypeAdapter implements JsonSerializer<EditedType>,
 			JsonDeserializer<EditedType> {
 		@Override
 		public JsonElement serialize(EditedType src, Type typeOfSrc,

@@ -20,7 +20,7 @@ public class LinkListing extends Listing<LinkListingData> {
 	
 	public static LinkListing fromString(String str) {
 		GsonBuilder builder = new GsonBuilder();
-		builder.registerTypeAdapter(EditedType.class, new EditedType.EditedTypeAdapter());
+		builder.registerTypeAdapter(EditedType.class, new EditedType.TypeAdapter());
 		Gson gson = builder.create();
 		LinkListing ret = gson.fromJson(str, LinkListing.class);
 		return ret;

@@ -17,16 +17,21 @@ public class CommentListing extends Listing<CommentListingData> {
 
 	public static CommentListing fromInputStream(InputStream is) throws IOException, JSONException {
 		StringWriter writer = new StringWriter();
-		IOUtils.copy(is,  writer, "UTF-8");
+		IOUtils.copy(is, writer, "UTF-8");
 		return fromString(writer.toString());
 	}
+
 	public static CommentListing fromString(String str) throws JSONException {
 		GsonBuilder builder = new GsonBuilder();
-		builder.registerTypeAdapter(EditedType.class, new EditedType.EditedTypeAdapter());
+		builder.registerTypeAdapter(EditedType.class, new EditedType.TypeAdapter());
 		Gson gson = builder.create();
 		JSONArray arr = new JSONArray(str);
-		
-		CommentListing ret = gson.fromJson(arr.getJSONObject(1).toString(), CommentListing.class);
+		String justcomments = removeEmptyReplies(arr.getJSONObject(1).toString());
+		CommentListing ret = gson.fromJson(justcomments, CommentListing.class);
 		return ret;
+	}
+
+	private static String removeEmptyReplies(String str) {
+		return str.replace("\"replies\":\"\",", "");
 	}
 }
