@@ -25,6 +25,7 @@ import android.net.http.AndroidHttpClient;
 
 /**
 * This class provides simple HTTP GET and POST operations using Apache HttpComponents.
+* @see AndroidHttpClient
 */
 public class SimpleHttpClient {
 	// API

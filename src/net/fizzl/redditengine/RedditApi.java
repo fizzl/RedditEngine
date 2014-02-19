@@ -16,6 +16,8 @@ import android.content.Context;
 
 /**
  * The interface of RedditEngine. Contains the reddit API.
+ * 
+ * @see <a href="http://www.reddit.com/dev/api">http://www.reddit.com/dev/api</a>
  */
 public interface RedditApi {
 	// Account
