@@ -11,6 +11,9 @@ import net.fizzl.redditengine.data.SubredditSettings;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+/**
+ * This class implements subreddits portion of the RedditApi
+ */
 public class SubredditsApi extends BaseApi {
 	public void deleteSubredditHeader(String subreddit){
 		throw new UnimplementedException();
@@ -60,6 +63,18 @@ public class SubredditsApi extends BaseApi {
 		throw new UnimplementedException();
 	}
 
+	/**
+	 * Get subreddits the user has a relationship with.
+	 * 
+	 * @param where		The where parameter chooses which subreddits are returned as follows: <tt>subscriber</tt> - subreddits the user is subscribed to <tt>contributor</tt> - subreddits the user is an approved submitter in <tt>moderator</tt> - subreddits the user is a moderator of
+	 * @param before	fullname of a thing
+	 * @param after		fullname of a thing
+	 * @param count		a positive integer (default: 0)
+	 * @param limit		the maximum number of items desired (default: 25, maximum: 100)
+	 * @param show		(optional) the string all
+	 * @return			{@link SubredditListing}
+	 * @throws 			RedditEngineException
+	 */
 	public SubredditListing getMySubreddits(String where, String before, String after, int count, int limit, String show) throws RedditEngineException {
 		StringBuilder path = new StringBuilder();
 		path.append("/subreddits/mine/");
@@ -102,13 +117,14 @@ public class SubredditsApi extends BaseApi {
 	/**
 	 * Get all subreddits.
 	 *
-	 * @param which		This parameter chooses the order in which the subreddits are displayed. "popular" sorts on the activity of the subreddit and the position of the subreddits can shift around. "new" sorts the subreddits based on their creation date, newest first.
+	 * @param which		This parameter chooses the order in which the subreddits are displayed. <tt>popular</tt> sorts on the activity of the subreddit and the position of the subreddits can shift around. <tt>new</tt> sorts the subreddits based on their creation date, newest first.
 	 * @param before	fullname of a thing
 	 * @param after		fullname of a thing
 	 * @param count		a positive integer (default: 0)
 	 * @param limit		the maximum number of items desired (default: 25, maximum: 100)
 	 * @param show		(optional) the string all
 	 * @return			{@link SubredditListing}
+	 * @throws 			RedditEngineException
 	 */
 	public SubredditListing getSubreddits(String which, String before, String after, int count, int limit, String show) throws RedditEngineException{
 		StringBuilder path = new StringBuilder();

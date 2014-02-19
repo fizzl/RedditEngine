@@ -1,5 +1,10 @@
 package net.fizzl.redditengine.data;
 
+/**
+ * reddit base class
+ * 
+ * @param <T>	type of data contained in Thing
+ */
 public class Thing<T> {
 	String id;
 	String name;

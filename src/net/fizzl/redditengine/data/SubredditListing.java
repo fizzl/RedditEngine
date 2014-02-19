@@ -11,6 +11,9 @@ import org.apache.commons.io.IOUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+/**
+ * This class converts an InputStream to a subreddit listing
+ */
 public class SubredditListing extends Listing<SubredditListingData> {
 	public static SubredditListing fromInputStream(InputStream is) throws IOException {
 		StringWriter writer = new StringWriter();

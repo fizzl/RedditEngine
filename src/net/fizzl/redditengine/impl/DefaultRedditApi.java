@@ -14,6 +14,9 @@ import net.fizzl.redditengine.data.SubredditSettings;
 import net.fizzl.redditengine.data.User;
 import android.content.Context;
 
+/**
+ * This class implements the whole RedditApi interface
+ */
 public class DefaultRedditApi implements RedditApi {
 	public DefaultRedditApi() {
 		mAccountApi = new AccountApi();

@@ -1,5 +1,11 @@
 package net.fizzl.redditengine.data;
 
+/**
+ * Indefinite object for controlling pagination and filtering.
+ * 
+ * <tt>after</tt> / <tt>before</tt> - only one should be specified. these indicate the fullname of an item in the listing to use as the anchor point of the slice.
+ * <tt>modhash</tt> - a token identifying a user.
+ */
 public class ListingData {
 	String after;
 	String before;

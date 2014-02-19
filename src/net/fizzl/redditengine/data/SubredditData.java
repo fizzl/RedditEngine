@@ -1,5 +1,8 @@
 package net.fizzl.redditengine.data;
 
+/**
+ * Holds all data in a Subreddit
+ */
 public class SubredditData {
 	String submit_text_html;
 	boolean user_is_banned;

@@ -14,6 +14,9 @@ import net.fizzl.redditengine.data.User;
 import net.fizzl.redditengine.impl.RedditEngineException;
 import android.content.Context;
 
+/**
+ * The interface of RedditEngine. Contains the reddit API.
+ */
 public interface RedditApi {
 	// Account
 	public void clearSessions(String passwd) throws RedditEngineException;

@@ -23,8 +23,21 @@ import org.apache.http.protocol.HttpContext;
 
 import android.net.http.AndroidHttpClient;
 
+/**
+* This class provides simple HTTP GET and POST operations using Apache HttpComponents.
+*/
 public class SimpleHttpClient {
 	// API
+	/**
+	 * Calls HTTP GET with the Request-URI. Returns an InputStream of the response entity.
+	 * 
+	 * @param url		HTTP GET URL
+	 * @param params	GET parameters
+	 * @return			InputStream
+	 * @throws 			ClientProtocolException
+	 * @throws 			IOException
+	 * @throws 			UnexpectedHttpResponseException
+	 */
 	public InputStream get(String url, List<NameValuePair> params) throws ClientProtocolException, IOException, UnexpectedHttpResponseException {
 		if(params != null) {
 			String strp = URLEncodedUtils.format(params, "UTF-8");
@@ -41,6 +54,16 @@ public class SimpleHttpClient {
 		return response.getEntity().getContent();
 	}
 	
+	/**
+	 * Calls HTTP POST with the Request-URI. Returns an InputStream of the response entity.
+	 * 
+	 * @param url		HTTP POST URL
+	 * @param params	POST parameters
+	 * @return			InputStream
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 * @throws UnexpectedHttpResponseException
+	 */
 	public InputStream post(String url, List<NameValuePair> params) throws ClientProtocolException, IOException, UnexpectedHttpResponseException {
 		HttpPost post = new HttpPost(url);
 		post.setEntity(new UrlEncodedFormEntity(params));
@@ -56,6 +79,9 @@ public class SimpleHttpClient {
 	}
 	
 	// Singleton
+	/**
+	 * Private constructor. To get an instance use {@link #getInstance()}
+	 */
 	private SimpleHttpClient() {
 		mClient = AndroidHttpClient.newInstance(USER_AGENT);
 		HttpParams params = mClient.getParams();
@@ -65,6 +91,11 @@ public class SimpleHttpClient {
 		mHttpContext.setAttribute(ClientContext.COOKIE_STORE, mCookieStore);
 	}
 
+	/**
+	 * Returns a (singleton) instance of this class
+	 * 
+	 * @return	SimpleHttpClient
+	 */
 	public static SimpleHttpClient getInstance() {
 		if(me == null) {
 			me = new SimpleHttpClient();

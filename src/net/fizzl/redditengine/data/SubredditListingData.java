@@ -1,5 +1,8 @@
 package net.fizzl.redditengine.data;
 
+/**
+ * A listing that contains subreddits
+ */
 public class SubredditListingData extends ListingData {
 	Subreddit[] children;
 
