@@ -13,6 +13,9 @@ import org.apache.http.message.BasicNameValuePair;
 
 /**
  * This class implements subreddits portion of the RedditApi
+ * 
+ * @see net.fizzl.redditengine.RedditApi
+ * @see net.fizzl.redditengine.data.SubredditListing
  */
 public class SubredditsApi extends BaseApi {
 	public void deleteSubredditHeader(String subreddit){
@@ -66,12 +69,14 @@ public class SubredditsApi extends BaseApi {
 	/**
 	 * Get subreddits the user has a relationship with.
 	 * 
+	 * <p/><tt>before</tt> and <tt>after</tt> are mutually exclusive.
+	 * 
 	 * @param where		The where parameter chooses which subreddits are returned as follows: <tt>subscriber</tt> - subreddits the user is subscribed to <tt>contributor</tt> - subreddits the user is an approved submitter in <tt>moderator</tt> - subreddits the user is a moderator of
-	 * @param before	fullname of a thing
-	 * @param after		fullname of a thing
-	 * @param count		a positive integer (default: 0)
+	 * @param before	fullname of a thing in the listing to use as the anchor point of the slice
+	 * @param after		fullname of a thing in the listing to use as the anchor point of the slice
+	 * @param count		the number of items already seen in this listing. a positive integer (default: 0)
 	 * @param limit		the maximum number of items desired (default: 25, maximum: 100)
-	 * @param show		(optional) the string all
+	 * @param show		(optional) the string <tt>all</tt>
 	 * @return			{@link SubredditListing}
 	 * @throws 			RedditEngineException
 	 */
@@ -116,13 +121,15 @@ public class SubredditsApi extends BaseApi {
 
 	/**
 	 * Get all subreddits.
-	 *
+	 * 
+	 * <p/><tt>before</tt> and <tt>after</tt> are mutually exclusive.
+	 *  
 	 * @param which		This parameter chooses the order in which the subreddits are displayed. <tt>popular</tt> sorts on the activity of the subreddit and the position of the subreddits can shift around. <tt>new</tt> sorts the subreddits based on their creation date, newest first.
-	 * @param before	fullname of a thing
-	 * @param after		fullname of a thing
-	 * @param count		a positive integer (default: 0)
+	 * @param before	fullname of a thing in the listing to use as the anchor point of the slice
+	 * @param after		fullname of a thing in the listing to use as the anchor point of the slice
+	 * @param count		the number of items already seen in this listing. a positive integer (default: 0)
 	 * @param limit		the maximum number of items desired (default: 25, maximum: 100)
-	 * @param show		(optional) the string all
+	 * @param show		(optional) the string <tt>all</tt>
 	 * @return			{@link SubredditListing}
 	 * @throws 			RedditEngineException
 	 */

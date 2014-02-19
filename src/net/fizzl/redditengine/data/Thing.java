@@ -1,7 +1,7 @@
 package net.fizzl.redditengine.data;
 
 /**
- * reddit base class
+ * Reddit base class
  * 
  * @param <T>	type of data contained in Thing
  */
