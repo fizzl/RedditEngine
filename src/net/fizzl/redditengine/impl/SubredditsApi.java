@@ -99,6 +99,17 @@ public class SubredditsApi extends BaseApi {
 		throw new UnimplementedException();
 	}
 
+	/**
+	 * Get all subreddits.
+	 *
+	 * @param which		This parameter chooses the order in which the subreddits are displayed. "popular" sorts on the activity of the subreddit and the position of the subreddits can shift around. "new" sorts the subreddits based on their creation date, newest first.
+	 * @param before	fullname of a thing
+	 * @param after		fullname of a thing
+	 * @param count		a positive integer (default: 0)
+	 * @param limit		the maximum number of items desired (default: 25, maximum: 100)
+	 * @param show		(optional) the string all
+	 * @return			{@link SubredditListing}
+	 */
 	public SubredditListing getSubreddits(String which, String before, String after, int count, int limit, String show) throws RedditEngineException{
 		StringBuilder path = new StringBuilder();
 		path.append("/subreddits/");
