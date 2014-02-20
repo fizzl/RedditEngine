@@ -40,3 +40,7 @@ Thumbs.db
 ####################
 /bin
 /gen
+
+# Temporary files #
+###################
+.~lock.*
