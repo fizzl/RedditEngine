@@ -18,7 +18,11 @@ import android.content.Context;
  * This class implements the whole RedditApi interface
  */
 public class DefaultRedditApi implements RedditApi {
-	public DefaultRedditApi() {
+	public static RedditApi newInstance() {
+		return new DefaultRedditApi();
+	}
+	
+	private DefaultRedditApi() {
 		mAccountApi = new AccountApi();
 		mAppsApi = new AppsApi();
 		mCaptchaApi = new CaptchaApi();

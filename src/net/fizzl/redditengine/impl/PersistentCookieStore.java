@@ -14,6 +14,8 @@ import org.apache.http.impl.client.BasicCookieStore;
 import android.content.Context;
 
 public class PersistentCookieStore extends BasicCookieStore {
+	private static final String cookiestore = "cookiestore.bin";
+	
 	public PersistentCookieStore() {
 		super();
 		load();
@@ -39,10 +41,10 @@ public class PersistentCookieStore extends BasicCookieStore {
 	}
 
 	private void load() {
-		RedditApi api = new DefaultRedditApi();
+		RedditApi api = DefaultRedditApi.newInstance();
 		Context ctx = api.getContext();
 		try {
-			FileInputStream fis = ctx.openFileInput("cookiestore.bin");
+			FileInputStream fis = ctx.openFileInput(cookiestore);
 			ObjectInputStream ois = new ObjectInputStream(fis);
 			BasicCookieStore tempStore = (BasicCookieStore) ois.readObject();
 			
@@ -57,10 +59,10 @@ public class PersistentCookieStore extends BasicCookieStore {
 	}
 	
 	private void save() {
-		RedditApi api = new DefaultRedditApi();
+		RedditApi api = DefaultRedditApi.newInstance();
 		Context ctx = api.getContext();
 		try {
-			FileOutputStream fos = ctx.openFileOutput("cookiestore.bin", Context.MODE_PRIVATE);
+			FileOutputStream fos = ctx.openFileOutput(cookiestore, Context.MODE_PRIVATE);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			BasicCookieStore tempStore = new BasicCookieStore();
 			for(Cookie c : getCookies()) {
