@@ -19,7 +19,7 @@ import android.content.Context;
  */
 public class DefaultRedditApi implements RedditApi {
 	public static RedditApi newInstance() {
-		return new DefaultRedditApi();
+		return new DefaultRedditApi();  // TODO should be a singleton?
 	}
 	
 	private DefaultRedditApi() {
