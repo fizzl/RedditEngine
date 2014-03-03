@@ -82,6 +82,7 @@ public class SimpleHttpClient {
 	// Singleton
 	/**
 	 * Private constructor. To get an instance use {@link #getInstance()}
+	 * @see AndroidHttpClient
 	 */
 	private SimpleHttpClient() {
 		mClient = AndroidHttpClient.newInstance(USER_AGENT);

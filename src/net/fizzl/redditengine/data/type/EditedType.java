@@ -10,10 +10,17 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
+/**
+ * A class for representing the <tt>edited</tt> field in the JSON representation
+ * @see TypeAdapter
+ */
 public class EditedType {
 	boolean edited = false;
 	double editTime = 0;
 	
+	/**
+	 * A class for serializing and deserializing to and from the <tt>edited</tt> field in JSON
+	 */
 	public static class TypeAdapter implements JsonSerializer<EditedType>,
 			JsonDeserializer<EditedType> {
 		@Override

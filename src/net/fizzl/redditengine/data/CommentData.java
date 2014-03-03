@@ -2,7 +2,9 @@ package net.fizzl.redditengine.data;
 
 import net.fizzl.redditengine.data.type.EditedType;
 
-
+/**
+ * Holds all data in a Comment
+ */
 public class CommentData {
 	String subreddit_id;
 	String banned_by;

@@ -13,14 +13,33 @@ import org.json.JSONException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+/**
+ * This class is a Listing wrapper that contains comments. An instance of this class can be created from an InputStream.
+ * @see CommentListingData
+ * @see java.io.InputStream
+ */
 public class CommentListing extends Listing<CommentListingData> {
 
+	/**
+	 * Returns a {@link #CommentListing} from an InputStream
+	 * 
+	 * @param is	InputStream containing a comment listing as JSON
+	 * @return		CommentListing
+	 * @throws 		IOException
+	 * @throws		JSONException
+	 */
 	public static CommentListing fromInputStream(InputStream is) throws IOException, JSONException {
 		StringWriter writer = new StringWriter();
 		IOUtils.copy(is, writer, "UTF-8");
 		return fromString(writer.toString());
 	}
 
+	/**
+	 * Returns a {@link #CommentListing} from a JSON string
+	 * 
+	 * @param str	a comment listing as JSON
+	 * @return		CommentListing
+	 */
 	public static CommentListing fromString(String str) throws JSONException {
 		GsonBuilder builder = new GsonBuilder();
 		builder.registerTypeAdapter(EditedType.class, new EditedType.TypeAdapter());

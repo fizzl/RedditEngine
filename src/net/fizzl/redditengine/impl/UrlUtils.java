@@ -7,6 +7,12 @@ public class UrlUtils {
 	public static final String BASE_URL = "http://www.reddit.com";
 	public static final String MODE_URL = ".json";
 
+	/**
+	 * Returns a reddit API URL
+	 * 
+	 * @param place path for the URL
+	 * @return URL as String
+	 */
 	public static String getGetUrl(String place) {
 		StringBuilder sb = new StringBuilder(BASE_URL);
 		sb.append(place);

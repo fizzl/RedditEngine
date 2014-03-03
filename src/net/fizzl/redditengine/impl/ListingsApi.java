@@ -21,6 +21,20 @@ public class ListingsApi extends BaseApi {
 		throw new UnimplementedException();
 	}
 
+	/**
+	 * Get a Link Listing
+	 * 
+	 * <p/><tt>before</tt> and <tt>after</tt> are mutually exclusive.
+	 * 
+	 * @param subreddit		(optional) Get link listing from this subreddit.
+	 * @param order			one of (<tt>hot</tt>, <tt>new</tt>, <tt>random</tt>, <tt>top</tt>, <tt>controversial</tt>)
+	 * @param topScope
+	 * @param before		fullname of a thing in the listing to use as the anchor point of the slice
+	 * @param after			fullname of a thing in the listing to use as the anchor point of the slice
+	 * @param limit			the maximum number of items desired (default: 25, maximum: 100)
+	 * @return {@link LinkListing}
+	 * @throws RedditEngineException
+	 */
 	public LinkListing getLinkListing(String subreddit, String order,
 			String topScope, String before, String after, int limit)
 			throws RedditEngineException {
@@ -62,6 +76,19 @@ public class ListingsApi extends BaseApi {
 		return ret;
 	}
 
+	/**
+	 * Get a Comment Listing
+	 * 
+	 * @param subreddit
+	 * @param article		ID36 of a link
+	 * @param comment		(optional) ID36 of a comment
+	 * @param context		an integer between 0 and 8
+	 * @param depth			(optional) an integer
+	 * @param limit			(optional) an integer
+	 * @param sort			one of (<tt>confidence, top, new, hot, controversial, old, random</tt>)
+	 * @return	{@link CommentListing}
+	 * @throws RedditEngineException
+	 */
 	public CommentListing getCommentListing(String subreddit, String article,
 			String comment, int context, int depth, int limit, String sort)
 			throws RedditEngineException {
