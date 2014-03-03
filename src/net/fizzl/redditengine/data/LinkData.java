@@ -2,6 +2,9 @@ package net.fizzl.redditengine.data;
 
 import net.fizzl.redditengine.data.type.EditedType;
 
+/**
+ * Holds all data in a Link
+ */
 public class LinkData {
 	String domain;
 	String banned_by;

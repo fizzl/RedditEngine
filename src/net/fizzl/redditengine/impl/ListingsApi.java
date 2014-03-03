@@ -10,6 +10,12 @@ import net.fizzl.redditengine.data.LinkListing;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+/**
+ * This class implements listings portion of the RedditApi
+ * 
+ * @see net.fizzl.redditengine.RedditApi
+ * @see LinkListing
+ */
 public class ListingsApi extends BaseApi {
 	public LinkListing getLinkListingByName(String name) {
 		throw new UnimplementedException();

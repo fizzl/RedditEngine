@@ -11,6 +11,11 @@ import org.apache.commons.io.IOUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+/**
+ * This class is a Listing wrapper that contains links. An instance of this class can be created from an InputStream.
+ * @see LinkListingData
+ * @see java.io.InputStream
+ */
 public class LinkListing extends Listing<LinkListingData> {
 	public static LinkListing fromInputStream(InputStream is) throws IOException {
 		StringWriter writer = new StringWriter();

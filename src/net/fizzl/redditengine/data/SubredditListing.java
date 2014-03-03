@@ -12,7 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 /**
- * This class is a Listing that contains subreddits and methods to create them from an InputStream
+ * This class is a Listing wrapper that contains subreddits. An instance of this class can be created from an InputStream.
  * @see SubredditData
  * @see java.io.InputStream
  */

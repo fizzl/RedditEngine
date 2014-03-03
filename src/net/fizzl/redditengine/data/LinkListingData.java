@@ -1,5 +1,9 @@
 package net.fizzl.redditengine.data;
 
+/**
+ * A Listing that contains Links as Listing Things
+ * @see Link
+ */
 public class LinkListingData extends ListingData {
 	Link[] children;
 
