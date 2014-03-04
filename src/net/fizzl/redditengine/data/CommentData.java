@@ -3,7 +3,9 @@ package net.fizzl.redditengine.data;
 import net.fizzl.redditengine.data.type.EditedType;
 
 /**
- * Holds all data in a Comment
+ * Holds all data in a reddit Comment.
+ * May include other Comments.
+ * @see CommentListing
  */
 public class CommentData {
 	String subreddit_id;
