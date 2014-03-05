@@ -55,6 +55,12 @@ public class SimpleHttpClient {
 		return response.getEntity().getContent();
 	}
 	
+	/* Response headers to monitor for:
+	 * X-Ratelimit-Used: Approximate number of requests used in this period
+	 * X-Ratelimit-Remaining: Approximate number of requests left to use
+	 * X-Ratelimit-Reset: Approximate number of seconds to end of period
+	 */
+	
 	/**
 	 * Calls HTTP POST with the Request-URI. Returns an InputStream of the response entity.
 	 * 
