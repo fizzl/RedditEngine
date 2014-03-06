@@ -3,6 +3,8 @@ package net.fizzl.redditengine.impl;
 import net.fizzl.redditengine.data.User;
 
 public class AccountApi extends BaseApi {
+	public static final String LOGIN_URL = "https://ssl.reddit.com/api/login/";
+	
 	public void clearSessions(String passwd) {
 		throw new UnimplementedException();
 	}
@@ -11,6 +13,7 @@ public class AccountApi extends BaseApi {
 	}
 
 	public void login(String user, String passwd, boolean remember)  {
+		// TODO use HTTPS/SSL instead of HTTP
 		throw new UnimplementedException();
 	}
 
