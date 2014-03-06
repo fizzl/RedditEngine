@@ -61,7 +61,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public void login(String user, String passwd, boolean remember) {
+	public void login(String user, String passwd, boolean remember) throws RedditEngineException {
 		mAccountApi.login(user, passwd, remember);
 	}
 
