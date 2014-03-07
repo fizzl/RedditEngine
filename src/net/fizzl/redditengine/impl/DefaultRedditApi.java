@@ -1,6 +1,7 @@
 package net.fizzl.redditengine.impl;
 
 import net.fizzl.redditengine.RedditApi;
+import net.fizzl.redditengine.data.AuthResponse;
 import net.fizzl.redditengine.data.CommentListing;
 import net.fizzl.redditengine.data.FlairListing;
 import net.fizzl.redditengine.data.LinkListing;
@@ -61,8 +62,8 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public void login(String user, String passwd, boolean remember) throws RedditEngineException {
-		mAccountApi.login(user, passwd, remember);
+	public AuthResponse login(String user, String passwd, boolean remember) throws RedditEngineException {
+		return mAccountApi.login(user, passwd, remember);
 	}
 
 	@Override

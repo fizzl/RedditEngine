@@ -1,5 +1,6 @@
 package net.fizzl.redditengine;
 
+import net.fizzl.redditengine.data.AuthResponse;
 import net.fizzl.redditengine.data.CommentListing;
 import net.fizzl.redditengine.data.FlairListing;
 import net.fizzl.redditengine.data.LinkListing;
@@ -23,7 +24,7 @@ public interface RedditApi {
 	// Account
 	public void clearSessions(String passwd) throws RedditEngineException;
 	public void deleteUser(String user, String passwd, String message) throws RedditEngineException;
-	public void login(String user, String passwd, boolean remember) throws RedditEngineException;
+	public AuthResponse login(String user, String passwd, boolean remember) throws RedditEngineException;
 	public User me() throws RedditEngineException;
 	public void register(String user, String passwd1, String passwd2, boolean remember, String email, String captcha, String captcha_iden) throws RedditEngineException;
 	public void updateUser(String passwd, String email, String newpass1, String newpass2, boolean verify) throws RedditEngineException;

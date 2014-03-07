@@ -1,5 +1,6 @@
 package net.fizzl.redditengine.impl;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import android.util.Log;
 
+import net.fizzl.redditengine.data.AuthResponse;
 import net.fizzl.redditengine.data.User;
 
 public class AccountApi extends BaseApi {
@@ -20,7 +22,7 @@ public class AccountApi extends BaseApi {
 	public void deleteUser(String user, String passwd, String message)  {
 		throw new UnimplementedException();
 	}
-
+	
 	/**
 	 * Log into a reddit account using SSL
 	 * 
@@ -29,11 +31,11 @@ public class AccountApi extends BaseApi {
 	 * @param remember	specifies whether or not the session cookie returned should last beyond the current browser session 
 	 * @throws RedditEngineException
 	 */
-	public void login(String user, String passwd, boolean remember) throws RedditEngineException  {
+	public AuthResponse login(String user, String passwd, boolean remember) throws RedditEngineException  {
 		StringBuilder sb = new StringBuilder();
 		sb.append(LOGIN_URL);
-		sb.append("/");
-		sb.append(user);  // redundant?
+		//sb.append("/");
+		//sb.append(user);
 		String url = sb.toString();
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -45,22 +47,32 @@ public class AccountApi extends BaseApi {
 		// The HTTP status code of the response will always be a 200 (OK) regardless of authentication success.
 		// To see if login was successful, check the JSON response.
 		
-		SimpleHttpClient client = SimpleHttpClient.getInstance();
+		//SimpleHttpClient client = SimpleHttpClient.getInstance();
+		AuthResponse ret = null;
 		try {
-			InputStream is = client.get(url, params);
-			// TODO suitable POJO for conversion from JSON
+			//InputStream is = client.get(url, params);
+			InputStream is = MockAuthReponse();
 			Log.i(AccountApi.class.getCanonicalName(), is.toString());
+			ret = AuthResponse.fromInputStream(is);
 			is.close();
 		} catch (Exception e) {
 			RedditEngineException re = new RedditEngineException(e);
 			throw re;
 		}
-		
+		return ret;
+	}
+	
+	// todo delete
+	private static InputStream MockAuthReponse () {
 		// error response:		{"json": {"errors": [["WRONG_PASSWORD", "invalid password", "passwd"]]}}
 		// success response:	{"json": {"errors": [], "data": {"modhash": "<MODHASH>","cookie": "<COOKIE>"}}}
-		
-		return;
+		String error = "{\"json\": {\"errors\": [[\"WRONG_PASSWORD\", \"invalid password\", \"passwd\"]]}}";
+		String success = "{\"json\": {\"errors\": [], \"data\": {\"modhash\": \"<MODHASH>\",\"cookie\": \"<COOKIE>\"}}}";
+		String response = Math.random()<0.5 ? error : success;		
+		InputStream is = new ByteArrayInputStream( response.getBytes() );
+		return is;
 	}
+	// end todo
 
 	public User me()  {
 		throw new UnimplementedException();
