@@ -59,9 +59,6 @@ public class SimpleHttpClient {
 	 * X-Ratelimit-Used: Approximate number of requests used in this period
 	 * X-Ratelimit-Remaining: Approximate number of requests left to use
 	 * X-Ratelimit-Reset: Approximate number of seconds to end of period
-	 * 
-	 * TODO: include an X-Modhash custom HTTP header
-	 * HttpGet.addHeader(new BasicHeader(X_MODHASH, modhash));
 	 */
 	
 	/**
@@ -122,5 +119,4 @@ public class SimpleHttpClient {
 	
 	// Constants
 	private static final String USER_AGENT = "fizzl.net/RedditEngine 1.0/SimpleHttpClient 1.1/by fizzl";
-	private static final String X_MODHASH = "X-Modhash";
 }
