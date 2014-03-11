@@ -67,7 +67,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public User me() {
+	public User me() throws RedditEngineException {
 		return mAccountApi.me();
 	}
 

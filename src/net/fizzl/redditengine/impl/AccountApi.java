@@ -60,8 +60,28 @@ public class AccountApi extends BaseApi {
 		return ret;
 	}
 
-	public User me()  {
-		throw new UnimplementedException();
+	/**
+	 * Get info about the currently authenticated user
+	 * 
+	 * @return {@link User}
+	 * @throws RedditEngineException
+	 */
+	public User me() throws RedditEngineException  {
+		StringBuilder path = new StringBuilder();
+		path.append(UrlUtils.BASE_URL);
+		path.append("/api/me.json");
+		String url = path.toString();
+		User response = new User();
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream is = client.get(url, new ArrayList<NameValuePair>());
+			response = User.fromInputStream(is);
+			is.close();
+		} catch (Exception e) {
+			RedditEngineException re = new RedditEngineException(e);
+			throw re;
+		}
+		return response;
 	}
 
 	public void register(String user, String passwd1, String passwd2, boolean remember, String email, String captcha, String captcha_iden)  {
