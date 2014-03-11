@@ -1,6 +1,5 @@
 package net.fizzl.redditengine.impl;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,11 +46,10 @@ public class AccountApi extends BaseApi {
 		// The HTTP status code of the response will always be a 200 (OK) regardless of authentication success.
 		// To see if login was successful, check the JSON response.
 		
-		//SimpleHttpClient client = SimpleHttpClient.getInstance();
+		SimpleHttpClient client = SimpleHttpClient.getInstance();
 		AuthResponse ret = null;
 		try {
-			//InputStream is = client.get(url, params);
-			InputStream is = MockAuthReponse();
+			InputStream is = client.post(url, params);
 			Log.i(AccountApi.class.getCanonicalName(), is.toString());
 			ret = AuthResponse.fromInputStream(is);
 			is.close();
@@ -61,18 +59,6 @@ public class AccountApi extends BaseApi {
 		}
 		return ret;
 	}
-	
-	// todo delete
-	private static InputStream MockAuthReponse () {
-		// error response:		{"json": {"errors": [["WRONG_PASSWORD", "invalid password", "passwd"]]}}
-		// success response:	{"json": {"errors": [], "data": {"modhash": "<MODHASH>","cookie": "<COOKIE>"}}}
-		String error = "{\"json\": {\"errors\": [[\"WRONG_PASSWORD\", \"invalid password\", \"passwd\"]]}}";
-		String success = "{\"json\": {\"errors\": [], \"data\": {\"modhash\": \"<MODHASH>\",\"cookie\": \"<COOKIE>\"}}}";
-		String response = Math.random()<0.5 ? error : success;		
-		InputStream is = new ByteArrayInputStream( response.getBytes() );
-		return is;
-	}
-	// end todo
 
 	public User me()  {
 		throw new UnimplementedException();
