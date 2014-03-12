@@ -542,7 +542,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public boolean isUsernameAvailable(String user) {
+	public boolean isUsernameAvailable(String user) throws RedditEngineException {
 		return mUserApi.isUsernameAvailable(user);
 	}
 

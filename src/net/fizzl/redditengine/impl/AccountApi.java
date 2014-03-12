@@ -14,6 +14,7 @@ import net.fizzl.redditengine.data.User;
 
 public class AccountApi extends BaseApi {
 	private static final String LOGIN_URL = "https://ssl.reddit.com/api/login";  // use HTTPS/SSL instead of HTTP
+	private static final String API_TYPE_JSON = "json";
 	
 	public void clearSessions(String passwd) {
 		throw new UnimplementedException();
@@ -40,7 +41,7 @@ public class AccountApi extends BaseApi {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("user", user));
 		params.add(new BasicNameValuePair("passwd", passwd));
-		params.add(new BasicNameValuePair("api_type", "json"));
+		params.add(new BasicNameValuePair("api_type", API_TYPE_JSON));
 		params.add(new BasicNameValuePair("rem", Boolean.toString(remember)));
 		
 		// The HTTP status code of the response will always be a 200 (OK) regardless of authentication success.
