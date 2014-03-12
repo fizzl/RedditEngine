@@ -17,9 +17,28 @@ public class AccountApi extends BaseApi {
 	private static final String LOGIN_PATH = "/api/login";
 	private static final String API_TYPE_JSON = "json";
 	
-	public void clearSessions(String passwd) {
-		throw new UnimplementedException();
+	public void clearSessions(String passwd) throws RedditEngineException {
+		StringBuilder path = new StringBuilder();
+		path.append(REDDIT_SSL);
+		path.append("/api/clear_sessions");
+		String url = path.toString();		
+		
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("api_type", API_TYPE_JSON));
+		params.add(new BasicNameValuePair("curpass", passwd));
+		
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream is = client.get(url, null);
+			// TODO suitable response class
+			is.close();
+		} catch (Exception e) {
+			RedditEngineException re = new RedditEngineException(e);
+			throw re;
+		}
+		return;
 	}
+	
 	public void deleteUser(String user, String passwd, String message)  {
 		throw new UnimplementedException();
 	}
@@ -47,9 +66,9 @@ public class AccountApi extends BaseApi {
 		// The HTTP status code of the response will always be a 200 (OK) regardless of authentication success.
 		// To see if login was successful, check the JSON response.
 		
-		SimpleHttpClient client = SimpleHttpClient.getInstance();
 		AuthResponse ret = null;
 		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
 			InputStream is = client.post(url, params);
 			Log.i(AccountApi.class.getCanonicalName(), is.toString());
 			ret = AuthResponse.fromInputStream(is);

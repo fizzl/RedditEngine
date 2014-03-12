@@ -52,7 +52,7 @@ public class DefaultRedditApi implements RedditApi {
 	private static Context mContext;
 
 	@Override
-	public void clearSessions(String passwd) {
+	public void clearSessions(String passwd) throws RedditEngineException {
 		mAccountApi.clearSessions(passwd);
 	}
 
