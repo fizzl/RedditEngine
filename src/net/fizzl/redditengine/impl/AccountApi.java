@@ -75,7 +75,7 @@ public class AccountApi extends BaseApi {
 		User response = new User();
 		try {
 			SimpleHttpClient client = SimpleHttpClient.getInstance();
-			InputStream is = client.get(url, new ArrayList<NameValuePair>());
+			InputStream is = client.get(url, null);
 			response = User.fromInputStream(is);
 			is.close();
 		} catch (Exception e) {

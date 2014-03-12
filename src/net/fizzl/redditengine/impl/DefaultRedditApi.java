@@ -547,7 +547,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public User aboutUser(String user) {
+	public User aboutUser(String user) throws RedditEngineException {
 		return mUserApi.aboutUser(user);
 	}
 

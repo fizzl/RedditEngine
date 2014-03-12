@@ -52,8 +52,31 @@ public class UserApi extends BaseApi {
 		return isAvailable;
 	}
 
-	public User aboutUser(String user){
-		throw new UnimplementedException();
+	/**
+	 * Returns information about a user
+	 * 
+	 * @param user	name of an existing user
+	 * @return {@link User}
+	 * @throws RedditEngineException
+	 */
+	public User aboutUser(String user) throws RedditEngineException{
+		StringBuilder path = new StringBuilder();
+		path.append(UrlUtils.BASE_URL);
+		path.append("/user/");
+		path.append(user);
+		path.append("/about.json");
+		String url = path.toString();
+		User response = new User();
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream is = client.get(url, null);
+			response = User.fromInputStream(is);
+			is.close();
+		} catch (Exception e) {
+			RedditEngineException re = new RedditEngineException(e);
+			throw re;
+		}
+		return response;
 	}
 
 	public Listing<?> getUserListing(String user, String what){
