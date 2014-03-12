@@ -58,8 +58,31 @@ public class SubredditsApi extends BaseApi {
 		throw new UnimplementedException();
 	}
 
-	public Subreddit aboutSubreddit(String subreddit){
-		throw new UnimplementedException();
+	/**
+	 * Return information about a subreddit
+	 * 
+	 * @param subreddit	Subreddit string
+	 * @return	Subreddit
+	 * @throws RedditEngineException
+	 */
+	public Subreddit aboutSubreddit(String subreddit) throws RedditEngineException {
+		StringBuilder path = new StringBuilder();
+		path.append(UrlUtils.BASE_URL);
+		path.append("/r/");
+		path.append(subreddit);
+		path.append("/about.json");
+		String url = path.toString();
+		Subreddit response = null;
+		SimpleHttpClient client = SimpleHttpClient.getInstance();
+		try {
+			InputStream is = client.get(url, null);
+			response = Subreddit.fromInputStream(is);
+			is.close();
+		} catch (Exception e) {
+			RedditEngineException re = new RedditEngineException(e);
+			throw re;
+		}
+		return response;
 	}
 
 	public SubredditSettings getSubredditSettings(String subreddit){

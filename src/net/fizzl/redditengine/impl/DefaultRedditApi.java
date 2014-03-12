@@ -494,7 +494,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public Subreddit aboutSubreddit(String subreddit) {
+	public Subreddit aboutSubreddit(String subreddit) throws RedditEngineException {
 		return mSubredditsApi.aboutSubreddit(subreddit);
 	}
 
