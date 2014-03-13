@@ -11,6 +11,10 @@ import net.fizzl.redditengine.data.SubredditSettings;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import com.google.gson.JsonSyntaxException;
+
+import android.util.Log;
+
 /**
  * This class implements subreddits portion of the RedditApi
  * 
@@ -131,6 +135,11 @@ public class SubredditsApi extends BaseApi {
 			InputStream is = client.get(url, params);
 			ret = SubredditListing.fromInputStream(is);
 			is.close();
+		} catch (JsonSyntaxException e) {
+			// TODO SubredditListing should handle empty response {}
+			// server returned nothing
+			Log.e(getClass().getName(), e.getMessage());
+			ret = new SubredditListing();
 		} catch (Exception e) {
 			RedditEngineException re = new RedditEngineException(e);
 			throw re;
