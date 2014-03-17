@@ -11,10 +11,11 @@ import net.fizzl.redditengine.RedditApi;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.BasicCookieStore;
 
-import com.google.gson.Gson;
-
 import android.content.Context;
 
+/**
+ * This class persists in-memory cookies
+ */
 public class PersistentCookieStore extends BasicCookieStore {
 	private static final String cookiestore = "cookiestore.bin";
 	
@@ -41,16 +42,14 @@ public class PersistentCookieStore extends BasicCookieStore {
 		save();
 		return ret;
 	}
-
+	
 	private void load() {
 		RedditApi api = DefaultRedditApi.newInstance();
 		Context ctx = api.getContext();
 		try {
 			FileInputStream fis = ctx.openFileInput(cookiestore);
 			ObjectInputStream ois = new ObjectInputStream(fis);
-			String jsonBasicCookieStore = (String) ois.readObject();
-			Gson gson = new Gson();
-			BasicCookieStore tempStore = gson.fromJson(jsonBasicCookieStore, BasicCookieStore.class);
+			SerializableCookieContainer tempStore = (SerializableCookieContainer) ois.readObject();
 			
 			super.clear();
 			for(Cookie c : tempStore.getCookies()) {
@@ -70,13 +69,11 @@ public class PersistentCookieStore extends BasicCookieStore {
 		try {
 			FileOutputStream fos = ctx.openFileOutput(cookiestore, Context.MODE_PRIVATE);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			BasicCookieStore tempStore = new BasicCookieStore();
+			SerializableCookieContainer tempStore = new SerializableCookieContainer();
 			for(Cookie c : getCookies()) {
 				tempStore.addCookie(c);
 			}
-			Gson gson = new Gson();
-			String jsonBasicCookieStore = gson.toJson(tempStore);
-			oos.writeObject(jsonBasicCookieStore);
+			oos.writeObject(tempStore);
 			oos.close();
 			fos.close();
 		} catch (Exception e) {
