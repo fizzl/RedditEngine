@@ -11,6 +11,8 @@ import net.fizzl.redditengine.RedditApi;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.BasicCookieStore;
 
+import com.google.gson.Gson;
+
 import android.content.Context;
 
 public class PersistentCookieStore extends BasicCookieStore {
@@ -46,7 +48,9 @@ public class PersistentCookieStore extends BasicCookieStore {
 		try {
 			FileInputStream fis = ctx.openFileInput(cookiestore);
 			ObjectInputStream ois = new ObjectInputStream(fis);
-			BasicCookieStore tempStore = (BasicCookieStore) ois.readObject();
+			String jsonBasicCookieStore = (String) ois.readObject();
+			Gson gson = new Gson();
+			BasicCookieStore tempStore = gson.fromJson(jsonBasicCookieStore, BasicCookieStore.class);
 			
 			super.clear();
 			for(Cookie c : tempStore.getCookies()) {
@@ -55,7 +59,9 @@ public class PersistentCookieStore extends BasicCookieStore {
 			
 			ois.close();
 			fis.close();
-		} catch(Exception e) {}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void save() {
@@ -68,9 +74,13 @@ public class PersistentCookieStore extends BasicCookieStore {
 			for(Cookie c : getCookies()) {
 				tempStore.addCookie(c);
 			}
-			oos.writeObject(tempStore);
+			Gson gson = new Gson();
+			String jsonBasicCookieStore = gson.toJson(tempStore);
+			oos.writeObject(jsonBasicCookieStore);
 			oos.close();
 			fos.close();
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			e.printStackTrace();			
+		}
 	}
 }
