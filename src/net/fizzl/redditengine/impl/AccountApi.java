@@ -1,9 +1,11 @@
 package net.fizzl.redditengine.impl;
 
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -31,6 +33,10 @@ public class AccountApi extends BaseApi {
 			SimpleHttpClient client = SimpleHttpClient.getInstance();
 			InputStream is = client.get(url, null);
 			// TODO suitable response class
+			StringWriter writer = new StringWriter();
+			IOUtils.copy(is, writer, "UTF-8");
+			String string = writer.toString();
+			Log.d(getClass().getName(), string);
 			is.close();
 		} catch (Exception e) {
 			RedditEngineException re = new RedditEngineException(e);

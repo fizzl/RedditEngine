@@ -6,6 +6,7 @@ package net.fizzl.redditengine.impl;
 public class UrlUtils {
 	public static final String BASE_URL = "http://www.reddit.com";
 	public static final String MODE_URL = ".json";
+	public static final String X_MODHASH = "X-Modhash";
 
 	/**
 	 * Returns a reddit API URL

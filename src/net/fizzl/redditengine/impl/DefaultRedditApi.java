@@ -484,12 +484,12 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public void subscribeSubreddit(String subreddit) {
+	public void subscribeSubreddit(String subreddit) throws RedditEngineException {
 		mSubredditsApi.subscribeSubreddit(subreddit);
 	}
 
 	@Override
-	public void unsubscribeSubreddit(String subreddit) {
+	public void unsubscribeSubreddit(String subreddit) throws RedditEngineException {
 		mSubredditsApi.unsubscribeSubreddit(subreddit);
 	}
 

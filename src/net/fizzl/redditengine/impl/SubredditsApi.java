@@ -1,6 +1,7 @@
 package net.fizzl.redditengine.impl;
 
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import net.fizzl.redditengine.data.Subreddit;
 import net.fizzl.redditengine.data.SubredditListing;
 import net.fizzl.redditengine.data.SubredditSettings;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -53,13 +55,49 @@ public class SubredditsApi extends BaseApi {
 	public String[] getSubredditsByTopic(String query){
 		throw new UnimplementedException();
 	}
-
-	public void subscribeSubreddit(String subreddit){
-		throw new UnimplementedException();
+	
+	/**
+	 * Handles subscribe and unsubscribe
+	 * 
+	 * TODO subreddit must be a fullname!
+	 * 
+	 * @param subreddit		fullname of a subreddit
+	 * @param sub			<tt>true</tt> for subscribe, <tt>false</tt> for unsubscribe
+	 * @throws RedditEngineException
+	 */
+	private void subscribeSubreddit(final String subreddit, final boolean sub) throws RedditEngineException {
+		StringBuilder path = new StringBuilder();
+		path.append(UrlUtils.BASE_URL);
+		path.append("/api/subscribe");
+		String url = path.toString();
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		String action = (sub == true) ? "sub" : "unsub";
+		params.add(new BasicNameValuePair("action", action));
+		params.add(new BasicNameValuePair("sr", subreddit));
+		params.add(new BasicNameValuePair("api_type", "json"));
+		//params.add(new BasicNameValuePair("uh", modhash));
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream is = client.post(url, params);
+			//
+			StringWriter writer = new StringWriter();
+			IOUtils.copy(is, writer, "UTF-8");
+			String string = writer.toString();
+			Log.d(getClass().getName(), string);
+			//response = Subreddit.fromInputStream(is);
+			is.close();
+		} catch (Exception e) {
+			RedditEngineException re = new RedditEngineException(e);
+			throw re;
+		}		
 	}
 
-	public void unsubscribeSubreddit(String subreddit){
-		throw new UnimplementedException();
+	public void subscribeSubreddit(String subreddit) throws RedditEngineException{
+		this.subscribeSubreddit(subreddit, true);
+	}
+
+	public void unsubscribeSubreddit(String subreddit) throws RedditEngineException{
+		this.subscribeSubreddit(subreddit, false);
 	}
 
 	/**

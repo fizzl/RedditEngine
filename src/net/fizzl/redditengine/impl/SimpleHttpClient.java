@@ -45,6 +45,7 @@ public class SimpleHttpClient {
 			url += "?" + strp;
 		}
 		HttpGet get = new HttpGet(url);
+		//get.addHeader(new BasicHeader(UrlUtils.X_MODHASH, modhash));
 		HttpResponse response = mClient.execute(get, mHttpContext);
 		StatusLine line = response.getStatusLine();
 		if(line.getStatusCode() != HttpStatus.SC_OK) {
