@@ -79,7 +79,6 @@ public class SubredditsApi extends BaseApi {
 		try {
 			SimpleHttpClient client = SimpleHttpClient.getInstance();
 			InputStream is = client.post(url, params);
-			//
 			StringWriter writer = new StringWriter();
 			IOUtils.copy(is, writer, "UTF-8");
 			String string = writer.toString();
@@ -176,7 +175,7 @@ public class SubredditsApi extends BaseApi {
 		} catch (JsonSyntaxException e) {
 			// TODO SubredditListing should handle empty response {}
 			// server returned nothing
-			Log.e(getClass().getName(), e.getMessage());
+			e.printStackTrace();
 			ret = new SubredditListing();
 		} catch (Exception e) {
 			RedditEngineException re = new RedditEngineException(e);

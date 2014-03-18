@@ -1,9 +1,16 @@
 package net.fizzl.redditengine.impl;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
@@ -21,7 +28,10 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 
+import com.google.gson.Gson;
+
 import android.net.http.AndroidHttpClient;
+import android.util.Log;
 
 /**
 * This class provides simple HTTP GET and POST operations using Apache HttpComponents.
@@ -45,7 +55,7 @@ public class SimpleHttpClient {
 			url += "?" + strp;
 		}
 		HttpGet get = new HttpGet(url);
-		//get.addHeader(new BasicHeader(UrlUtils.X_MODHASH, modhash));
+		//get.addHeader(new BasicHeader(UrlUtils.X_MODHASH, ???));
 		HttpResponse response = mClient.execute(get, mHttpContext);
 		StatusLine line = response.getStatusLine();
 		if(line.getStatusCode() != HttpStatus.SC_OK) {
@@ -74,6 +84,7 @@ public class SimpleHttpClient {
 	 */
 	public InputStream post(String url, List<NameValuePair> params) throws ClientProtocolException, IOException, UnexpectedHttpResponseException {
 		HttpPost post = new HttpPost(url);
+		//post.addHeader(new BasicHeader(UrlUtils.X_MODHASH, ???));
 		post.setEntity(new UrlEncodedFormEntity(params));
 		HttpResponse response = mClient.execute(post, mHttpContext);
 		StatusLine line = response.getStatusLine();
@@ -82,8 +93,53 @@ public class SimpleHttpClient {
 			UnexpectedHttpResponseException ex = new UnexpectedHttpResponseException(msg);
 			throw ex;
 		}
+		InputStream in = response.getEntity().getContent();
+		InputStream is = clone(in);
+		return is;
+	}
+	
+	private InputStream clone(InputStream in) {
+		InputStream retval = in;
+		// TODO use tee and pipes and not a byte array
+		try {
+			byte[] bytes = IOUtils.toByteArray(in);
+			retval = new ByteArrayInputStream(bytes);
+			in.close();
+			InputStream is = new ByteArrayInputStream(bytes);
+			StringWriter writer = new StringWriter();
+			IOUtils.copy(is, writer, "UTF-8");
+			String json = writer.toString();
+			is.close();
+			Log.d("clone IS:", json);
+			HashMap data = new Gson().fromJson(json, HashMap.class);
+			String modhash = (String) findKeyRecursion(data, "modhash");
+			if (modhash != null) {
+				Log.d("clone IS:", "modhash = " + modhash);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		return retval;
+	}
+	
+	private Object findKeyRecursion (Map map, Object find) {
+		Set entry = map.entrySet();
+		Set keys = map.keySet();
+		Collection values = map.values();
+		boolean found = map.containsKey(find);
 		
-		return response.getEntity().getContent();
+		if (found) {
+			Object get = map.get(find);
+			return get;
+		}
+		
+		for (Object value : values) {
+			// TODO what about Lists?
+			if (value instanceof Map) return findKeyRecursion ((Map) value, find);
+		}
+		
+		return null;
 	}
 	
 	// Singleton
