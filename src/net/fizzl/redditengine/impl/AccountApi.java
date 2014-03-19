@@ -76,7 +76,7 @@ public class AccountApi extends BaseApi {
 		try {
 			SimpleHttpClient client = SimpleHttpClient.getInstance();
 			InputStream is = client.post(url, params);
-			Log.i(AccountApi.class.getCanonicalName(), is.toString());
+			//Log.i(AccountApi.class.getCanonicalName(), is.toString());
 			ret = AuthResponse.fromInputStream(is);
 			is.close();
 		} catch (Exception e) {
