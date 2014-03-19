@@ -4,12 +4,10 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
@@ -103,6 +101,15 @@ public class SimpleHttpClient {
 		return is;
 	}
 	
+	/**
+	 * If response is "application/json", try find a modhash from the contents and return a clone of the InputStream.
+	 * Otherwise return the InputStream.
+	 * 
+	 * @param response	HTTP response
+	 * @return InputStream of HTTP response
+	 * @throws IllegalStateException
+	 * @throws IOException
+	 */
 	private InputStream checkContent(HttpResponse response) throws IllegalStateException, IOException {
 		InputStream content = response.getEntity().getContent();
 		InputStream ret = null;
@@ -116,14 +123,23 @@ public class SimpleHttpClient {
 		return ret;
 	}
 	
+	/**
+	 * Add modhash to outgoing headers if it is available
+	 * @param http	HTTP request
+	 */
 	void addModhash(HttpRequestBase http) {
 		if (lastModhash != null && !lastModhash.isEmpty()) {
 			http.addHeader(new BasicHeader(UrlUtils.X_MODHASH, lastModhash));
-			Log.d(getClass().getName(), "adding modhash " + lastModhash + " to headers " + http.getAllHeaders());
+			Log.d(getClass().getName(), "adding modhash " + lastModhash + " to outgoing headers");
 		}		
 		Log.d(http.getMethod(), http.getURI().toString());
 	}
 	
+	/**
+	 * Check HTTP status code
+	 * @param line
+	 * @throws UnexpectedHttpResponseException
+	 */
 	void checkStatusline(StatusLine line) throws UnexpectedHttpResponseException {
 		if(line.getStatusCode() != HttpStatus.SC_OK) {
 			String msg = String.format("Unexpected return code %s", line.getReasonPhrase());
@@ -133,8 +149,8 @@ public class SimpleHttpClient {
 	}
 	
 	/**
-	 * modhash probably isn't in the HTTP headers, but check anyway
-	 * TODO delete this if modhash doesnt exist in headers
+	 * modhash probably isn't in the HTTP response headers, but check anyway
+	 * TODO delete this if modhash doesn't exist in headers
 	 * @throws UnexpectedHttpResponseException 
 	 */
 	private void checkHeaders(HttpResponse response) throws UnexpectedHttpResponseException {
@@ -168,7 +184,7 @@ public class SimpleHttpClient {
 			is.close();  // got a copy of the inputstream as string, close it
 			is = null;
 			//Log.d("clone IS:", json);
-			HashMap data = new Gson().fromJson(json, HashMap.class);  // create a POJO data hierarchy from JSON
+			Object data = new Gson().fromJson(json, Object.class);  // create a POJO data hierarchy from JSON
 			String modhash = (String) findKeyRecursion(data, "modhash");  // look for modhash key, find its value
 			if (modhash != null) {
 				lastModhash = modhash;
@@ -181,31 +197,44 @@ public class SimpleHttpClient {
 		return retval;
 	}
 	
-	private String lastModhash;
+	private String lastModhash;  // last known modhash
 	
 	/**
-	 * Look for Object find in map recursively and returns its value if found
+	 * Look for key that matches <tt>find</tt> in data structure recursively and returns its value if found
 	 * 
-	 * @param map	data hierarchy to go through
-	 * @param find	look for this key
-	 * @return value of find (if found, otherwise null)
+	 * @param object	data hierarchy to go through
+	 * @param find		look for this key
+	 * @return			value of find (if found, otherwise null)
 	 */
-	private Object findKeyRecursion (Map map, Object find) {
-		Set entry = map.entrySet();
-		Set keys = map.keySet();
-		Collection values = map.values();
-		boolean found = map.containsKey(find);
+	private Object findKeyRecursion (Object object, Object find) {
+		Object clazz = object.getClass();
+		//Log.d(clazz.toString(), object.toString().substring(0, 255));		
+		Collection<?> values = new ArrayList();
 		
-		if (found) {
-			Object get = map.get(find);
-			return get;
+		if (object instanceof Map) {
+			Map<String, ?> map = (Map<String, ?>)object;
+			values = map.values();
+			//Set<?> entry = map.entrySet();
+			//Set<String> keys = map.keySet();
+			boolean found = map.containsKey(find);
+			if (found) {
+				Object get = map.get(find);
+				return get;
+			}			
 		}
-		
+		else if (object instanceof List) {
+			values = (List<?>)object;
+		}
+		else {
+			Log.d(getClass().getName(), "findKeyRecursion got class " + clazz);
+		}
+
 		for (Object value : values) {
-			// TODO what about Lists?
-			if (value instanceof Map) return findKeyRecursion ((Map) value, find);
+			if (value instanceof Map || value instanceof List) {
+				return findKeyRecursion (value, find);
+			}
 		}
-		
+
 		return null;
 	}
 	
