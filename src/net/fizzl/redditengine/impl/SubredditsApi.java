@@ -82,7 +82,7 @@ public class SubredditsApi extends BaseApi {
 			StringWriter writer = new StringWriter();
 			IOUtils.copy(is, writer, "UTF-8");
 			String string = writer.toString();
-			Log.d(getClass().getName(), string);
+			Log.d(getClass().getName() + "." + "subscribeSubreddit() got ", string);
 			//response = Subreddit.fromInputStream(is);
 			is.close();
 		} catch (Exception e) {
