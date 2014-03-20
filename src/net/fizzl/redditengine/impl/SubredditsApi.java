@@ -146,42 +146,10 @@ public class SubredditsApi extends BaseApi {
 	 */
 	public SubredditListing getMySubreddits(String where, String before, String after, int count, int limit, String show) throws RedditEngineException {
 		StringBuilder path = new StringBuilder();
-		path.append("/subreddits/mine/");
+		path.append("mine/");
 		path.append(where);
-		String url = UrlUtils.getGetUrl(path.toString());
-		
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		if (after != null) {
-			params.add(new BasicNameValuePair("after", after));
-		} else if (before != null) {
-			params.add(new BasicNameValuePair("before", before));
-		}
-		if(count > 0) {
-			params.add(new BasicNameValuePair("count", Integer.toString(count)));
-		}
-		if(limit > 0) {
-			params.add(new BasicNameValuePair("limit", Integer.toString(limit)));
-		}
-		if(show != null) {
-			params.add(new BasicNameValuePair("show", show));
-		}
-		
-		SimpleHttpClient client = SimpleHttpClient.getInstance();
-		SubredditListing ret = null;
-		try {
-			InputStream is = client.get(url, params);
-			ret = SubredditListing.fromInputStream(is);
-			is.close();
-		} catch (JsonSyntaxException e) {
-			// TODO SubredditListing should handle empty response {}
-			// server returned nothing
-			Log.w(getClass().getName(), e.getMessage());
-			ret = new SubredditListing();
-		} catch (Exception e) {
-			RedditEngineException re = new RedditEngineException(e);
-			throw re;
-		}
-		return ret;
+		String which = path.toString();
+		return getSubreddits(which, before, after, count, limit, show);
 	}
 
 	public SubredditListing searchSubreddits(String query, String before, String after, int count, int limit, String show){
@@ -230,6 +198,11 @@ public class SubredditsApi extends BaseApi {
 			InputStream is = client.get(url, params);
 			ret = SubredditListing.fromInputStream(is);
 			is.close();
+		} catch (JsonSyntaxException e) {
+			// TODO SubredditListing should handle empty response {}
+			// server returned nothing
+			Log.w(getClass().getName(), e.getMessage());
+			ret = new SubredditListing();
 		} catch (Exception e) {
 			RedditEngineException re = new RedditEngineException(e);
 			throw re;
