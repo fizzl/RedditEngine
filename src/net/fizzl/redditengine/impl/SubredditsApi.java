@@ -152,8 +152,11 @@ public class SubredditsApi extends BaseApi {
 		return getSubreddits(which, before, after, count, limit, show);
 	}
 
-	public SubredditListing searchSubreddits(String query, String before, String after, int count, int limit, String show){
-		throw new UnimplementedException();
+	public SubredditListing searchSubreddits(String query, String before, String after, int count, int limit, String show) throws RedditEngineException{
+		StringBuilder path = new StringBuilder();
+		path.append("search");
+		String which = path.toString();
+		return getSubreddits(which, query, before, after, count, limit, show);
 	}
 
 	/**
@@ -170,7 +173,11 @@ public class SubredditsApi extends BaseApi {
 	 * @return			{@link SubredditListing}
 	 * @throws 			RedditEngineException
 	 */
-	public SubredditListing getSubreddits(String which, String before, String after, int count, int limit, String show) throws RedditEngineException{
+	public SubredditListing getSubreddits(String which, String before, String after, int count, int limit, String show) throws RedditEngineException {
+		return getSubreddits(which, null, before, after, count, limit, show);
+	}
+
+	private SubredditListing getSubreddits(String which, String query, String before, String after, int count, int limit, String show) throws RedditEngineException{
 		StringBuilder path = new StringBuilder();
 		path.append("/subreddits/");
 		path.append(which);
@@ -190,6 +197,9 @@ public class SubredditsApi extends BaseApi {
 		}
 		if(show != null) {
 			params.add(new BasicNameValuePair("show", show));
+		}
+		if(query != null) {
+			params.add(new BasicNameValuePair("q", query));
 		}
 		
 		SimpleHttpClient client = SimpleHttpClient.getInstance();

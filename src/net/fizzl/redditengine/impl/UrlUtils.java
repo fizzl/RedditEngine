@@ -17,7 +17,7 @@ public class UrlUtils {
 	public static String getGetUrl(String place) {
 		StringBuilder sb = new StringBuilder(BASE_URL);
 		sb.append(place);
-		sb.append("/");
+		//sb.append("/");
 		sb.append(MODE_URL);
 		return sb.toString();
 	}

@@ -512,7 +512,7 @@ public class DefaultRedditApi implements RedditApi {
 
 	@Override
 	public SubredditListing searchSubreddits(String query, String before,
-			String after, int count, int limit, String show) {
+			String after, int count, int limit, String show) throws RedditEngineException {
 		return mSubredditsApi.searchSubreddits(query, before, after, count,
 				limit, show);
 	}
