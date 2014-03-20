@@ -1,6 +1,7 @@
 package net.fizzl.redditengine.impl;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -12,6 +13,7 @@ import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.BasicCookieStore;
 
 import android.content.Context;
+import android.util.Log;
 
 /**
  * This class persists in-memory cookies
@@ -58,6 +60,8 @@ public class PersistentCookieStore extends BasicCookieStore {
 			
 			ois.close();
 			fis.close();
+		} catch(FileNotFoundException e) {
+			Log.w(getClass().getName(), e.getMessage());
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

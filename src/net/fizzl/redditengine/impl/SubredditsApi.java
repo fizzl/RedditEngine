@@ -175,7 +175,7 @@ public class SubredditsApi extends BaseApi {
 		} catch (JsonSyntaxException e) {
 			// TODO SubredditListing should handle empty response {}
 			// server returned nothing
-			e.printStackTrace();
+			Log.w(getClass().getName(), e.getMessage());
 			ret = new SubredditListing();
 		} catch (Exception e) {
 			RedditEngineException re = new RedditEngineException(e);
