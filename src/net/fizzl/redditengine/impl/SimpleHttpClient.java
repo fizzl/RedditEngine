@@ -187,7 +187,9 @@ public class SimpleHttpClient {
 			String modhash = (String) findKeyRecursion(data, "modhash");  // look for modhash key, find its value
 			if (modhash != null) {
 				lastModhash = modhash;
-				Log.d("cloned inputstream found a modhash: ", modhash);
+				Log.d(getClass().getName(), "cloned inputstream found a modhash: " + modhash);
+			} else {
+				Log.d(getClass().getName(), "cloned inputstream didn't find a modhash");
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -230,20 +232,10 @@ public class SimpleHttpClient {
 
 		for (Object value : values) {
 			if (value instanceof Map || value instanceof List) {
-				boolean isEmpty = false;
-				if (value instanceof Map) {
-					if (((Map<?,?>) value).isEmpty()) {
-						isEmpty = true;
-					}
-				}
-				else if (value instanceof List) {
-					if (((List<?>) value).isEmpty()) {
-						isEmpty = true;
-					}
-				}
-				// skip empty lists and maps so we do not return null when there is more data
-				if (!isEmpty) {
-					return findKeyRecursion (value, find);
+				Object retval = findKeyRecursion (value, find);
+				// skip paths that did not find the key
+				if (retval != null) {
+					return retval;
 				}
 			}
 		}
