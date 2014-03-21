@@ -59,8 +59,6 @@ public class SubredditsApi extends BaseApi {
 	/**
 	 * Handles subscribe and unsubscribe
 	 * 
-	 * TODO subreddit must be a fullname!
-	 * 
 	 * @param subreddit		fullname of a subreddit
 	 * @param sub			<tt>true</tt> for subscribe, <tt>false</tt> for unsubscribe
 	 * @throws RedditEngineException

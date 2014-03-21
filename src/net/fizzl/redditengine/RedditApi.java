@@ -3,6 +3,7 @@ package net.fizzl.redditengine;
 import net.fizzl.redditengine.data.AuthResponse;
 import net.fizzl.redditengine.data.CommentListing;
 import net.fizzl.redditengine.data.FlairListing;
+import net.fizzl.redditengine.data.JsonResponse;
 import net.fizzl.redditengine.data.LinkListing;
 import net.fizzl.redditengine.data.Listing;
 import net.fizzl.redditengine.data.MessageListing;
@@ -22,7 +23,7 @@ import android.content.Context;
  */
 public interface RedditApi {
 	// Account
-	public void clearSessions(String passwd) throws RedditEngineException;
+	public JsonResponse<?> clearSessions(String passwd) throws RedditEngineException;
 	public void deleteUser(String user, String passwd, String message) throws RedditEngineException;
 	public AuthResponse login(String user, String passwd, boolean remember) throws RedditEngineException;
 	public User me() throws RedditEngineException;

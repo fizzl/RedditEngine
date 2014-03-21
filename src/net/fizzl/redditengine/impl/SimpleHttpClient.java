@@ -30,7 +30,6 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 
 import com.google.gson.Gson;
-
 import android.net.http.AndroidHttpClient;
 import android.util.Log;
 
@@ -209,10 +208,10 @@ public class SimpleHttpClient {
 	private Object findKeyRecursion (Object object, Object find) {
 		Object clazz = object.getClass();
 		//Log.d(clazz.toString(), object.toString().substring(0, 255));		
-		Collection<?> values = new ArrayList();
+		Collection<?> values = new ArrayList<Object>();
 		
 		if (object instanceof Map) {
-			Map<String, ?> map = (Map<String, ?>)object;
+			Map<?, ?> map = (Map<?, ?>)object;
 			values = map.values();
 			//Set<?> entry = map.entrySet();
 			//Set<String> keys = map.keySet();
@@ -231,7 +230,21 @@ public class SimpleHttpClient {
 
 		for (Object value : values) {
 			if (value instanceof Map || value instanceof List) {
-				return findKeyRecursion (value, find);
+				boolean isEmpty = false;
+				if (value instanceof Map) {
+					if (((Map<?,?>) value).isEmpty()) {
+						isEmpty = true;
+					}
+				}
+				else if (value instanceof List) {
+					if (((List<?>) value).isEmpty()) {
+						isEmpty = true;
+					}
+				}
+				// skip empty lists and maps so we do not return null when there is more data
+				if (!isEmpty) {
+					return findKeyRecursion (value, find);
+				}
 			}
 		}
 

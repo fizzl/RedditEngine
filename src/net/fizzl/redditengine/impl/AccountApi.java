@@ -1,17 +1,16 @@
 package net.fizzl.redditengine.impl;
 
 import java.io.InputStream;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import android.util.Log;
 
 import net.fizzl.redditengine.data.AuthResponse;
+import net.fizzl.redditengine.data.JsonResponse;
 import net.fizzl.redditengine.data.User;
 
 public class AccountApi extends BaseApi {
@@ -19,7 +18,7 @@ public class AccountApi extends BaseApi {
 	private static final String LOGIN_PATH = "/api/login";
 	private static final String API_TYPE_JSON = "json";
 	
-	public void clearSessions(String passwd) throws RedditEngineException {
+	public JsonResponse<?> clearSessions(String passwd) throws RedditEngineException {
 		StringBuilder path = new StringBuilder();
 		path.append(REDDIT_SSL);
 		path.append("/api/clear_sessions");
@@ -27,22 +26,26 @@ public class AccountApi extends BaseApi {
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("api_type", API_TYPE_JSON));
-		params.add(new BasicNameValuePair("curpass", passwd));
+		
+		if (passwd != null && !passwd.isEmpty()) {
+			params.add(new BasicNameValuePair("curpass", passwd));			
+		}
+		else if (lastPassword != null) {
+			params.add(new BasicNameValuePair("curpass", lastPassword));
+		}
+		JsonResponse<?> response = new AuthResponse();  // AuthResponse is a temporary placeholder to get data into JsonReponse. TODO should not depend on AuthResponse
 		
 		try {
 			SimpleHttpClient client = SimpleHttpClient.getInstance();
-			InputStream is = client.get(url, null);
-			// TODO suitable response class
-			StringWriter writer = new StringWriter();
-			IOUtils.copy(is, writer, "UTF-8");
-			String string = writer.toString();
-			Log.d(getClass().getName(), string);
+			InputStream is = client.post(url, params);
+			response = AuthResponse.fromInputStream(is);
+			Log.d(getClass().getName(), new com.google.gson.Gson().toJson(response));
 			is.close();
 		} catch (Exception e) {
 			RedditEngineException re = new RedditEngineException(e);
 			throw re;
 		}
-		return;
+		return response;
 	}
 	
 	public void deleteUser(String user, String passwd, String message)  {
@@ -78,6 +81,9 @@ public class AccountApi extends BaseApi {
 			InputStream is = client.post(url, params);
 			//Log.i(AccountApi.class.getCanonicalName(), is.toString());
 			ret = AuthResponse.fromInputStream(is);
+			if (ret.getJson().getData() != null) {
+				lastPassword = passwd;
+			}
 			is.close();
 		} catch (Exception e) {
 			RedditEngineException re = new RedditEngineException(e);
@@ -117,4 +123,6 @@ public class AccountApi extends BaseApi {
 	public void updateUser(String passwd, String email, String newpass1, String newpass2, boolean verify)  {
 		throw new UnimplementedException();
 	}
+	
+	private String lastPassword;
 }

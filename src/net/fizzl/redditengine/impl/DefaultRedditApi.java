@@ -4,6 +4,7 @@ import net.fizzl.redditengine.RedditApi;
 import net.fizzl.redditengine.data.AuthResponse;
 import net.fizzl.redditengine.data.CommentListing;
 import net.fizzl.redditengine.data.FlairListing;
+import net.fizzl.redditengine.data.JsonResponse;
 import net.fizzl.redditengine.data.LinkListing;
 import net.fizzl.redditengine.data.Listing;
 import net.fizzl.redditengine.data.MessageListing;
@@ -52,8 +53,8 @@ public class DefaultRedditApi implements RedditApi {
 	private static Context mContext;
 
 	@Override
-	public void clearSessions(String passwd) throws RedditEngineException {
-		mAccountApi.clearSessions(passwd);
+	public JsonResponse<?> clearSessions(String passwd) throws RedditEngineException {
+		return mAccountApi.clearSessions(passwd);
 	}
 
 	@Override

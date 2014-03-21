@@ -51,7 +51,7 @@ public class PersistentCookieStore extends BasicCookieStore {
 		try {
 			FileInputStream fis = ctx.openFileInput(cookiestore);
 			ObjectInputStream ois = new ObjectInputStream(fis);
-			SerializableCookieContainer tempStore = (SerializableCookieContainer) ois.readObject();
+			SerializableCookieStore tempStore = (SerializableCookieStore) ois.readObject();
 			
 			super.clear();
 			for(Cookie c : tempStore.getCookies()) {
@@ -73,7 +73,7 @@ public class PersistentCookieStore extends BasicCookieStore {
 		try {
 			FileOutputStream fos = ctx.openFileOutput(cookiestore, Context.MODE_PRIVATE);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			SerializableCookieContainer tempStore = new SerializableCookieContainer();
+			SerializableCookieStore tempStore = new SerializableCookieStore();
 			for(Cookie c : getCookies()) {
 				tempStore.addCookie(c);
 			}

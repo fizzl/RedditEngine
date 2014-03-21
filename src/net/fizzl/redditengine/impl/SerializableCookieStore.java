@@ -9,7 +9,7 @@ import org.apache.http.cookie.Cookie;
 /**
  * TODO later version of BasicClientCookie implements Serializable, use that
  */
-public class SerializableCookieContainer implements Serializable {
+public class SerializableCookieStore implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private List<SerializableCookie> cookies = new ArrayList<SerializableCookie>();
 	
