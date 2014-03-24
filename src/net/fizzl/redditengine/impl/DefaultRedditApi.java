@@ -285,7 +285,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public LinkListing getLinkListingByName(String name) {
+	public LinkListing getLinkListingByName(String name) throws RedditEngineException {
 		return mListingsApi.getLinkListingByName(name);
 	}
 

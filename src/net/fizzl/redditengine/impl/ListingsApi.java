@@ -6,7 +6,6 @@ import java.util.List;
 
 import net.fizzl.redditengine.data.CommentListing;
 import net.fizzl.redditengine.data.LinkListing;
-
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -17,8 +16,29 @@ import org.apache.http.message.BasicNameValuePair;
  * @see LinkListing
  */
 public class ListingsApi extends BaseApi {
-	public LinkListing getLinkListingByName(String name) {
-		throw new UnimplementedException();
+	/**
+	 * Get a listing of links by fullname
+	 * 
+	 * @param names	list of fullnames for links separated by commas or spaces
+	 * @return		{@link LinkListing}
+	 * @throws RedditEngineException 
+	 */
+	public LinkListing getLinkListingByName(String names) throws RedditEngineException {
+		StringBuilder path = new StringBuilder();
+		path.append("/by_id/");
+		path.append(names);  // TODO check if this is well-formed?
+		String url = UrlUtils.getGetUrl(path.toString());
+		SimpleHttpClient client = SimpleHttpClient.getInstance();
+		LinkListing response = new LinkListing();
+		try {
+			InputStream is = client.get(url, null);
+			response = LinkListing.fromInputStream(is);
+			is.close();
+		} catch (Exception e) {
+			RedditEngineException re = new RedditEngineException(e);
+			throw re;
+		}
+		return response;
 	}
 
 	/**
