@@ -4,17 +4,16 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
+import net.fizzl.redditengine.data.ListMapValue;
 import net.fizzl.redditengine.data.Subreddit;
 import net.fizzl.redditengine.data.SubredditListing;
 import net.fizzl.redditengine.data.SubredditSettings;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import android.util.Log;
@@ -34,10 +33,50 @@ public class SubredditsApi extends BaseApi {
 		throw new UnimplementedException();
 	}
 
-	public String[] getSubredditRecomendations(String[] reddits, String[] omit){
-		throw new UnimplementedException();
+	/**
+	 * Return subreddits recommended for the given subreddit(s).
+	 * 
+	 * @param reddits	subreddit names
+	 * @param omits		subreddit names to be filtered out
+	 * @return list of subreddits
+	 * @throws RedditEngineException
+	 */
+	public String[] getSubredditRecomendations(String[] reddits, String[] omits) throws RedditEngineException{
+		StringBuilder path = new StringBuilder();
+		path.append(UrlUtils.BASE_URL);
+		path.append("/api/recommend/sr/");
+		
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		if (reddits != null) {
+			params.add(new BasicNameValuePair("srnames", UrlUtils.toCommaDelimited(reddits)));
+		}
+		String strp = URLEncodedUtils.format(params, "UTF-8");
+		path.append(strp);
+		path.append(".json");
+		String url = path.toString();
+		
+		List<NameValuePair> optional;
+		if (omits == null) {
+			optional = null;
+		} else {
+			optional = new ArrayList<NameValuePair>();
+			optional.add(new BasicNameValuePair("omit", UrlUtils.toCommaDelimited(omits)));
+		}
+		
+		List<String> retval = new ArrayList<String>();
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream is = client.get(url, optional);
+			retval = ListMapValue.fromInputStream(is, "sr_name");
+			is.close();
+		} catch (Exception e) {
+			RedditEngineException re = new RedditEngineException(e);
+			throw re;
+		}
+		
+		return retval.toArray(new String[retval.size()]);
 	}
-
+	
 	public String[] searchSubreddits(String startswith, boolean withNSFW){
 		throw new UnimplementedException();
 	}
@@ -75,16 +114,8 @@ public class SubredditsApi extends BaseApi {
 		try {
 			SimpleHttpClient client = SimpleHttpClient.getInstance();
 			InputStream is = client.get(url, params);
-			StringWriter writer = new StringWriter();
-			IOUtils.copy(is,  writer, "UTF-8");
+			retval = ListMapValue.fromInputStream(is, "name");
 			is.close();
-			String json = writer.toString();
-			Gson gson = new Gson();
-			ArrayList<Map<String,String>> listmap = gson.fromJson(json, ArrayList.class);
-			for (Map<String,String> map : listmap) {
-				String value = (String) map.get("name");
-				retval.add(value);
-			}
 		} catch (Exception e) {
 			RedditEngineException re = new RedditEngineException(e);
 			throw re;

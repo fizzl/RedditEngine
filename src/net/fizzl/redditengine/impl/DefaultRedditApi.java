@@ -453,7 +453,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public String[] getSubredditRecomendations(String[] reddits, String[] omit) {
+	public String[] getSubredditRecomendations(String[] reddits, String[] omit) throws RedditEngineException {
 		return mSubredditsApi.getSubredditRecomendations(reddits, omit);
 	}
 

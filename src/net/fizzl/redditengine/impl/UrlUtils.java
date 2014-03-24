@@ -21,4 +21,18 @@ public class UrlUtils {
 		sb.append(MODE_URL);
 		return sb.toString();
 	}
+	
+	/**
+	 * Returns a comma delimited list from an array of Strings
+	 */
+	public static String toCommaDelimited(String[] strings) {
+		StringBuilder builder = new StringBuilder();
+		for (String string: strings) {
+			if (builder.length() > 0) {
+				builder.append(',');
+			}
+			builder.append(string);
+		}
+		return builder.toString();
+	}
 }
