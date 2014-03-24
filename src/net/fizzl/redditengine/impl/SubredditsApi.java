@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import net.fizzl.redditengine.data.Subreddit;
 import net.fizzl.redditengine.data.SubredditListing;
@@ -13,6 +14,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import android.util.Log;
@@ -52,8 +54,43 @@ public class SubredditsApi extends BaseApi {
 		throw new UnimplementedException();
 	}
 
-	public String[] getSubredditsByTopic(String query){
-		throw new UnimplementedException();
+	/**
+	 * Return a list of subreddits that are relevant to a search query
+	 * 
+	 * @param 	query	a string no longer than 50 characters
+	 * @return	list of subreddits
+	 * @throws RedditEngineException 
+	 */
+	public String[] getSubredditsByTopic(String query) throws RedditEngineException{
+		StringBuilder place = new StringBuilder();
+		place.append("/api/subreddits_by_topic");
+		String url = UrlUtils.getGetUrl(place.toString());
+
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		if (query != null) {
+			params.add(new BasicNameValuePair("query", query));
+		}
+		
+		List<String> retval = new ArrayList<String>();
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream is = client.get(url, params);
+			StringWriter writer = new StringWriter();
+			IOUtils.copy(is,  writer, "UTF-8");
+			is.close();
+			String json = writer.toString();
+			Gson gson = new Gson();
+			ArrayList<Map<String,String>> listmap = gson.fromJson(json, ArrayList.class);
+			for (Map<String,String> map : listmap) {
+				String value = (String) map.get("name");
+				retval.add(value);
+			}
+		} catch (Exception e) {
+			RedditEngineException re = new RedditEngineException(e);
+			throw re;
+		}
+		
+		return retval.toArray(new String[retval.size()]);
 	}
 	
 	/**
@@ -73,7 +110,6 @@ public class SubredditsApi extends BaseApi {
 		params.add(new BasicNameValuePair("action", action));
 		params.add(new BasicNameValuePair("sr", subreddit));
 		params.add(new BasicNameValuePair("api_type", "json"));
-		//params.add(new BasicNameValuePair("uh", modhash));
 		try {
 			SimpleHttpClient client = SimpleHttpClient.getInstance();
 			InputStream is = client.post(url, params);

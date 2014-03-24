@@ -480,7 +480,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public String[] getSubredditsByTopic(String query) {
+	public String[] getSubredditsByTopic(String query) throws RedditEngineException {
 		return mSubredditsApi.getSubredditsByTopic(query);
 	}
 
