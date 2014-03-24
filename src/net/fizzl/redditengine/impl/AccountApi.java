@@ -18,11 +18,18 @@ public class AccountApi extends BaseApi {
 	private static final String LOGIN_PATH = "/api/login";
 	private static final String API_TYPE_JSON = "json";
 	
+	/**
+	 * Clear all session cookies and replace the current one.
+	 * 
+	 * @param passwd	the user's current password
+	 * @return			errors if unsuccessful
+	 * @throws RedditEngineException
+	 */
 	public JsonResponse<?> clearSessions(String passwd) throws RedditEngineException {
 		StringBuilder path = new StringBuilder();
 		path.append(REDDIT_SSL);
 		path.append("/api/clear_sessions");
-		String url = path.toString();		
+		String url = path.toString();
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("api_type", API_TYPE_JSON));
@@ -33,8 +40,10 @@ public class AccountApi extends BaseApi {
 		else if (lastPassword != null) {
 			params.add(new BasicNameValuePair("curpass", lastPassword));
 		}
-		JsonResponse<?> response = new AuthResponse();  // AuthResponse is a temporary placeholder to get data into JsonReponse. TODO should not depend on AuthResponse
+		// TODO destination url parameter "dest"
+		// TODO should manually clear session cookies?
 		
+		JsonResponse<?> response = new AuthResponse();  // AuthResponse is a temporary placeholder to get data into JsonReponse. TODO should not depend on AuthResponse
 		try {
 			SimpleHttpClient client = SimpleHttpClient.getInstance();
 			InputStream is = client.post(url, params);
@@ -124,5 +133,5 @@ public class AccountApi extends BaseApi {
 		throw new UnimplementedException();
 	}
 	
-	private String lastPassword;
+	private String lastPassword;  // last known password the user has entered
 }

@@ -17,6 +17,8 @@ import android.util.Log;
 
 /**
  * This class persists in-memory cookies
+ * 
+ * @see SerializableCookieStore
  */
 public class PersistentCookieStore extends BasicCookieStore {
 	private static final String cookiestore = "cookiestore.bin";
@@ -45,6 +47,9 @@ public class PersistentCookieStore extends BasicCookieStore {
 		return ret;
 	}
 	
+	/**
+	 * Load Cookies from a file
+	 */
 	private void load() {
 		RedditApi api = DefaultRedditApi.newInstance();
 		Context ctx = api.getContext();
@@ -67,6 +72,9 @@ public class PersistentCookieStore extends BasicCookieStore {
 		}
 	}
 	
+	/**
+	 * Save cookies to a file
+	 */
 	private void save() {
 		RedditApi api = DefaultRedditApi.newInstance();
 		Context ctx = api.getContext();

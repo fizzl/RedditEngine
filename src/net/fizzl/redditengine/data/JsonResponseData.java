@@ -1,5 +1,10 @@
 package net.fizzl.redditengine.data;
 
+/**
+ * Json response that has errors and possibly a data field
+ *
+ * @param <T>	type of data in the data field (if any)
+ */
 public class JsonResponseData<T> extends Thing<T>{
 	private String[][] errors;	
 	

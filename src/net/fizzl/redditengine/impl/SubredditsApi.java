@@ -89,10 +89,22 @@ public class SubredditsApi extends BaseApi {
 		}		
 	}
 
+	/**
+	 * Subscribe to a subreddit
+	 * 
+	 * @param subreddit	fullname of a subreddit 
+	 * @throws RedditEngineException
+	 */
 	public void subscribeSubreddit(String subreddit) throws RedditEngineException{
 		this.subscribeSubreddit(subreddit, true);
 	}
 
+	/**
+	 * Unsubscribe from a subreddit
+
+	 * @param subreddit	fullname of a subreddit
+	 * @throws RedditEngineException
+	 */
 	public void unsubscribeSubreddit(String subreddit) throws RedditEngineException{
 		this.subscribeSubreddit(subreddit, false);
 	}
@@ -150,6 +162,20 @@ public class SubredditsApi extends BaseApi {
 		return getSubreddits(which, before, after, count, limit, show);
 	}
 
+	/**
+	 * Search subreddits by title and description.
+	 * 
+	 * <p/><tt>before</tt> and <tt>after</tt> are mutually exclusive.
+	 * 
+	 * @param query		a search query
+	 * @param before	fullname of a thing in the listing to use as the anchor point of the slice
+	 * @param after		fullname of a thing in the listing to use as the anchor point of the slice
+	 * @param count		the number of items already seen in this listing. a positive integer (default: 0)
+	 * @param limit		the maximum number of items desired (default: 25, maximum: 100)
+	 * @param show		(optional) the string <tt>all</tt>
+	 * @return			{@link SubredditListing}
+	 * @throws			RedditEngineException
+	 */
 	public SubredditListing searchSubreddits(String query, String before, String after, int count, int limit, String show) throws RedditEngineException{
 		StringBuilder path = new StringBuilder();
 		path.append("search");
@@ -175,6 +201,9 @@ public class SubredditsApi extends BaseApi {
 		return getSubreddits(which, null, before, after, count, limit, show);
 	}
 
+	/**
+	 * Implementation for many subreddit api methods
+	 */
 	private SubredditListing getSubreddits(String which, String query, String before, String after, int count, int limit, String show) throws RedditEngineException{
 		StringBuilder path = new StringBuilder();
 		path.append("/subreddits/");

@@ -1,5 +1,10 @@
 package net.fizzl.redditengine.data;
 
+/**
+ * Data contents for a reddit api login method response
+ * 
+ * @see AuthResponse
+ */
 public class AuthJsonResponseData {
 	private String modhash;
 	private String cookie;
