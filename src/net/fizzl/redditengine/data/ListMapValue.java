@@ -9,8 +9,6 @@ import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 
-import com.google.gson.Gson;
-
 /**
  * Converts a JSON data structure of a list of key-value pairs to a List of Strings using <tt>name</tt> as map key
  * 
@@ -26,13 +24,11 @@ public class ListMapValue {
 	}
 	
 	public static List<Map<String,String>> fromInputStream(InputStream is) throws IOException {
-		StringWriter writer = new StringWriter();
-		IOUtils.copy(is,  writer, "UTF-8");
-		return fromInputStream(writer.toString());
+		return GsonTemplate.fromInputStream(is, List.class);
 	}
 	
 	public static List<String> fromInputStream(String json, String name) {
-		List<Map<String,String>> listmap = fromInputStream(json);
+		List<Map<String,String>> listmap = fromString(json);
 		List<String> retval = new ArrayList<String>();
 		for (Map<String,String> map : listmap) {
 			String value = (String) map.get(name);
@@ -41,9 +37,7 @@ public class ListMapValue {
 		return retval;
 	}
 
-	public static List<Map<String,String>> fromInputStream(String json) {
-		Gson gson = new Gson();
-		ArrayList<Map<String,String>> retval = gson.fromJson(json, ArrayList.class);
-		return retval;
+	public static List<Map<String,String>> fromString(String json) {
+		return GsonTemplate.fromString(json, List.class);
 	}
 }
