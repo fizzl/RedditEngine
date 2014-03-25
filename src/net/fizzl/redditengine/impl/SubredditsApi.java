@@ -1,16 +1,20 @@
 package net.fizzl.redditengine.impl;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
+import net.fizzl.redditengine.data.GsonTemplate;
 import net.fizzl.redditengine.data.ListMapValue;
 import net.fizzl.redditengine.data.Subreddit;
+import net.fizzl.redditengine.data.SubredditData;
 import net.fizzl.redditengine.data.SubredditListing;
 import net.fizzl.redditengine.data.SubredditSettings;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -85,8 +89,27 @@ public class SubredditsApi extends BaseApi {
 		throw new UnimplementedException();
 	}
 
-	public String getSubredditSubmitText(String subreddit){
-		throw new UnimplementedException();
+	public String getSubredditSubmitText(String subreddit) throws RedditEngineException {
+		StringBuilder path = new StringBuilder();
+		path.append("/r/");
+		path.append(subreddit);
+		path.append("/api/submit_text");		
+		String url = UrlUtils.getGetUrl(path.toString());
+		// response json has "submit_text", "submit_text_html" which can be found in SubredditData
+		SubredditData response = new SubredditData();
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream is = client.get(url, null);
+			response = GsonTemplate.fromInputStream(is, SubredditData.class);
+			is.close();
+		} catch (ClientProtocolException e) {
+			throw new RedditEngineException(e);
+		} catch (IOException e) {
+			throw new RedditEngineException(e);
+		} catch (UnexpectedHttpResponseException e) {
+			throw new RedditEngineException(e);
+		}
+		return response.getSubmit_text();
 	}
 
 	public String getSubredditStylesheet(String subreddit, String operation, String revid, String contest){

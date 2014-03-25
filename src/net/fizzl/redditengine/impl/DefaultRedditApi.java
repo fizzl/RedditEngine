@@ -468,7 +468,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public String getSubredditSubmitText(String subreddit) {
+	public String getSubredditSubmitText(String subreddit) throws RedditEngineException {
 		return mSubredditsApi.getSubredditSubmitText(subreddit);
 	}
 
