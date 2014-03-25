@@ -6,7 +6,6 @@ import net.fizzl.redditengine.data.CommentListing;
 import net.fizzl.redditengine.data.FlairListing;
 import net.fizzl.redditengine.data.JsonResponse;
 import net.fizzl.redditengine.data.LinkListing;
-import net.fizzl.redditengine.data.Listing;
 import net.fizzl.redditengine.data.MessageListing;
 import net.fizzl.redditengine.data.ModlogListing;
 import net.fizzl.redditengine.data.Multi;
@@ -14,6 +13,7 @@ import net.fizzl.redditengine.data.Subreddit;
 import net.fizzl.redditengine.data.SubredditListing;
 import net.fizzl.redditengine.data.SubredditSettings;
 import net.fizzl.redditengine.data.User;
+import net.fizzl.redditengine.data.UserListing;
 import android.content.Context;
 
 /**
@@ -553,7 +553,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public Listing<?> getUserListing(String user, String what) {
+	public UserListing getUserListing(String user, String what) throws RedditEngineException {
 		return mUserApi.getUserListing(user, what);
 	}
 

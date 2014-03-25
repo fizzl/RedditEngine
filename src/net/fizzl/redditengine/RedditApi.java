@@ -5,7 +5,6 @@ import net.fizzl.redditengine.data.CommentListing;
 import net.fizzl.redditengine.data.FlairListing;
 import net.fizzl.redditengine.data.JsonResponse;
 import net.fizzl.redditengine.data.LinkListing;
-import net.fizzl.redditengine.data.Listing;
 import net.fizzl.redditengine.data.MessageListing;
 import net.fizzl.redditengine.data.ModlogListing;
 import net.fizzl.redditengine.data.Multi;
@@ -13,6 +12,7 @@ import net.fizzl.redditengine.data.Subreddit;
 import net.fizzl.redditengine.data.SubredditListing;
 import net.fizzl.redditengine.data.SubredditSettings;
 import net.fizzl.redditengine.data.User;
+import net.fizzl.redditengine.data.UserListing;
 import net.fizzl.redditengine.impl.RedditEngineException;
 import android.content.Context;
 
@@ -141,7 +141,7 @@ public interface RedditApi {
 	public void setPermissions(String user, String subreddit, String permissions) throws RedditEngineException;
 	public boolean isUsernameAvailable(String user) throws RedditEngineException;
 	public User aboutUser(String user) throws RedditEngineException;
-	public Listing<?> getUserListing(String user, String what) throws RedditEngineException;
+	public UserListing getUserListing(String user, String what) throws RedditEngineException;
 	
 	// Wiki
 	public void addWikiEditor(String subreddit, String page, String user) throws RedditEngineException;
