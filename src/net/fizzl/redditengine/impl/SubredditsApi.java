@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import net.fizzl.redditengine.data.GsonTemplate;
 import net.fizzl.redditengine.data.ListMapValue;
 import net.fizzl.redditengine.data.Subreddit;
@@ -81,8 +83,42 @@ public class SubredditsApi extends BaseApi {
 		return retval.toArray(new String[retval.size()]);
 	}
 	
-	public String[] searchSubreddits(String startswith, boolean withNSFW){
-		throw new UnimplementedException();
+	/**
+	 * List subreddit names that begin with a query string
+	 * 
+	 * @param startswith	a string up to 50 characters long, consisting of printable characters
+	 * @param withNSFW		boolean value
+	 * @return				subreddit names
+	 * @throws RedditEngineException 
+	 */
+	public String[] searchSubreddits(String startswith, boolean withNSFW) throws RedditEngineException{
+		StringBuilder path = new StringBuilder();
+		path.append("/api/search_reddit_names");
+		String url = UrlUtils.getGetUrl(path.toString());
+		
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		if (startswith != null) {
+			params.add(new BasicNameValuePair("query", startswith));
+		}
+		params.add(new BasicNameValuePair("include_over_18", String.valueOf(withNSFW)));
+
+		List<String> names = new ArrayList<String>();
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream in = client.post(url, params);
+			// TODO make a wrapper class from this?
+			Map<String, List<String>> maplist = GsonTemplate.fromInputStream(in, Map.class);	
+			in.close();
+			names = maplist.get("names");
+		} catch (ClientProtocolException e) {
+			throw new RedditEngineException(e);
+		} catch (IOException e) {
+			throw new RedditEngineException(e);
+		} catch (UnexpectedHttpResponseException e) {
+			throw new RedditEngineException(e);
+		}
+		
+		return names.toArray(new String[names.size()]);
 	}
 
 	public void siteAdmin(String name, SubredditSettings settings){

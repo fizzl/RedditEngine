@@ -458,7 +458,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public String[] searchSubreddits(String startswith, boolean withNSFW) {
+	public String[] searchSubreddits(String startswith, boolean withNSFW) throws RedditEngineException {
 		return mSubredditsApi.searchSubreddits(startswith, withNSFW);
 	}
 
