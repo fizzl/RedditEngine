@@ -2,6 +2,7 @@ package net.fizzl.redditengine.impl;
 
 import java.io.InputStream;
 
+import net.fizzl.redditengine.data.GsonTemplate;
 import net.fizzl.redditengine.data.ModlogListing;
 import net.fizzl.redditengine.data.StyleSheet;
 
@@ -54,7 +55,7 @@ public class ModerationApi extends BaseApi {
 		try {
 			SimpleHttpClient client = SimpleHttpClient.getInstance();
 			InputStream is = client.get(url, null);
-			response = StyleSheet.fromInputStream(is);
+			response = GsonTemplate.fromInputStream(is, StyleSheet.class);
 			is.close();
 		} catch (Exception e) {
 			RedditEngineException re = new RedditEngineException(e);
