@@ -39,7 +39,12 @@ public class EditedType {
 			String raw = json.getAsJsonPrimitive().getAsString();
 			if (!raw.equals("false")) {
 				ret.edited = true;
-				ret.editTime = Double.parseDouble(raw);
+				if (!raw.equals("true")) {
+					// normally raw should be a double if raw is not "false"
+					ret.editTime = Double.parseDouble(raw);
+				} else {
+					// TODO if raw is just "true", what should editTime be?
+				}
 			}
 			return ret;
 		}

@@ -438,9 +438,9 @@ public class DefaultRedditApi implements RedditApi {
 	@Override
 	public LinkListing search(String subreddit, String query,
 			boolean restrictToSubreddit, String before, String after,
-			int count, int limit, String sort, String timeScope, String show) {
+			int count, int limit, String sort, String syntax, String timeScope, String show) throws RedditEngineException {
 		return mSearchApi.search(subreddit, query, restrictToSubreddit, before,
-				after, count, limit, sort, timeScope, show);
+				after, count, limit, sort, syntax, timeScope, show);
 	}
 
 	@Override

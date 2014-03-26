@@ -117,7 +117,7 @@ public interface RedditApi {
 	
 	// Search
 	public LinkListing search(String subreddit, String query, boolean restrictToSubreddit, String before, String after, int count, 
-			int limit, String sort, String timeScope, String show) throws RedditEngineException;
+			int limit, String sort, String syntax, String timeScope, String show) throws RedditEngineException;
 
 	// Subreddits
 	public void deleteSubredditHeader(String subreddit) throws RedditEngineException;
