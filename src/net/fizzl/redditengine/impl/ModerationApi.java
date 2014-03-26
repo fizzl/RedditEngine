@@ -1,6 +1,9 @@
 package net.fizzl.redditengine.impl;
 
+import java.io.InputStream;
+
 import net.fizzl.redditengine.data.ModlogListing;
+import net.fizzl.redditengine.data.StyleSheet;
 
 public class ModerationApi extends BaseApi {
 	public ModlogListing getModlogListing(String subreddit, String type, String mod, String before, String after, int count, int limit){
@@ -39,8 +42,25 @@ public class ModerationApi extends BaseApi {
 		throw new UnimplementedException();
 	}
 
-	public void getStyleSheet(String subreddit){
-		throw new UnimplementedException();
+	/**
+	 * Returns reddits stylesheet
+	 * @throws RedditEngineException
+	 */
+	public StyleSheet getStyleSheet(String subreddit) throws RedditEngineException{
+		String path = String.format("/r/%s/about/stylesheet", subreddit);
+		String url = UrlUtils.getGetUrl(path);
+		
+		StyleSheet response = new StyleSheet();
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream is = client.get(url, null);
+			response = StyleSheet.fromInputStream(is);
+			is.close();
+		} catch (Exception e) {
+			RedditEngineException re = new RedditEngineException(e);
+			throw re;
+		}
+		return response;
 	}
 
 }

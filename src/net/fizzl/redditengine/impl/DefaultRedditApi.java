@@ -9,6 +9,7 @@ import net.fizzl.redditengine.data.LinkListing;
 import net.fizzl.redditengine.data.MessageListing;
 import net.fizzl.redditengine.data.ModlogListing;
 import net.fizzl.redditengine.data.Multi;
+import net.fizzl.redditengine.data.StyleSheet;
 import net.fizzl.redditengine.data.Subreddit;
 import net.fizzl.redditengine.data.SubredditListing;
 import net.fizzl.redditengine.data.SubredditSettings;
@@ -374,8 +375,8 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public void getStyleSheet(String subreddit) {
-		mModerationApi.getStyleSheet(subreddit);
+	public StyleSheet getStyleSheet(String subreddit) throws RedditEngineException {
+		return mModerationApi.getStyleSheet(subreddit);
 	}
 
 	@Override

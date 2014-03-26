@@ -8,6 +8,7 @@ import net.fizzl.redditengine.data.LinkListing;
 import net.fizzl.redditengine.data.MessageListing;
 import net.fizzl.redditengine.data.ModlogListing;
 import net.fizzl.redditengine.data.Multi;
+import net.fizzl.redditengine.data.StyleSheet;
 import net.fizzl.redditengine.data.Subreddit;
 import net.fizzl.redditengine.data.SubredditListing;
 import net.fizzl.redditengine.data.SubredditSettings;
@@ -99,7 +100,7 @@ public interface RedditApi {
 	public void leaveContributor(String thingId) throws RedditEngineException;
 	public void leaveModerator(String thingId) throws RedditEngineException;
 	public void remove(String thing, boolean spam) throws RedditEngineException;
-	public void getStyleSheet(String subreddit) throws RedditEngineException;
+	public StyleSheet getStyleSheet(String subreddit) throws RedditEngineException;
 	
 	// Multis
 	public Multi[] getMyMultis() throws RedditEngineException;
