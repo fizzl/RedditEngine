@@ -11,6 +11,7 @@ import net.fizzl.redditengine.data.LinkListing;
 import net.fizzl.redditengine.data.MessageListing;
 import net.fizzl.redditengine.data.ModlogListing;
 import net.fizzl.redditengine.data.Multi;
+import net.fizzl.redditengine.data.MultiData;
 import net.fizzl.redditengine.data.StyleSheet;
 import net.fizzl.redditengine.data.Subreddit;
 import net.fizzl.redditengine.data.SubredditListing;
@@ -382,7 +383,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public Multi[] getMyMultis() throws RedditEngineException {
+	public MultiData[] getMyMultis() throws RedditEngineException {
 		return mMultiApi.getMyMultis();
 	}
 
@@ -392,7 +393,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public Multi getMulti(String path) {
+	public MultiData getMulti(String path) throws RedditEngineException {
 		return mMultiApi.getMulti(path);
 	}
 

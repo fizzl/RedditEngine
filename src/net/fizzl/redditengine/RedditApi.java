@@ -9,7 +9,7 @@ import net.fizzl.redditengine.data.JsonResponse;
 import net.fizzl.redditengine.data.LinkListing;
 import net.fizzl.redditengine.data.MessageListing;
 import net.fizzl.redditengine.data.ModlogListing;
-import net.fizzl.redditengine.data.Multi;
+import net.fizzl.redditengine.data.MultiData;
 import net.fizzl.redditengine.data.StyleSheet;
 import net.fizzl.redditengine.data.Subreddit;
 import net.fizzl.redditengine.data.SubredditListing;
@@ -105,9 +105,9 @@ public interface RedditApi {
 	public StyleSheet getStyleSheet(String subreddit) throws RedditEngineException;
 	
 	// Multis
-	public Multi[] getMyMultis() throws RedditEngineException;
+	public MultiData[] getMyMultis() throws RedditEngineException;
 	public void deleteMulti(String path) throws RedditEngineException;
-	public Multi getMulti(String path) throws RedditEngineException;
+	public MultiData getMulti(String path) throws RedditEngineException;
 	public void createOrEditMulti(String path, String[] subreddits, boolean isPublic) throws RedditEngineException;
 	public void copyMulti(String path, String from, String to) throws RedditEngineException;
 	public String getMultiDescription(String path) throws RedditEngineException;
