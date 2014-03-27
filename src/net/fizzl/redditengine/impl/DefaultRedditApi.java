@@ -1,5 +1,7 @@
 package net.fizzl.redditengine.impl;
 
+import java.io.InputStream;
+
 import net.fizzl.redditengine.RedditApi;
 import net.fizzl.redditengine.data.AuthResponse;
 import net.fizzl.redditengine.data.CommentListing;
@@ -118,17 +120,17 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public boolean needCaptcha() {
+	public boolean needCaptcha() throws RedditEngineException {
 		return mCaptchaApi.needCaptcha();
 	}
 
 	@Override
-	public String newCaptcha() {
+	public String newCaptcha() throws RedditEngineException {
 		return mCaptchaApi.newCaptcha();
 	}
 
 	@Override
-	public String captchaImageUrl(String captchaIdentity) {
+	public InputStream captchaImage(String captchaIdentity) throws RedditEngineException {
 		return mCaptchaApi.captchaImageUrl(captchaIdentity);
 	}
 

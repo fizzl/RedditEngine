@@ -1,5 +1,7 @@
 package net.fizzl.redditengine;
 
+import java.io.InputStream;
+
 import net.fizzl.redditengine.data.AuthResponse;
 import net.fizzl.redditengine.data.CommentListing;
 import net.fizzl.redditengine.data.FlairListing;
@@ -42,7 +44,7 @@ public interface RedditApi {
 	// Captcha
 	public boolean needCaptcha() throws RedditEngineException;
 	public String newCaptcha() throws RedditEngineException;
-	public String captchaImageUrl(String captchaIdentity) throws RedditEngineException;
+	public InputStream captchaImage(String captchaIdentity) throws RedditEngineException;
 	
 	// Flair
 	public void clearFlairTemplates(String subreddit, String flair_type) throws RedditEngineException;
