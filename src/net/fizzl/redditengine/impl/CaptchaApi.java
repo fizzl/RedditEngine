@@ -26,6 +26,7 @@ public class CaptchaApi extends BaseApi {
 			SimpleHttpClient client = SimpleHttpClient.getInstance();
 			InputStream in = client.get(url, null);
 			retval = GsonTemplate.fromInputStream(in, boolean.class);
+			in.close();
 		} catch (ClientProtocolException e) {
 			throw new RedditEngineException(e);
 		} catch (IOException e) {
@@ -55,6 +56,7 @@ public class CaptchaApi extends BaseApi {
 			SimpleHttpClient client = SimpleHttpClient.getInstance();
 			InputStream in = client.post(url, params);
 			JsonResponse<Map<String,String>> response = GsonTemplate.fromInputStream(in, JsonResponse.class);
+			in.close();
 			Map<String,String> data = response.getJson().getData();
 			if (data != null) {
 				retval = data.get("iden");
@@ -86,6 +88,7 @@ public class CaptchaApi extends BaseApi {
 		try {
 			SimpleHttpClient client = SimpleHttpClient.getInstance();
 			in = client.get(url, null);
+			// client reads InputStream and calls in.close();
 		} catch (ClientProtocolException e) {
 			throw new RedditEngineException(e);
 		} catch (IOException e) {

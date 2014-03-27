@@ -382,7 +382,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public Multi[] getMyMultis() {
+	public Multi[] getMyMultis() throws RedditEngineException {
 		return mMultiApi.getMyMultis();
 	}
 

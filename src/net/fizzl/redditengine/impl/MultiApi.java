@@ -1,10 +1,31 @@
 package net.fizzl.redditengine.impl;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.apache.http.client.ClientProtocolException;
+
+import net.fizzl.redditengine.data.GsonTemplate;
 import net.fizzl.redditengine.data.Multi;
 
 public class MultiApi extends BaseApi {
-	public Multi[] getMyMultis(){
-		throw new UnimplementedException();
+	public Multi[] getMyMultis() throws RedditEngineException{
+		String url = String.format("%s%s", UrlUtils.BASE_URL, "/api/multi/mine");
+		Multi[] retval = null;
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream in = client.get(url,null);
+			retval = GsonTemplate.fromInputStream(in, Multi[].class);
+			in.close();
+		} catch (ClientProtocolException e) {
+			throw new RedditEngineException(e);
+		} catch (IOException e) {
+			throw new RedditEngineException(e);
+		} catch (UnexpectedHttpResponseException e) {
+			throw new RedditEngineException(e);
+		}
+		
+		return retval;
 	}
 
 	public void deleteMulti(String path){
