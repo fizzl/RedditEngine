@@ -10,7 +10,6 @@ import net.fizzl.redditengine.data.JsonResponse;
 import net.fizzl.redditengine.data.LinkListing;
 import net.fizzl.redditengine.data.MessageListing;
 import net.fizzl.redditengine.data.ModlogListing;
-import net.fizzl.redditengine.data.Multi;
 import net.fizzl.redditengine.data.MultiData;
 import net.fizzl.redditengine.data.StyleSheet;
 import net.fizzl.redditengine.data.Subreddit;
