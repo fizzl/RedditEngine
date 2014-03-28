@@ -7,10 +7,10 @@ import net.fizzl.redditengine.data.AuthResponse;
 import net.fizzl.redditengine.data.CommentListing;
 import net.fizzl.redditengine.data.FlairListing;
 import net.fizzl.redditengine.data.JsonResponse;
+import net.fizzl.redditengine.data.LabeledMulti;
 import net.fizzl.redditengine.data.LinkListing;
 import net.fizzl.redditengine.data.MessageListing;
 import net.fizzl.redditengine.data.ModlogListing;
-import net.fizzl.redditengine.data.MultiData;
 import net.fizzl.redditengine.data.StyleSheet;
 import net.fizzl.redditengine.data.Subreddit;
 import net.fizzl.redditengine.data.SubredditListing;
@@ -382,7 +382,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public MultiData[] getMyMultis() throws RedditEngineException {
+	public LabeledMulti[] getMyMultis() throws RedditEngineException {
 		return mMultiApi.getMyMultis();
 	}
 
@@ -392,7 +392,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public MultiData getMulti(String path) throws RedditEngineException {
+	public LabeledMulti getMulti(String path) throws RedditEngineException {
 		return mMultiApi.getMulti(path);
 	}
 
@@ -408,7 +408,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public String getMultiDescription(String path) {
+	public String getMultiDescription(String path) throws RedditEngineException {
 		return mMultiApi.getMultiDescription(path);
 	}
 

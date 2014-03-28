@@ -1,7 +1,10 @@
 package net.fizzl.redditengine.data;
 
+/**
+ * Subreddit multi class
+ */
 public class MultiData {
-	String[] fields;
+	String[] fields;	// subreddit list
 	String explanation;
 	String reason;
 	
