@@ -21,6 +21,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.client.protocol.ClientContext;
@@ -59,7 +60,21 @@ public class SimpleHttpClient {
 		return execute(get);
 	}
 	
-	// TODO HTTP PUT
+	/**
+	 * Calls HTTP PUT with the Request-URI. Returns an InputStream of the response entity.
+	 * 
+	 * @param url		HTTP PUT URL
+	 * @param params	PUT parameters
+	 * @return			InputStream
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 * @throws UnexpectedHttpResponseException
+	 */
+	public InputStream put(String url, List<NameValuePair> params) throws ClientProtocolException, IOException, UnexpectedHttpResponseException {
+		HttpPut put = new HttpPut(url);
+		put.setEntity(new UrlEncodedFormEntity(params));
+		return execute(put);
+	}
 	
 	/**
 	 * Common functionality for all HTTP requests
@@ -78,6 +93,15 @@ public class SimpleHttpClient {
 		return is;
 	}
 	
+	/**
+	 * Calls HTTP DELETE with the Request-URI. Returns an InputStream of the response entity.
+	 * 
+	 * @param url	HTTP DELETE URL
+	 * @return		InputStream
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 * @throws UnexpectedHttpResponseException
+	 */
 	public InputStream delete(String url) throws ClientProtocolException, IOException, UnexpectedHttpResponseException {
 		HttpDelete delete = new HttpDelete(url);		
 		return execute(delete);
@@ -101,7 +125,7 @@ public class SimpleHttpClient {
 	 */
 	public InputStream post(String url, List<NameValuePair> params) throws ClientProtocolException, IOException, UnexpectedHttpResponseException {
 		HttpPost post = new HttpPost(url);
-		post.setEntity(new UrlEncodedFormEntity(params));		
+		post.setEntity(new UrlEncodedFormEntity(params));
 		return execute(post);
 	}
 	
