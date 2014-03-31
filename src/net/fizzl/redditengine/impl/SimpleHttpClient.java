@@ -55,35 +55,32 @@ public class SimpleHttpClient {
 			String strp = URLEncodedUtils.format(params, "UTF-8");
 			url += "?" + strp;
 		}
-		HttpGet get = new HttpGet(url);
-		addModhash(get);
-		HttpResponse response = mClient.execute(get, mHttpContext);
-		
-		Header contentType = response.getFirstHeader("Content-Type");
-		Log.d("Received(" + get.METHOD_NAME + ") ", contentType.getName() + ": " + contentType.getValue());
-		checkHeaders(response);
-		
-		checkStatusline(response.getStatusLine());
-		
-		InputStream is = checkContent(response);
-		return is;
+		HttpGet get = new HttpGet(url);		
+		return execute(get);
 	}
 	
 	// TODO HTTP PUT
 	
-	public InputStream delete(String url) throws ClientProtocolException, IOException, UnexpectedHttpResponseException {
-		HttpDelete delete = new HttpDelete(url);
-		addModhash(delete);
-		HttpResponse response = mClient.execute(delete, mHttpContext);
+	/**
+	 * Common functionality for all HTTP requests
+	 */
+	private InputStream execute (HttpRequestBase request) throws ClientProtocolException, IOException, UnexpectedHttpResponseException {
+		addModhash(request);
+		HttpResponse response = mClient.execute(request, mHttpContext);
 		
 		Header contentType = response.getFirstHeader("Content-Type");
-		Log.d("Received(" + delete.METHOD_NAME + ") ", contentType.getName() + ": " + contentType.getValue());
-		checkHeaders(response);
+		Log.d("Received(" + request.getMethod() + ") ", contentType.getName() + ": " + contentType.getValue());
 		
-		checkStatusline(response.getStatusLine());
-		
+		checkHeaders(response);		
+		checkStatusline(response.getStatusLine());		
 		InputStream is = checkContent(response);
+		
 		return is;
+	}
+	
+	public InputStream delete(String url) throws ClientProtocolException, IOException, UnexpectedHttpResponseException {
+		HttpDelete delete = new HttpDelete(url);		
+		return execute(delete);
 	}
 	
 	/* Response headers to monitor for:
@@ -104,18 +101,8 @@ public class SimpleHttpClient {
 	 */
 	public InputStream post(String url, List<NameValuePair> params) throws ClientProtocolException, IOException, UnexpectedHttpResponseException {
 		HttpPost post = new HttpPost(url);
-		addModhash(post);
-		post.setEntity(new UrlEncodedFormEntity(params));
-		HttpResponse response = mClient.execute(post, mHttpContext);
-		
-		Header contentType = response.getFirstHeader("Content-Type");
-		Log.d("Received(" + post.METHOD_NAME + ") ", contentType.getName() + ": " + contentType.getValue());
-		checkHeaders(response);
-		
-		checkStatusline(response.getStatusLine());
-
-		InputStream is = checkContent(response);
-		return is;
+		post.setEntity(new UrlEncodedFormEntity(params));		
+		return execute(post);
 	}
 	
 	/**
