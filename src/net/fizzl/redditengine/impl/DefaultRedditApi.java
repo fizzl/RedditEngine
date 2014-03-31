@@ -423,7 +423,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public void addSubredditToMulti(String path, String subreddit) {
+	public void addSubredditToMulti(String path, String subreddit) throws RedditEngineException {
 		mMultiApi.addSubredditToMulti(path, subreddit);
 	}
 

@@ -261,8 +261,40 @@ public class MultiApi extends BaseApi {
 		throw new UnimplementedException();
 	}
 
-	public void addSubredditToMulti(String path, String subreddit){
-		throw new UnimplementedException();
+	/**
+	 * Add a subreddit to a multi.
+	 * 
+	 * @param path		multireddit url path
+	 * @param subreddit	subreddit name
+	 * @throws RedditEngineException
+	 */
+	public void addSubredditToMulti(String path, String subreddit) throws RedditEngineException{
+		// PUT /api/multi/multipath/r/srname
+		String url = String.format("%s/api/multi/%s/r/%s", UrlUtils.BASE_URL, path, subreddit);
+		
+		Map<String, String> map = new java.util.HashMap<String, String>(); // "anonymous class" for GSON
+		map.put("name", subreddit);
+		String model = new Gson().toJson(map);
+		
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("model", model));
+		params.add(new BasicNameValuePair("multipath", path));
+		params.add(new BasicNameValuePair("srname", subreddit));
+		
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream in = client.put(url, params);
+			// TODO what to do with response
+			Object response = GsonTemplate.fromInputStream(in, Object.class);
+			in.close();
+		} catch (ClientProtocolException e) {
+			throw new RedditEngineException(e);
+		} catch (IOException e) {
+			throw new RedditEngineException(e);
+		} catch (UnexpectedHttpResponseException e) {
+			throw new RedditEngineException(e);
+		}
+				
 	}
 
 	public String getSubredditInfoInMulti(String path, String subreddit){
