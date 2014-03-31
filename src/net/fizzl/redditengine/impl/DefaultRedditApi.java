@@ -387,7 +387,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public void deleteMulti(String path) {
+	public void deleteMulti(String path) throws RedditEngineException {
 		mMultiApi.deleteMulti(path);
 	}
 

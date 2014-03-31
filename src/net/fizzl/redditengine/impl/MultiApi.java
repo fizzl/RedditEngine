@@ -61,8 +61,21 @@ public class MultiApi extends BaseApi {
 		return retval;
 	}
 
-	public void deleteMulti(String path){
-		throw new UnimplementedException();
+	public void deleteMulti(String path) throws RedditEngineException{
+		String url = String.format("%s/api/multi/%s", UrlUtils.BASE_URL, path);
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream in = client.delete(url);
+			// TODO error details in response, won't get to this because an exception is thrown
+			MultiData response = GsonTemplate.fromInputStream(in, MultiData.class);
+			in.close();
+		} catch (ClientProtocolException e) {
+			throw new RedditEngineException(e);
+		} catch (IOException e) {
+			throw new RedditEngineException(e);
+		} catch (UnexpectedHttpResponseException e) {
+			throw new RedditEngineException(e);
+		}
 	}
 
 	/**

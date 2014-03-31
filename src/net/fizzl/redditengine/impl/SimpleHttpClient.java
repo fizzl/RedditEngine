@@ -18,6 +18,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -59,7 +60,24 @@ public class SimpleHttpClient {
 		HttpResponse response = mClient.execute(get, mHttpContext);
 		
 		Header contentType = response.getFirstHeader("Content-Type");
-		Log.d("Received(GET) ", contentType.getName() + ": " + contentType.getValue());
+		Log.d("Received(" + get.METHOD_NAME + ") ", contentType.getName() + ": " + contentType.getValue());
+		checkHeaders(response);
+		
+		checkStatusline(response.getStatusLine());
+		
+		InputStream is = checkContent(response);
+		return is;
+	}
+	
+	// TODO HTTP PUT
+	
+	public InputStream delete(String url) throws ClientProtocolException, IOException, UnexpectedHttpResponseException {
+		HttpDelete delete = new HttpDelete(url);
+		addModhash(delete);
+		HttpResponse response = mClient.execute(delete, mHttpContext);
+		
+		Header contentType = response.getFirstHeader("Content-Type");
+		Log.d("Received(" + delete.METHOD_NAME + ") ", contentType.getName() + ": " + contentType.getValue());
 		checkHeaders(response);
 		
 		checkStatusline(response.getStatusLine());
@@ -91,7 +109,7 @@ public class SimpleHttpClient {
 		HttpResponse response = mClient.execute(post, mHttpContext);
 		
 		Header contentType = response.getFirstHeader("Content-Type");
-		Log.d("Received(POST) ", contentType.getName() + ": " + contentType.getValue());
+		Log.d("Received(" + post.METHOD_NAME + ") ", contentType.getName() + ": " + contentType.getValue());
 		checkHeaders(response);
 		
 		checkStatusline(response.getStatusLine());
@@ -212,6 +230,9 @@ public class SimpleHttpClient {
 	 * @return			value of find (if found, otherwise null)
 	 */
 	private Object findKeyRecursion (Object object, Object find) {
+		if (object == null || find == null) {
+			return null;
+		}
 		Object clazz = object.getClass();
 		//Log.d(clazz.toString(), object.toString().substring(0, 255));		
 		Collection<?> values = new ArrayList<Object>();
