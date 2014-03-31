@@ -398,7 +398,7 @@ public class DefaultRedditApi implements RedditApi {
 
 	@Override
 	public void createOrEditMulti(String path, String[] subreddits,
-			boolean isPublic) {
+			boolean isPublic) throws RedditEngineException {
 		mMultiApi.createOrEditMulti(path, subreddits, isPublic);
 	}
 

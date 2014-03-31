@@ -2,10 +2,15 @@ package net.fizzl.redditengine.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.message.BasicNameValuePair;
+
+import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -89,9 +94,95 @@ public class MultiApi extends BaseApi {
 		}
 		return retval;
 	}
+	
+	// inner class for sending JSON data
+	private class Model {
+		private Subreddit[] subreddits;
+		private String visibility;
+		class Subreddit {
+			private String name;
+			public String getName() {
+				return name;
+			}
+			public void setName(String name) {
+				this.name = name;
+			}
+		}
+		public Subreddit[] getSubreddits() {
+			return subreddits;
+		}
+		public void setSubreddits(Subreddit[] subreddits) {
+			this.subreddits = subreddits;
+		}
+		public String getVisibility() {
+			return this.visibility;
+		}
+		public void setVisibility(String visibility) {
+			this.visibility =  visibility;
+		}
+	}
+	
+	private String booleanToVisibility (boolean visibility) {
+		if (visibility == true) {
+			return "public";
+		} else { 
+			return "private";
+		}
+	}
+	
+	private boolean visibilityToBoolean (String visibility) {
+		if (visibility.equals("public")) {
+			return true;
+		} else if (visibility.equals("private")) {
+			return false;
+		} else {
+			Log.e(getClass().getName(), visibility);
+			return false;
+		}
+	}
 
-	public void createOrEditMulti(String path, String[] subreddits, boolean isPublic){
-		throw new UnimplementedException();
+	/**
+	 * Create a multi. Throws 409 Conflict if the multi already exists.
+	 * 	
+	 * @param path			multireddit url path
+	 * @param subreddits	subreddit names
+	 * @param isPublic		{@code true} for 'public' and {@code false} for 'private'
+	 * @throws RedditEngineException
+	 */
+	public void createOrEditMulti(String path, String[] subreddits, boolean isPublic) throws RedditEngineException{
+		// TODO how to know when to edit? (PUT)
+		Model model = new Model();
+		List<Model.Subreddit> modelSubreddits = new ArrayList<Model.Subreddit>();
+		for (String subreddit: subreddits) {
+			Model.Subreddit sr = model.new Subreddit();
+			sr.setName(subreddit);
+			modelSubreddits.add(sr);
+		}
+		Model.Subreddit[] array = modelSubreddits.toArray(new Model.Subreddit[modelSubreddits.size()]);
+		model.setSubreddits(array);
+		model.setVisibility(booleanToVisibility(isPublic));
+		
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		String jsonModel = new Gson().toJson(model);
+		params.add(new BasicNameValuePair("model", jsonModel));
+		params.add(new BasicNameValuePair("multipath", path));
+		
+		String url = String.format("%s/api/multi/%s", UrlUtils.BASE_URL, path);
+
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream in = client.post(url, params);
+			LabeledMulti response = GsonTemplate.fromInputStream(in, LabeledMulti.class);
+			// TODO anything to be done with the response?
+			Log.d(getClass().getName(), new Gson().toJson(response));  // debug log for now
+			in.close();
+		} catch (ClientProtocolException e) {
+			throw new RedditEngineException(e);
+		} catch (IOException e) {
+			throw new RedditEngineException(e);
+		} catch (UnexpectedHttpResponseException e) {
+			throw new RedditEngineException(e);
+		}
 	}
 
 	public void copyMulti(String path, String from, String to){

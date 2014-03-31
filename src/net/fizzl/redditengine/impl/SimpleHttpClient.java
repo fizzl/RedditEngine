@@ -140,11 +140,15 @@ public class SimpleHttpClient {
 	 * @throws UnexpectedHttpResponseException
 	 */
 	void checkStatusline(StatusLine line) throws UnexpectedHttpResponseException {
-		if(line.getStatusCode() != HttpStatus.SC_OK) {
-			String msg = String.format("Unexpected return code %s", line.getReasonPhrase());
+		int statusCode = line.getStatusCode();
+		// accept all 2xx Success codes
+		if (statusCode >= HttpStatus.SC_OK && statusCode < HttpStatus.SC_MULTIPLE_CHOICES) {
+			return;
+		} else {
+			String msg = String.format("Unexpected return code %d %s", statusCode, line.getReasonPhrase());
 			UnexpectedHttpResponseException ex = new UnexpectedHttpResponseException(msg);
-			throw ex;
-		}		
+			throw ex;			
+		}
 	}
 	
 	/**
