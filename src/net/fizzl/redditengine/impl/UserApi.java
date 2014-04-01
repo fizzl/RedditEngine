@@ -4,21 +4,107 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.message.BasicNameValuePair;
 
+import com.google.gson.Gson;
+
+import net.fizzl.redditengine.data.GsonTemplate;
+import net.fizzl.redditengine.data.JsonResponse;
 import net.fizzl.redditengine.data.User;
 import net.fizzl.redditengine.data.UserListing;
 
 public class UserApi extends BaseApi {
-	public void friend(String user, String container, String type, String permissions, String note){
-		throw new UnimplementedException();
+	/**
+	 * Handles friending as well as privilege changes on subreddits.
+	 * 
+	 * @param user		the name of an existing user
+	 * @param container
+	 * @param type		one of (<tt>friend, moderator, moderator_invite, contributor, banned, wikibanned, wikicontributor</tt>)
+	 * @param permissions
+	 * @param note		a string no longer than 300 characters
+	 * @return			{@link JsonResponse}
+	 * @throws RedditEngineException
+	 */
+	public JsonResponse<?> friend (String user, String container, String type, String permissions, String note) throws RedditEngineException{
+		// POST /api/friend
+		String url = String.format("%s/api/friend", UrlUtils.BASE_URL);
+		
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("api_type", "json"));
+		params.add(new BasicNameValuePair("name", user));
+		if (container != null) {
+			params.add(new BasicNameValuePair("container", container));
+		}
+		params.add(new BasicNameValuePair("type", type));
+		if (permissions != null) {
+			params.add(new BasicNameValuePair("permissions", permissions));
+		}
+		if (note != null) {
+			params.add(new BasicNameValuePair("note", note));
+		}
+		
+		JsonResponse<?> retval;
+		try {
+			// response can be:
+			// {"json": {"errors": [["USER_REQUIRED", "please login to do that", null]]}}
+			// {"json": {"errors": []}}
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream is = client.post(url, params);
+			retval = GsonTemplate.fromInputStream(is, JsonResponse.class);
+			is.close();
+		} catch (ClientProtocolException e) {
+			throw new RedditEngineException(e);
+		} catch (IOException e) {
+			throw new RedditEngineException(e);
+		} catch (UnexpectedHttpResponseException e) {
+			throw new RedditEngineException(e);
+		}
+		
+		return retval;
 	}
 
-	public void unfriend(String user, String thingId, String container, String type){
-		throw new UnimplementedException();
+	/**
+	 * Handles removal of a friend (a user-user relation) or removal of a user's privileges from a
+	 * subreddit (a user-subreddit relation). The user can either be passed in by name (nuser) or
+	 * by fullname (iuser). If type is friend or enemy, 'container' will be the current user,
+	 * otherwise the subreddit must be set.
+	 * 
+	 * @param user		the name of an existing user
+	 * @param thingId	fullname of a thing
+	 * @param container
+	 * @param type		one of (<tt>friend, enemy, moderator, moderator_invite, contributor, banned, wikibanned, wikicontributor</tt>)
+	 * @throws RedditEngineException
+	 */
+	public void unfriend(String user, String thingId, String container, String type) throws RedditEngineException{
+		String url = String.format("%s/api/unfriend", UrlUtils.BASE_URL);
+		
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("name", user));
+		if (container != null) {
+			params.add(new BasicNameValuePair("container", container));
+		}
+		params.add(new BasicNameValuePair("type", type));
+		params.add(new BasicNameValuePair("id", thingId));
+		
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream is = client.post(url, params);
+			Object response = GsonTemplate.fromInputStream(is, Object.class);
+			is.close();
+			if (response != null && response instanceof Map && ((Map<?,?>)response).size() > 0) {
+				android.util.Log.d(getClass().getName(), new Gson().toJson(response));
+			}
+		} catch (ClientProtocolException e) {
+			throw new RedditEngineException(e);
+		} catch (IOException e) {
+			throw new RedditEngineException(e);
+		} catch (UnexpectedHttpResponseException e) {
+			throw new RedditEngineException(e);
+		}
 	}
 
 	public void setPermissions(String user, String subreddit, String permissions){

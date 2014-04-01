@@ -530,14 +530,14 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public void friend(String user, String container, String type,
-			String permissions, String note) {
-		mUserApi.friend(user, container, type, permissions, note);
+	public JsonResponse<?> friend(String user, String container, String type,
+			String permissions, String note) throws RedditEngineException {
+		return mUserApi.friend(user, container, type, permissions, note);
 	}
 
 	@Override
 	public void unfriend(String user, String thingId, String container,
-			String type) {
+			String type) throws RedditEngineException {
 		mUserApi.unfriend(user, thingId, container, type);
 	}
 
