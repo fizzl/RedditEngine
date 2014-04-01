@@ -3,6 +3,7 @@ package net.fizzl.redditengine.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -61,12 +62,19 @@ public class MultiApi extends BaseApi {
 		return retval;
 	}
 
+	/**
+	 * Delete a multi.
+	 * 
+	 * @param path	multireddit url path
+	 * @throws RedditEngineException
+	 */
 	public void deleteMulti(String path) throws RedditEngineException{
 		String url = String.format("%s/api/multi/%s", UrlUtils.BASE_URL, path);
 		try {
 			SimpleHttpClient client = SimpleHttpClient.getInstance();
 			InputStream in = client.delete(url);
 			// TODO error details in response, won't get to this because an exception is thrown
+			// seems normally the response is null?
 			MultiData response = GsonTemplate.fromInputStream(in, MultiData.class);
 			in.close();
 		} catch (ClientProtocolException e) {
@@ -253,8 +261,50 @@ public class MultiApi extends BaseApi {
 	// make this class public if the client needs it
 	private class LabeledMultiDescription extends Thing<LabeledMultiDescriptionData> {}
 
-	public void setMultiDescription(String path, String text){
-		throw new UnimplementedException();
+	/**
+	 * Change a multi's markdown description.
+	 * 
+	 * @param path	multireddit url path
+	 * @param text	raw markdown text
+	 * @throws RedditEngineException
+	 */
+	public void setMultiDescription(String path, String text) throws RedditEngineException{
+		String url = String.format("%s/api/multi/%s/description", UrlUtils.BASE_URL, path);
+		
+		LabeledMultiDescriptionData data = new LabeledMultiDescriptionData();
+		data.setBody_md(text);	
+		// should ignore null variables so we get just {"body_md":text}
+		String model = new Gson().toJson(data);
+		
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("model", model));
+		params.add(new BasicNameValuePair("multipath", path));
+		
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream in = client.put(url, params);
+			LabeledMultiDescription response = GsonTemplate.fromInputStream(in, LabeledMultiDescription.class);
+			if (response != null && response.getData() != null
+				&& response.getData().getBody_md() != null 
+				&& response.getData().body_md.equalsIgnoreCase(text)) {
+				// response shows the description is ok
+			} else {
+				// TODO should we throw an exception or not?
+				if (response != null) {
+					String json = new Gson().toJson(response);
+					Log.e(getClass().getName(), String.format(
+						"did not find \'body_md==%s\' in the response (%s)", text, json));
+				}
+			}
+			in.close();
+		} catch (ClientProtocolException e) {
+			throw new RedditEngineException(e);
+		} catch (IOException e) {
+			throw new RedditEngineException(e);
+		} catch (UnexpectedHttpResponseException e) {
+			throw new RedditEngineException(e);
+		}
+
 	}
 
 	public void removeSubredditFromMulti(String path, String subreddit){
@@ -272,7 +322,7 @@ public class MultiApi extends BaseApi {
 		// PUT /api/multi/multipath/r/srname
 		String url = String.format("%s/api/multi/%s/r/%s", UrlUtils.BASE_URL, path, subreddit);
 		
-		Map<String, String> map = new java.util.HashMap<String, String>(); // "anonymous class" for GSON
+		Map<String, String> map = new HashMap<String, String>(); // "anonymous class" for GSON
 		map.put("name", subreddit);
 		String model = new Gson().toJson(map);
 		
@@ -284,8 +334,15 @@ public class MultiApi extends BaseApi {
 		try {
 			SimpleHttpClient client = SimpleHttpClient.getInstance();
 			InputStream in = client.put(url, params);
-			// TODO what to do with response
+			// response is {name=subreddit}
 			Object response = GsonTemplate.fromInputStream(in, Object.class);
+			if ((response != null) && (response instanceof Map)) {
+				Map<String, String> responseMap = (Map<String, String>) response;
+				String value = responseMap.get("name");
+				if (value != null && value.equalsIgnoreCase(subreddit)) {
+					// return value is ok
+				}
+			}
 			in.close();
 		} catch (ClientProtocolException e) {
 			throw new RedditEngineException(e);

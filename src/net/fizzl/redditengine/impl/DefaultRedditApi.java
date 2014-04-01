@@ -413,7 +413,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public void setMultiDescription(String path, String text) {
+	public void setMultiDescription(String path, String text) throws RedditEngineException {
 		mMultiApi.setMultiDescription(path, text);
 	}
 
