@@ -377,8 +377,34 @@ public class MultiApi extends BaseApi {
 				
 	}
 
-	public String getSubredditInfoInMulti(String path, String subreddit){
-		throw new UnimplementedException();
+	public String getSubredditInfoInMulti(String path, String subreddit) throws RedditEngineException{
+		// GET /api/multi/multipath/r/srname
+		String url = String.format("%s/api/multi/%s/r/%s", UrlUtils.BASE_URL, path, subreddit);
+
+		// TODO are these really needed
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("multipath", path));
+		params.add(new BasicNameValuePair("srname", subreddit));
+		
+		String retval = null;
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream in = client.get(url, params);
+			Object response = GsonTemplate.fromInputStream(in, Object.class);
+			// TODO what should the return value be?
+			if (response != null) {
+				retval = new Gson().toJson(response);
+			}
+			in.close();
+		} catch (ClientProtocolException e) {
+			throw new RedditEngineException(e);
+		} catch (IOException e) {
+			throw new RedditEngineException(e);
+		} catch (UnexpectedHttpResponseException e) {
+			throw new RedditEngineException(e);
+		}
+		
+		return retval;
 	}
 
 	public void renameMulti(String path, String from, String to){

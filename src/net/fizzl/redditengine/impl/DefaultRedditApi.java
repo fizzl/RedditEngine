@@ -428,7 +428,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public String getSubredditInfoInMulti(String path, String subreddit) {
+	public String getSubredditInfoInMulti(String path, String subreddit) throws RedditEngineException {
 		return mMultiApi.getSubredditInfoInMulti(path, subreddit);
 	}
 
