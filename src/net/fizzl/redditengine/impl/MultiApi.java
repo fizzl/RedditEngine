@@ -307,8 +307,31 @@ public class MultiApi extends BaseApi {
 
 	}
 
-	public void removeSubredditFromMulti(String path, String subreddit){
-		throw new UnimplementedException();
+	/**
+	 * Remove a subreddit from a multi.
+	 * 
+	 * @param path		multireddit url path
+	 * @param subreddit	subreddit name
+	 * @throws RedditEngineException
+	 */
+	public void removeSubredditFromMulti(String path, String subreddit) throws RedditEngineException{
+		// DELETE /api/multi/multipath/r/srname
+		String url = String.format("%s/api/multi/%s/r/%s", UrlUtils.BASE_URL, path, subreddit);
+		
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			// request URI should completely identify the resource to delete
+			InputStream in = client.delete(url);
+			// response is normally null
+			Object response = GsonTemplate.fromInputStream(in, Object.class);			
+			in.close();
+		} catch (ClientProtocolException e) {
+			throw new RedditEngineException(e);
+		} catch (IOException e) {
+			throw new RedditEngineException(e);
+		} catch (UnexpectedHttpResponseException e) {
+			throw new RedditEngineException(e);
+		}
 	}
 
 	/**

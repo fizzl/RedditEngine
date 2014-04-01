@@ -418,7 +418,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public void removeSubredditFromMulti(String path, String subreddit) {
+	public void removeSubredditFromMulti(String path, String subreddit) throws RedditEngineException {
 		mMultiApi.removeSubredditFromMulti(path, subreddit);
 	}
 
