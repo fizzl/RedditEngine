@@ -4,6 +4,7 @@ import java.io.InputStream;
 
 import net.fizzl.redditengine.data.AuthResponse;
 import net.fizzl.redditengine.data.CommentListing;
+import net.fizzl.redditengine.data.ComposeResponse;
 import net.fizzl.redditengine.data.FlairListing;
 import net.fizzl.redditengine.data.JsonResponse;
 import net.fizzl.redditengine.data.LabeledMulti;
@@ -86,7 +87,7 @@ public interface RedditApi {
 	
 	// Private messages
 	public void block(String thingId) throws RedditEngineException;
-	public void compose(String to, String subject, String text, String captcha, String captchaIdentity) throws RedditEngineException;
+	public ComposeResponse compose(String to, String subject, String text, String captcha, String captchaIdentity) throws RedditEngineException;
 	public void readMessage(String thingId) throws RedditEngineException;
 	public void unreadMessage(String thingId) throws RedditEngineException;
 	public MessageListing getMessageListing(String where, boolean mark, String mid, String before, 

@@ -5,6 +5,7 @@ import java.io.InputStream;
 import net.fizzl.redditengine.RedditApi;
 import net.fizzl.redditengine.data.AuthResponse;
 import net.fizzl.redditengine.data.CommentListing;
+import net.fizzl.redditengine.data.ComposeResponse;
 import net.fizzl.redditengine.data.FlairListing;
 import net.fizzl.redditengine.data.JsonResponse;
 import net.fizzl.redditengine.data.LabeledMulti;
@@ -306,9 +307,9 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public void compose(String to, String subject, String text, String captcha,
-			String captchaIdentity) {
-		mMessagesApi.compose(to, subject, text, captcha, captchaIdentity);
+	public ComposeResponse compose(String to, String subject, String text, String captcha,
+			String captchaIdentity) throws RedditEngineException {
+		return mMessagesApi.compose(to, subject, text, captcha, captchaIdentity);
 	}
 
 	@Override
