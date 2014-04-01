@@ -9,6 +9,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.message.BasicNameValuePair;
 
+import net.fizzl.redditengine.data.GsonTemplate;
 import net.fizzl.redditengine.data.MessageListing;
 
 public class MessagesApi extends BaseApi {
@@ -20,12 +21,53 @@ public class MessagesApi extends BaseApi {
 		throw new UnimplementedException();
 	}
 
-	public void readMessage(String thingId){
-		throw new UnimplementedException();
+	/**
+	 * Read message
+	 * 
+	 * @param thingId	fullname of a thing
+	 * @throws RedditEngineException 
+	 */
+	public void readMessage(String thingId) throws RedditEngineException {
+		// POST /api/read_message
+		String url = String.format("%s/api/read_message", UrlUtils.BASE_URL);
+		this.readOrUnreadMessage(url, thingId);
 	}
-
-	public void unreadMessage(String thingId){
-		throw new UnimplementedException();
+	
+	/**
+	 * Unread message
+	 * 
+	 * @param thingId	fullname of a thing
+	 * @throws RedditEngineException
+	 */
+	public void unreadMessage(String thingId) throws RedditEngineException{
+		// POST /api/unread_message
+		String url = String.format("%s/api/unread_message", UrlUtils.BASE_URL);
+		this.readOrUnreadMessage(url, thingId);		
+	}
+	
+	/**
+	 * Helper function for {@link #readMessage(String)}, {@link #unreadMessage(String)}
+	 * 
+	 * @param url		REST API url
+	 * @param thingId	fullname of message
+	 * @throws RedditEngineException
+	 */
+	private void readOrUnreadMessage(String url, String thingId) throws RedditEngineException {	
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("id", thingId));
+		
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream is = client.post(url, params);
+			Object response = GsonTemplate.fromInputStream(is, Object.class);  // {}
+			is.close();
+		} catch (ClientProtocolException e) {
+			throw new RedditEngineException(e);
+		} catch (IOException e) {
+			throw new RedditEngineException(e);
+		} catch (UnexpectedHttpResponseException e) {
+			throw new RedditEngineException(e);
+		}	
 	}
 
 	public MessageListing getMessageListing(String where, boolean mark, String mid, String before, 

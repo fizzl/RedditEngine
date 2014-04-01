@@ -312,12 +312,12 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public void readMessage(String thingId) {
+	public void readMessage(String thingId) throws RedditEngineException {
 		mMessagesApi.readMessage(thingId);
 	}
 
 	@Override
-	public void unreadMessage(String thingId) {
+	public void unreadMessage(String thingId) throws RedditEngineException {
 		mMessagesApi.unreadMessage(thingId);
 	}
 
