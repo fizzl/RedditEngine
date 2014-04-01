@@ -206,6 +206,14 @@ public class MultiApi extends BaseApi {
 		}
 	}
 
+	/**
+	 * Copy a multi. Responds with 409 Conflict if the target already exists.
+	 * 
+	 * @param path	multi to be copied
+	 * @param from	source multireddit url path
+	 * @param to	destination multireddit url path
+	 * @throws RedditEngineException
+	 */
 	// TODO Unexpected return code 400 Bad Request
 	public void copyMulti(String path, String from, String to) throws RedditEngineException{
 		// POST /api/multi/multipath/copy
@@ -435,6 +443,14 @@ public class MultiApi extends BaseApi {
 		return retval;
 	}
 
+	/**
+	 * Rename a multi.
+	 * 
+	 * @param path	multi to be copied
+	 * @param from	source multireddit url path
+	 * @param to	destination multireddit url path
+	 * @throws RedditEngineException
+	 */
 	// TODO Unexpected return code 400 Bad Request
 	public void renameMulti(String path, String from, String to) throws RedditEngineException{
 		// POST /api/multi/multipath/rename

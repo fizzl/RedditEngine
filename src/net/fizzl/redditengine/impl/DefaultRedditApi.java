@@ -324,7 +324,7 @@ public class DefaultRedditApi implements RedditApi {
 	@Override
 	public MessageListing getMessageListing(String where, boolean mark,
 			String mid, String before, String after, int count, int limit,
-			String show) {
+			String show) throws RedditEngineException {
 		return mMessagesApi.getMessageListing(where, mark, mid, before, after,
 				count, limit, show);
 	}

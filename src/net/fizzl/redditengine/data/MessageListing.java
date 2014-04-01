@@ -11,6 +11,9 @@ import org.apache.commons.io.IOUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+/**
+ * GSON wrapper for Listing that contains Messages
+ */
 public class MessageListing extends Listing<MessageListingData> {
 	public static MessageListing fromInputStream(InputStream is) throws IOException {
 		StringWriter writer = new StringWriter();
