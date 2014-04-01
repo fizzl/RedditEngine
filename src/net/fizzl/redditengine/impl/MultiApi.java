@@ -206,8 +206,29 @@ public class MultiApi extends BaseApi {
 		}
 	}
 
-	public void copyMulti(String path, String from, String to){
-		throw new UnimplementedException();
+	// TODO Unexpected return code 400 Bad Request
+	public void copyMulti(String path, String from, String to) throws RedditEngineException{
+		// POST /api/multi/multipath/copy
+		String url = String.format("%s/api/multi/%s/copy", UrlUtils.BASE_URL, path);
+		
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("from", from));
+		params.add(new BasicNameValuePair("to", to));
+		
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream in = client.post(url, params);
+			Object response = GsonTemplate.fromInputStream(in, Object.class);
+			// TODO anything to be done with the response?
+			Log.d(getClass().getName(), new Gson().toJson(response));  // debug log for now
+			in.close();
+		} catch (ClientProtocolException e) {
+			throw new RedditEngineException(e);
+		} catch (IOException e) {
+			throw new RedditEngineException(e);
+		} catch (UnexpectedHttpResponseException e) {
+			throw new RedditEngineException(e);
+		}
 	}
 
 	/**
@@ -304,7 +325,6 @@ public class MultiApi extends BaseApi {
 		} catch (UnexpectedHttpResponseException e) {
 			throw new RedditEngineException(e);
 		}
-
 	}
 
 	/**
@@ -377,6 +397,14 @@ public class MultiApi extends BaseApi {
 				
 	}
 
+	/**
+	 * Get data about a subreddit in a multi.
+	 * 
+	 * @param path		multireddit url path
+	 * @param subreddit	subreddit name
+	 * @return			subreddit data
+	 * @throws RedditEngineException
+	 */
 	public String getSubredditInfoInMulti(String path, String subreddit) throws RedditEngineException{
 		// GET /api/multi/multipath/r/srname
 		String url = String.format("%s/api/multi/%s/r/%s", UrlUtils.BASE_URL, path, subreddit);
@@ -407,8 +435,29 @@ public class MultiApi extends BaseApi {
 		return retval;
 	}
 
-	public void renameMulti(String path, String from, String to){
-		throw new UnimplementedException();
+	// TODO Unexpected return code 400 Bad Request
+	public void renameMulti(String path, String from, String to) throws RedditEngineException{
+		// POST /api/multi/multipath/rename
+		String url = String.format("%s/api/multi/%s/rename", UrlUtils.BASE_URL, path);
+		
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("from", from));
+		params.add(new BasicNameValuePair("to", to));
+		
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream in = client.post(url, params);
+			Object response = GsonTemplate.fromInputStream(in, Object.class);
+			// TODO anything to be done with the response?
+			Log.d(getClass().getName(), new Gson().toJson(response));  // debug log for now
+			in.close();
+		} catch (ClientProtocolException e) {
+			throw new RedditEngineException(e);
+		} catch (IOException e) {
+			throw new RedditEngineException(e);
+		} catch (UnexpectedHttpResponseException e) {
+			throw new RedditEngineException(e);
+		}
 	}
 
 }

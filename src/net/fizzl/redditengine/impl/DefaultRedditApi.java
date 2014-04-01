@@ -403,7 +403,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public void copyMulti(String path, String from, String to) {
+	public void copyMulti(String path, String from, String to) throws RedditEngineException {
 		mMultiApi.copyMulti(path, from, to);
 	}
 
@@ -433,7 +433,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public void renameMulti(String path, String from, String to) {
+	public void renameMulti(String path, String from, String to) throws RedditEngineException {
 		mMultiApi.renameMulti(path, from, to);
 	}
 
