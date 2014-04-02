@@ -142,7 +142,7 @@ public interface RedditApi {
 	// Users
 	public JsonResponse<?> friend(String user, String container, String type, String permissions, String note) throws RedditEngineException;
 	public void unfriend(String user, String thingId, String container, String type) throws RedditEngineException;
-	public void setPermissions(String user, String subreddit, String permissions) throws RedditEngineException;
+	public void setPermissions(String user, String subreddit, String permissions, String type) throws RedditEngineException;
 	public boolean isUsernameAvailable(String user) throws RedditEngineException;
 	public User aboutUser(String user) throws RedditEngineException;
 	public UserListing getUserListing(String user, String what) throws RedditEngineException;

@@ -2,13 +2,18 @@ package net.fizzl.redditengine.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.message.BasicNameValuePair;
+
+import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -107,8 +112,47 @@ public class UserApi extends BaseApi {
 		}
 	}
 
-	public void setPermissions(String user, String subreddit, String permissions){
-		throw new UnimplementedException();
+	public void setPermissions(String user, String subreddit, String permissions, String type) throws RedditEngineException{
+		// POST [/r/subreddit]/api/setpermissions
+		// hard to test, gives 403
+		StringBuilder path = new StringBuilder();
+		path.append(UrlUtils.BASE_URL);
+		if (subreddit != null && !subreddit.isEmpty()) {
+			path.append("/r/");
+			path.append(subreddit);
+		}
+		path.append("/api/setpermissions");
+		String url = path.toString();
+		
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("api_type", "json"));
+		params.add(new BasicNameValuePair("name", user));
+		params.add(new BasicNameValuePair("permissions", permissions));
+		params.add(new BasicNameValuePair("type", type));
+		
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream is = client.post(url, params);
+			// if a 403 occurs the response is HTML
+			StringWriter writer = new StringWriter();
+			IOUtils.copy(is,  writer, "UTF-8");
+			is.close();
+			String response = writer.toString();
+			Pattern pattern = Pattern.compile(".*\\<[^>]+>.*", Pattern.DOTALL);
+			boolean containsHTML = pattern.matcher(response).find();
+			if (containsHTML == false) {
+				// create POJO here
+				Log.d(getClass().getName(), response);
+			} else {
+				Log.e(getClass().getName(), "response was HTML: " + response.substring(0, 64) + "...");
+			}
+		} catch (ClientProtocolException e) {
+			throw new RedditEngineException(e);
+		} catch (IOException e) {
+			throw new RedditEngineException(e);
+		} catch (UnexpectedHttpResponseException e) {
+			throw new RedditEngineException(e);
+		}
 	}
 	
 	/**

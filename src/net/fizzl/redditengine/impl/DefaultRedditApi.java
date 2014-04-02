@@ -542,8 +542,8 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public void setPermissions(String user, String subreddit, String permissions) {
-		mUserApi.setPermissions(user, subreddit, permissions);
+	public void setPermissions(String user, String subreddit, String permissions, String type) throws RedditEngineException {
+		mUserApi.setPermissions(user, subreddit, permissions, type);
 	}
 
 	@Override
