@@ -263,6 +263,8 @@ public class SubredditsApi extends BaseApi {
 	}
 
 	public SubredditSettings getSubredditSettings(String subreddit){
+		//GET /r/<subreddit>/about/edit.json just returns 404, broken?
+		//String url = String.format("%s/r/%s/about/edit.json", UrlUtils.BASE_URL, subreddit);
 		throw new UnimplementedException();
 	}
 

@@ -332,7 +332,7 @@ public class DefaultRedditApi implements RedditApi {
 
 	@Override
 	public ModlogListing getModlogListing(String subreddit, String type,
-			String mod, String before, String after, int count, int limit) {
+			String mod, String before, String after, int count, int limit) throws RedditEngineException {
 		return mModerationApi.getModlogListing(subreddit, type, mod, before,
 				after, count, limit);
 	}
