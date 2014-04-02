@@ -3,9 +3,13 @@ package net.fizzl.redditengine.data.type;
 import java.lang.reflect.Type;
 
 import net.fizzl.redditengine.data.Comment;
+import net.fizzl.redditengine.data.CommentData;
 import net.fizzl.redditengine.data.Link;
+import net.fizzl.redditengine.data.LinkData;
 import net.fizzl.redditengine.data.Thing;
 import net.fizzl.redditengine.impl.UnimplementedException;
+
+import android.util.Log;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -36,11 +40,43 @@ public class UserListingItem extends Thing<Object> {
 		setName(comment.getName());
 	}
 	
+	public Comment toComment() {
+		if (this.getKind().equals("t1") == false) {
+			Log.w(getClass().getName(), "Trying to convert a non-t1 type of data to CommentData");
+		}
+		Comment comment = new Comment();
+		comment.setData((CommentData)this.getData());
+		comment.setId(this.getId());
+		comment.setName(this.getName());
+		comment.setKind(this.getKind());
+		return comment;
+	}
+	
+	public Link toLink() {
+		if (this.getKind().equals("t3") == false) {
+			Log.w(getClass().getName(), "Trying to convert a non-t3 type of data to LinkData");
+		}		
+		Link link = new Link();
+		link.setId(this.getId());
+		link.setName(this.getName());
+		link.setKind(this.getKind());
+		link.setData((LinkData)this.getData());
+		return link;
+	}
+	
 	public static class TypeAdapter implements JsonSerializer<UserListingItem>, JsonDeserializer<UserListingItem> {
 		@Override
 		public JsonElement serialize(UserListingItem src, Type typeOfSrc, JsonSerializationContext context) {
-			// TODO implementation
-			throw new UnimplementedException();
+			JsonElement retval = null;
+			String kind = src.getKind();
+			if (kind.equals("t1")) {
+				Comment comment = src.toComment();
+				retval = context.serialize(comment, Comment.class);
+			} else if(kind.equals("t3")) {
+				Link link = src.toLink();
+				retval = context.serialize(link, Link.class);
+			}
+			return retval;
 		}
 
 		@Override
