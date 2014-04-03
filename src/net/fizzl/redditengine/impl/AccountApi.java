@@ -14,7 +14,6 @@ import net.fizzl.redditengine.data.JsonResponse;
 import net.fizzl.redditengine.data.User;
 
 public class AccountApi extends BaseApi {
-	private static final String REDDIT_SSL = "https://ssl.reddit.com";
 	private static final String LOGIN_PATH = "/api/login";
 	private static final String API_TYPE_JSON = "json";
 	
@@ -27,7 +26,7 @@ public class AccountApi extends BaseApi {
 	 */
 	public JsonResponse<?> clearSessions(String passwd) throws RedditEngineException {
 		StringBuilder path = new StringBuilder();
-		path.append(REDDIT_SSL);
+		path.append(UrlUtils.REDDIT_SSL);
 		path.append("/api/clear_sessions");
 		String url = path.toString();
 		
@@ -71,7 +70,7 @@ public class AccountApi extends BaseApi {
 	 */
 	public AuthResponse login(String user, String passwd, boolean remember) throws RedditEngineException  {
 		StringBuilder sb = new StringBuilder();
-		sb.append(REDDIT_SSL);
+		sb.append(UrlUtils.REDDIT_SSL);
 		sb.append(LOGIN_PATH);
 		String url = sb.toString();
 		
@@ -109,7 +108,7 @@ public class AccountApi extends BaseApi {
 	 */
 	public User me() throws RedditEngineException  {
 		StringBuilder path = new StringBuilder();
-		path.append(REDDIT_SSL);
+		path.append(UrlUtils.REDDIT_SSL);
 		path.append("/api/me.json");
 		String url = path.toString();
 		User response = new User();
