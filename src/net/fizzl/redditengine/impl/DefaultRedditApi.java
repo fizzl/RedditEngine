@@ -5,6 +5,7 @@ import java.io.InputStream;
 import net.fizzl.redditengine.RedditApi;
 import net.fizzl.redditengine.data.AuthResponse;
 import net.fizzl.redditengine.data.CommentListing;
+import net.fizzl.redditengine.data.CommentResponse;
 import net.fizzl.redditengine.data.ComposeResponse;
 import net.fizzl.redditengine.data.FlairListing;
 import net.fizzl.redditengine.data.JsonResponse;
@@ -197,8 +198,8 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public void comment(String parentId, String text) {
-		mLinkCommentApi.comment(parentId, text);
+	public CommentResponse comment(String parentId, String text) throws RedditEngineException {
+		return mLinkCommentApi.comment(parentId, text);
 	}
 
 	@Override

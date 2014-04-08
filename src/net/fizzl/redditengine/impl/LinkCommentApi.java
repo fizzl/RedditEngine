@@ -1,10 +1,44 @@
 package net.fizzl.redditengine.impl;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.message.BasicNameValuePair;
+
 import net.fizzl.redditengine.data.CommentListing;
+import net.fizzl.redditengine.data.CommentResponse;
+import net.fizzl.redditengine.data.GsonTemplate;
 
 public class LinkCommentApi extends BaseApi {
-	public void comment(String parentId, String text){
-		throw new UnimplementedException();
+	public CommentResponse comment(String parentId, String text) throws RedditEngineException{
+		String url = String.format("%s/api/comment", UrlUtils.BASE_URL);
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		if (text != null) {
+			params.add(new BasicNameValuePair("text", text));
+		}
+		if (parentId != null) {
+			params.add(new BasicNameValuePair("thing_id", parentId));
+		}
+		params.add(new BasicNameValuePair("api_type", "json"));
+		CommentResponse retval = null;
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream is = client.post(url, params);
+			retval = GsonTemplate.fromInputStream(is, CommentResponse.class);
+			is.close();
+		} catch (ClientProtocolException e) {
+			throw new RedditEngineException(e);
+		} catch (IOException e) {
+			throw new RedditEngineException(e);
+		} catch (UnexpectedHttpResponseException e) {
+			throw new RedditEngineException(e);
+		}
+		
+		return retval;
 	}
 
 	public void delete(String thingId){

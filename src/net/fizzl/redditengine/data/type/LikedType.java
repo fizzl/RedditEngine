@@ -16,10 +16,11 @@ public class LikedType {
 	public static class TypeAdapter implements JsonSerializer<LikedType>, JsonDeserializer<LikedType> {
 		@Override
 		public JsonElement serialize(LikedType src, Type typeOfSrc, JsonSerializationContext context) {
-			if(src.liked_boolean == true) {
-				return new JsonPrimitive(src.liked_boolean);
+			// should serialize number first?
+			if(src.liked > 0) {
+				return new JsonPrimitive(src.liked);
 			}
-			return new JsonPrimitive(src.liked);
+			return new JsonPrimitive(src.liked_boolean);
 		}
 	
 		@Override
@@ -27,11 +28,10 @@ public class LikedType {
 			LikedType ret = new LikedType();
 			String raw = json.getAsJsonPrimitive().getAsString();
 			if (!raw.equals("false")) {
-				ret.liked_boolean = true;
 				if (!raw.equals("true")) {
-					ret.liked = Integer.parseInt(raw);
+					ret.liked = Integer.parseInt(raw);  // not false and not true, try number
 				} else {
-					// TODO if raw is just "true", what should liked be?
+					ret.liked_boolean = true;
 				}
 			}
 			return ret;

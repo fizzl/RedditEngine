@@ -4,6 +4,7 @@ import java.io.InputStream;
 
 import net.fizzl.redditengine.data.AuthResponse;
 import net.fizzl.redditengine.data.CommentListing;
+import net.fizzl.redditengine.data.CommentResponse;
 import net.fizzl.redditengine.data.ComposeResponse;
 import net.fizzl.redditengine.data.FlairListing;
 import net.fizzl.redditengine.data.JsonResponse;
@@ -61,7 +62,7 @@ public interface RedditApi {
 	public void setFlairEnabled(String subreddit, boolean enabled) throws RedditEngineException;
 	
 	// Links & Comments
-	public void comment(String parentId, String text) throws RedditEngineException;
+	public CommentResponse comment(String parentId, String text) throws RedditEngineException;
 	public void delete(String thingId) throws RedditEngineException;
 	public void edit(String thingId, String text) throws RedditEngineException;
 	public void hide(String thingId) throws RedditEngineException;
