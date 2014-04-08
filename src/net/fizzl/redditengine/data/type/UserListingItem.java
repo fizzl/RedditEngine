@@ -2,13 +2,13 @@ package net.fizzl.redditengine.data.type;
 
 import java.lang.reflect.Type;
 
+import net.fizzl.redditengine.data.Award;
 import net.fizzl.redditengine.data.Comment;
 import net.fizzl.redditengine.data.CommentData;
 import net.fizzl.redditengine.data.Link;
 import net.fizzl.redditengine.data.LinkData;
 import net.fizzl.redditengine.data.Thing;
 import net.fizzl.redditengine.impl.UnimplementedException;
-
 import android.util.Log;
 
 import com.google.gson.JsonDeserializationContext;
@@ -40,6 +40,14 @@ public class UserListingItem extends Thing<Object> {
 		setName(comment.getName());
 	}
 	
+	public UserListingItem(Award award) {
+		super();
+		setData(award.getData());
+		setId(award.getId());
+		setKind(award.getKind());
+		setName(award.getName());
+	}
+
 	public Comment toComment() {
 		if (this.getKind().equals("t1") == false) {
 			Log.w(getClass().getName(), "Trying to convert a non-t1 type of data to CommentData");
@@ -86,14 +94,16 @@ public class UserListingItem extends Thing<Object> {
 				JsonObject obj = json.getAsJsonObject();
 				if(!obj.get(KIND).isJsonNull()) {
 					 String kind = obj.get(KIND).getAsString();
+					 // TODO smarter way to convert t1-t6 to UserListingItem
 					 if (kind.equals("t1")) {
 						 Comment comment = context.deserialize(obj, Comment.class);
-						 // TODO smarter way to convert Comment to UserListingItem
 						 retval = new UserListingItem(comment);
 					 } else if (kind.equals("t3")) {
 						 Link link = context.deserialize(obj, Link.class);
-						 // TODO smarter way to convert Link to UserListingItem
 						 retval = new UserListingItem(link);
+					 } else if (kind.equals("t6")) {
+						 Award award = context.deserialize(obj, Award.class);
+						 retval = new UserListingItem(award);
 					 }
 				}
 			}

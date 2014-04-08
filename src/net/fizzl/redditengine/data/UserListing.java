@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.StringWriter;
 
 import net.fizzl.redditengine.data.type.EditedType;
+import net.fizzl.redditengine.data.type.LikedType;
 import net.fizzl.redditengine.data.type.UserListingItem;
 
 import org.apache.commons.io.IOUtils;
@@ -27,6 +28,7 @@ public class UserListing extends Listing<UserListingData> {
 		GsonBuilder builder = new GsonBuilder();
 		builder.registerTypeAdapter(UserListingItem.class, new UserListingItem.TypeAdapter());
 		builder.registerTypeAdapter(EditedType.class, new EditedType.TypeAdapter());
+		builder.registerTypeAdapter(LikedType.class, new LikedType.TypeAdapter());
 		Gson gson = builder.create();
 		UserListing retval = gson.fromJson(json, UserListing.class);
 		return retval;

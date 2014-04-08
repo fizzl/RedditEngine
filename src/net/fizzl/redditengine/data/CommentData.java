@@ -1,6 +1,7 @@
 package net.fizzl.redditengine.data;
 
 import net.fizzl.redditengine.data.type.EditedType;
+import net.fizzl.redditengine.data.type.LikedType;
 
 /**
  * Holds all data in a reddit Comment.
@@ -11,7 +12,7 @@ public class CommentData {
 	String subreddit_id;
 	String banned_by;
 	String subreddit;
-	int likes;
+	LikedType likes;
 	CommentListing replies;
 	boolean saved;
 	String id;
@@ -52,10 +53,10 @@ public class CommentData {
 	public void setSubreddit(String subreddit) {
 		this.subreddit = subreddit;
 	}
-	public int getLikes() {
+	public LikedType getLikes() {
 		return likes;
 	}
-	public void setLikes(int likes) {
+	public void setLikes(LikedType likes) {
 		this.likes = likes;
 	}
 	public CommentListing getReplies() {
