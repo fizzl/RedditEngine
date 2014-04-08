@@ -3,12 +3,12 @@ package net.fizzl.redditengine.data.type;
 import java.lang.reflect.Type;
 
 import net.fizzl.redditengine.data.Award;
+import net.fizzl.redditengine.data.AwardData;
 import net.fizzl.redditengine.data.Comment;
 import net.fizzl.redditengine.data.CommentData;
 import net.fizzl.redditengine.data.Link;
 import net.fizzl.redditengine.data.LinkData;
 import net.fizzl.redditengine.data.Thing;
-import net.fizzl.redditengine.impl.UnimplementedException;
 import android.util.Log;
 
 import com.google.gson.JsonDeserializationContext;
@@ -72,6 +72,18 @@ public class UserListingItem extends Thing<Object> {
 		return link;
 	}
 	
+	public Award toAward() {
+		if (this.getKind().equals("t6") == false) {
+			Log.w(getClass().getName(), "Trying to convert a non-t6 type of data to Award");
+		}		
+		Award award = new Award();
+		award.setId(this.getId());
+		award.setName(this.getName());
+		award.setKind(this.getKind());
+		award.setData((AwardData)this.getData());
+		return award;
+	}
+	
 	public static class TypeAdapter implements JsonSerializer<UserListingItem>, JsonDeserializer<UserListingItem> {
 		@Override
 		public JsonElement serialize(UserListingItem src, Type typeOfSrc, JsonSerializationContext context) {
@@ -83,6 +95,11 @@ public class UserListingItem extends Thing<Object> {
 			} else if(kind.equals("t3")) {
 				Link link = src.toLink();
 				retval = context.serialize(link, Link.class);
+			} else if(kind.equals("t6")) {
+				Award award = src.toAward();
+				retval = context.serialize(award, Award.class);
+			} else {
+				throw new JsonSyntaxException("Unable to serialize " + src);
 			}
 			return retval;
 		}
@@ -108,7 +125,7 @@ public class UserListingItem extends Thing<Object> {
 				}
 			}
 			if (retval == null) {
-				throw new JsonSyntaxException("Unable to parse " + typeOfT.getClass().getCanonicalName());
+				throw new JsonSyntaxException("Unable to deserialize " + typeOfT.getClass().getCanonicalName());
 			}
 			return retval;
 		}		
