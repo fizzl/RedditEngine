@@ -1,6 +1,7 @@
 package net.fizzl.redditengine.data;
 
 import net.fizzl.redditengine.data.type.EditedType;
+import net.fizzl.redditengine.data.type.LikedType;
 
 /**
  * Holds all data in a Link
@@ -16,7 +17,7 @@ public class LinkData {
 	String subreddit;
 	String selftext_html;
 	String selftext;
-	int likes;
+	LikedType likes;
 	String link_flair_text;
 	String id;
 	
@@ -102,10 +103,10 @@ public class LinkData {
 	public void setSelftext(String selftext) {
 		this.selftext = selftext;
 	}
-	public int getLikes() {
+	public LikedType getLikes() {
 		return likes;
 	}
-	public void setLikes(int likes) {
+	public void setLikes(LikedType likes) {
 		this.likes = likes;
 	}
 	public String getLink_flair_text() {

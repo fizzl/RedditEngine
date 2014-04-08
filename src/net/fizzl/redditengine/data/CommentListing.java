@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.StringWriter;
 
 import net.fizzl.redditengine.data.type.EditedType;
+import net.fizzl.redditengine.data.type.LikedType;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
@@ -43,6 +44,7 @@ public class CommentListing extends Listing<CommentListingData> {
 	public static CommentListing fromString(String str) throws JSONException {
 		GsonBuilder builder = new GsonBuilder();
 		builder.registerTypeAdapter(EditedType.class, new EditedType.TypeAdapter());
+		builder.registerTypeAdapter(LikedType.class, new LikedType.TypeAdapter());
 		Gson gson = builder.create();
 		JSONArray arr = new JSONArray(str);
 		String justcomments = removeEmptyReplies(arr.getJSONObject(1).toString());

@@ -15,6 +15,10 @@ public class CommentThing {
 		String parent;
 		String content;
 		String id;
+		String contentText;
+		String link;
+		Object replies;  // TODO type
+		String contentHTML;
 		
 		public String getParent() {
 			return parent;
