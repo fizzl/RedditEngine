@@ -10,6 +10,7 @@ import net.fizzl.redditengine.data.FlairListing;
 import net.fizzl.redditengine.data.JsonResponse;
 import net.fizzl.redditengine.data.LabeledMulti;
 import net.fizzl.redditengine.data.LinkListing;
+import net.fizzl.redditengine.data.SubmitResponse;
 import net.fizzl.redditengine.data.MessageListing;
 import net.fizzl.redditengine.data.ModlogListing;
 import net.fizzl.redditengine.data.StyleSheet;
@@ -76,7 +77,7 @@ public interface RedditApi {
 	public void unsave(String thingId) throws RedditEngineException;
 	public void setContestMode(String thingId, boolean state) throws RedditEngineException;
 	public void setSticky(String thingId, boolean state) throws RedditEngineException;
-	public void submit(String subreddit, String title, String kind, String url, String text, 
+	public SubmitResponse submit(String subreddit, String title, String kind, String url, String text, 
 			String captcha, String captchaIden, boolean resubmit, boolean save, boolean sendReplies) throws RedditEngineException;
 	public void vote(String thingId, int dir) throws RedditEngineException;
 	

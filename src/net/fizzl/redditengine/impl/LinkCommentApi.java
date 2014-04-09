@@ -12,6 +12,7 @@ import org.apache.http.message.BasicNameValuePair;
 import net.fizzl.redditengine.data.CommentListing;
 import net.fizzl.redditengine.data.CommentResponse;
 import net.fizzl.redditengine.data.GsonTemplate;
+import net.fizzl.redditengine.data.SubmitResponse;
 
 public class LinkCommentApi extends BaseApi {
 	public CommentResponse comment(String parentId, String text) throws RedditEngineException{
@@ -93,9 +94,60 @@ public class LinkCommentApi extends BaseApi {
 		throw new UnimplementedException();
 	}
 
-	public void submit(String subreddit, String title, String kind, String url, String text, 
-			String captcha, String captchaIden, boolean resubmit, boolean save, boolean sendReplies){
-		throw new UnimplementedException();
+	/**
+	 * Submit a link to a subreddit.
+	 * 
+	 * @param subreddit		name of a subreddit
+	 * @param title			title of the submission. up to 300 characters long
+	 * @param kind			one of (link, self)
+	 * @param url			a valid URL
+	 * @param text			raw markdown text
+	 * @param captcha		the user's response to the CAPTCHA challenge
+	 * @param captchaIden	the identifier of the CAPTCHA challenge
+	 * @param resubmit		boolean value
+	 * @param save			boolean value
+	 * @param sendReplies	boolean value
+	 * @return				{@link SubmitResponse}
+	 * @throws RedditEngineException
+	 */
+	public SubmitResponse submit(String subreddit, String title, String kind, String url, String text, 
+			String captcha, String captchaIden, boolean resubmit, boolean save, boolean sendReplies) throws RedditEngineException{
+		String path = String.format("%s/api/submit", UrlUtils.BASE_URL);
+		
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("sr", subreddit));
+		params.add(new BasicNameValuePair("api_type", "json"));
+		params.add(new BasicNameValuePair("captcha", captcha));
+		params.add(new BasicNameValuePair("iden", captchaIden));
+		params.add(new BasicNameValuePair("kind", kind));
+		params.add(new BasicNameValuePair("resubmit", String.valueOf(resubmit)));
+		params.add(new BasicNameValuePair("save", String.valueOf(save)));
+		params.add(new BasicNameValuePair("sendreplies", String.valueOf(sendReplies)));
+		params.add(new BasicNameValuePair("text", text));
+		params.add(new BasicNameValuePair("title", title));
+		params.add(new BasicNameValuePair("extension", "json"));
+		params.add(new BasicNameValuePair("then", "tb")); // then	one of (tb, comments)
+		params.add(new BasicNameValuePair("url", url));
+		
+		// response can be:
+		// {"json": {"errors": [["QUOTA_FILLED", "You've submitted too many links recently. Please try again in an hour.", null]]}}
+		// {"json": {"errors": [], "data": {"url": "<URL>", "id": "<ID>", "name": "<FULLNAME>"}}}
+		
+		SubmitResponse retval = null;
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream is = client.post(path, params);
+			retval = GsonTemplate.fromInputStream(is, SubmitResponse.class);
+			is.close();
+		} catch (ClientProtocolException e) {
+			throw new RedditEngineException(e);
+		} catch (IOException e) {
+			throw new RedditEngineException(e);
+		} catch (UnexpectedHttpResponseException e) {
+			throw new RedditEngineException(e);
+		}
+		
+		return retval;
 	}
 
 	public void vote(String thingId, int dir){

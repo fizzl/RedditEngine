@@ -11,6 +11,7 @@ import net.fizzl.redditengine.data.FlairListing;
 import net.fizzl.redditengine.data.JsonResponse;
 import net.fizzl.redditengine.data.LabeledMulti;
 import net.fizzl.redditengine.data.LinkListing;
+import net.fizzl.redditengine.data.SubmitResponse;
 import net.fizzl.redditengine.data.MessageListing;
 import net.fizzl.redditengine.data.ModlogListing;
 import net.fizzl.redditengine.data.StyleSheet;
@@ -269,10 +270,10 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public void submit(String subreddit, String title, String kind, String url,
+	public SubmitResponse submit(String subreddit, String title, String kind, String url,
 			String text, String captcha, String captchaIden, boolean resubmit,
-			boolean save, boolean sendReplies) {
-		mLinkCommentApi.submit(subreddit, title, kind, url, text, captcha,
+			boolean save, boolean sendReplies) throws RedditEngineException {
+		return mLinkCommentApi.submit(subreddit, title, kind, url, text, captcha,
 				captchaIden, resubmit, save, sendReplies);
 	}
 
