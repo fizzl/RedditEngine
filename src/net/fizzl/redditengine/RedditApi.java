@@ -73,7 +73,7 @@ public interface RedditApi {
 	public void unmarkNSFW(String thingId) throws RedditEngineException;
 	public CommentListing moreChildren(String linkId, String children, String moreId, String sort) throws RedditEngineException;
 	public void report(String thingId) throws RedditEngineException;
-	public void save(String thingId) throws RedditEngineException;
+	public void save(String thingId, String category) throws RedditEngineException;
 	public void unsave(String thingId) throws RedditEngineException;
 	public void setContestMode(String thingId, boolean state) throws RedditEngineException;
 	public void setSticky(String thingId, boolean state) throws RedditEngineException;

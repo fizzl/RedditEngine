@@ -163,8 +163,35 @@ public class LinkCommentApi extends BaseApi {
 		throw new UnimplementedException();
 	}
 
-	public void save(String thingId){
-		throw new UnimplementedException();
+	/**
+	 * Save a link or comment.
+	 * @param category	a category name
+	 * @param thingId	fullname of a thing
+	 * @throws RedditEngineException 
+	 */
+	public void save(String thingId, String category) throws RedditEngineException{
+		String url = String.format("%s/api/save", UrlUtils.BASE_URL);
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		if (thingId != null) {
+			params.add(new BasicNameValuePair("id", thingId));
+		}
+		if (category != null) {
+			params.add(new BasicNameValuePair("category", category));
+		}
+		params.add(new BasicNameValuePair("api_type", "json"));
+
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream is = client.post(url, params);
+			Object retval = GsonTemplate.fromInputStream(is, Object.class);  // response is {}
+			is.close();
+		} catch (ClientProtocolException e) {
+			throw new RedditEngineException(e);
+		} catch (IOException e) {
+			throw new RedditEngineException(e);
+		} catch (UnexpectedHttpResponseException e) {
+			throw new RedditEngineException(e);
+		}
 	}
 
 	public void unsave(String thingId){

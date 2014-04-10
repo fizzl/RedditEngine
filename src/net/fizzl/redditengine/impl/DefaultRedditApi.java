@@ -250,8 +250,8 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public void save(String thingId) {
-		mLinkCommentApi.save(thingId);
+	public void save(String thingId, String category) throws RedditEngineException {
+		mLinkCommentApi.save(thingId, category);
 	}
 
 	@Override
