@@ -12,6 +12,7 @@ import org.apache.http.message.BasicNameValuePair;
 import net.fizzl.redditengine.data.CommentListing;
 import net.fizzl.redditengine.data.CommentResponse;
 import net.fizzl.redditengine.data.GsonTemplate;
+import net.fizzl.redditengine.data.JsonResponse;
 import net.fizzl.redditengine.data.SubmitResponse;
 
 public class LinkCommentApi extends BaseApi {
@@ -46,8 +47,42 @@ public class LinkCommentApi extends BaseApi {
 		throw new UnimplementedException();
 	}
 
-	public void edit(String thingId, String text){
-		throw new UnimplementedException();
+	/**
+	 * Edit the body text of a comment or self-post.
+	 * 
+	 * @param thingId	fullname of a thing created by the user
+	 * @param text		raw markdown text
+	 * @throws RedditEngineException 
+	 */
+	public JsonResponse<?> edit(String thingId, String text) throws RedditEngineException{
+		// TODO more specific return type
+		String url = String.format("%s/api/editusertext", UrlUtils.BASE_URL);
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		if (text != null) {
+			params.add(new BasicNameValuePair("text", text));
+		}
+		if (thingId != null) {
+			params.add(new BasicNameValuePair("thingId", thingId));
+		}
+		params.add(new BasicNameValuePair("api_type", "json"));
+
+		// possible answers
+		// {json={errors=[[NOT_AUTHOR, you can't do that, thing_id]]}}
+
+		JsonResponse<?> retval = null;
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream is = client.post(url, params);
+			retval = GsonTemplate.fromInputStream(is, JsonResponse.class);
+			is.close();
+		} catch (ClientProtocolException e) {
+			throw new RedditEngineException(e);
+		} catch (IOException e) {
+			throw new RedditEngineException(e);
+		} catch (UnexpectedHttpResponseException e) {
+			throw new RedditEngineException(e);
+		}
+		return retval;
 	}
 
 	public void hide(String thingId){

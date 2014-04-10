@@ -209,8 +209,8 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public void edit(String thingId, String text) {
-		mLinkCommentApi.edit(thingId, text);
+	public JsonResponse<?> edit(String thingId, String text) throws RedditEngineException {
+		return mLinkCommentApi.edit(thingId, text);
 	}
 
 	@Override
