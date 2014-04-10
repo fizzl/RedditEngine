@@ -265,7 +265,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public void setSticky(String thingId, boolean state) {
+	public void setSticky(String thingId, boolean state) throws RedditEngineException {
 		mLinkCommentApi.setSticky(thingId, state);
 	}
 

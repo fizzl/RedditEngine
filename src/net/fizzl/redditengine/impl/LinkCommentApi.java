@@ -227,8 +227,34 @@ public class LinkCommentApi extends BaseApi {
 		throw new UnimplementedException();
 	}
 
-	public void setSticky(String thingId, boolean state){
-		throw new UnimplementedException();
+	/**
+	 * Set or unset a self-post as the sticky post in its subreddit.
+	 * 
+	 * @param thingId	fullname of a thing
+	 * @param state		state is a boolean that indicates whether to sticky or unsticky this post - true to sticky, false to unsticky.
+	 * @throws RedditEngineException
+	 */
+	public void setSticky(String thingId, boolean state) throws RedditEngineException{
+		// TODO result is 403, how to set sticky?
+		String url = String.format("%s/api/set_subreddit_sticky", UrlUtils.BASE_URL);
+		
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("api_type", "json"));
+		params.add(new BasicNameValuePair("id", thingId));
+		params.add(new BasicNameValuePair("state", String.valueOf(state)));
+		
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream is = client.post(url, params);
+			Object retval = GsonTemplate.fromInputStream(is, Object.class);
+			is.close();
+		} catch (ClientProtocolException e) {
+			throw new RedditEngineException(e);
+		} catch (IOException e) {
+			throw new RedditEngineException(e);
+		} catch (UnexpectedHttpResponseException e) {
+			throw new RedditEngineException(e);
+		}
 	}
 
 	/**
