@@ -287,8 +287,32 @@ public class LinkCommentApi extends BaseApi {
 		return retval;
 	}
 
-	public void vote(String thingId, int dir){
-		throw new UnimplementedException();
+	/**
+	 * Cast a vote on a thing.
+	 * 
+	 * @param thingId	the fullname of the Link or Comment to vote on.
+	 * @param dir		direction of the vote. Voting 1 is an upvote, -1 is a downvote, and 0 is equivalent to "un-voting" by clicking again on a highlighted arrow
+	 * @throws RedditEngineException 
+	 */
+	public void vote(String thingId, int dir) throws RedditEngineException{
+		String url = String.format("%s/api/vote", UrlUtils.BASE_URL);
+		
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("dir", String.valueOf(dir)));
+		params.add(new BasicNameValuePair("id", thingId));
+		
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream is = client.post(url, params);
+			Object retval = GsonTemplate.fromInputStream(is, Object.class);
+			is.close();
+		} catch (ClientProtocolException e) {
+			throw new RedditEngineException(e);
+		} catch (IOException e) {
+			throw new RedditEngineException(e);
+		} catch (UnexpectedHttpResponseException e) {
+			throw new RedditEngineException(e);
+		}
 	}
 
 }

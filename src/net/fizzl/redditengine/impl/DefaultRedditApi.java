@@ -278,7 +278,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public void vote(String thingId, int dir) {
+	public void vote(String thingId, int dir) throws RedditEngineException {
 		mLinkCommentApi.vote(thingId, dir);
 	}
 
