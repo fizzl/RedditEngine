@@ -44,7 +44,13 @@ public class LinkCommentApi extends BaseApi {
 	}
 
 	public void delete(String thingId){
-		throw new UnimplementedException();
+		// POST /api/del
+		String url = String.format("%s/api/del", UrlUtils.BASE_URL);
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		if (thingId != null) {
+			params.add(new BasicNameValuePair("thing_id", thingId));
+		}
+		params.add(new BasicNameValuePair("api_type", "json"));
 	}
 
 	/**
@@ -62,7 +68,7 @@ public class LinkCommentApi extends BaseApi {
 			params.add(new BasicNameValuePair("text", text));
 		}
 		if (thingId != null) {
-			params.add(new BasicNameValuePair("thingId", thingId));
+			params.add(new BasicNameValuePair("thing_id", thingId));
 		}
 		params.add(new BasicNameValuePair("api_type", "json"));
 
