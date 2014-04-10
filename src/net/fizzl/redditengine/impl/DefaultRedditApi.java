@@ -255,7 +255,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public void unsave(String thingId) {
+	public void unsave(String thingId) throws RedditEngineException {
 		mLinkCommentApi.unsave(thingId);
 	}
 
