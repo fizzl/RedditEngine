@@ -214,12 +214,12 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public void hide(String thingId) {
+	public void hide(String thingId) throws RedditEngineException {
 		mLinkCommentApi.hide(thingId);
 	}
 
 	@Override
-	public void unhide(String thingId) {
+	public void unhide(String thingId) throws RedditEngineException {
 		mLinkCommentApi.unhide(thingId);
 	}
 

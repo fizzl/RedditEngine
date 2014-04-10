@@ -49,7 +49,7 @@ public class LinkCommentApi extends BaseApi {
 		if (thingId != null) {
 			params.add(new BasicNameValuePair("id", thingId));
 		}
-		params.add(new BasicNameValuePair("api_type", "json"));
+		params.add(new BasicNameValuePair("api_type", "json"));  // needed?
 		try {
 			SimpleHttpClient client = SimpleHttpClient.getInstance();
 			InputStream is = client.post(url, params);
@@ -101,12 +101,46 @@ public class LinkCommentApi extends BaseApi {
 		return retval;
 	}
 
-	public void hide(String thingId){
-		throw new UnimplementedException();
+	/**
+	 * This removes a link from the user's default view of subreddit listings.
+	 * 
+	 * @param thingId	fullname of a link
+	 * @throws RedditEngineException
+	 */
+	public void hide(String thingId) throws RedditEngineException{
+		String url = String.format("%s/api/hide", UrlUtils.BASE_URL);
+		hideOrUnhide(url, thingId);
+	}
+	
+	private void hideOrUnhide(String url, String thingId) throws RedditEngineException {
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		if (thingId != null) {
+			params.add(new BasicNameValuePair("id", thingId));
+		}
+		params.add(new BasicNameValuePair("api_type", "json"));  // needed?
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream is = client.post(url, params);
+			Object retval = GsonTemplate.fromInputStream(is, Object.class);  // response is {}
+			is.close();
+		} catch (ClientProtocolException e) {
+			throw new RedditEngineException(e);
+		} catch (IOException e) {
+			throw new RedditEngineException(e);
+		} catch (UnexpectedHttpResponseException e) {
+			throw new RedditEngineException(e);
+		}		
 	}
 
-	public void unhide(String thingId){
-		throw new UnimplementedException();
+	/**
+	 * Unhide a link.
+	 * 
+	 * @param thingId	fullname of a thing
+	 * @throws RedditEngineException
+	 */
+	public void unhide(String thingId) throws RedditEngineException{
+		String url = String.format("%s/api/unhide", UrlUtils.BASE_URL);
+		hideOrUnhide(url, thingId);
 	}
 
 	public void info(String url, String thingId, int limit){
