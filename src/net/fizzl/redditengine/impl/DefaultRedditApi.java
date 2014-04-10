@@ -204,7 +204,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public void delete(String thingId) {
+	public void delete(String thingId) throws RedditEngineException {
 		mLinkCommentApi.delete(thingId);
 	}
 
