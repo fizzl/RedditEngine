@@ -225,7 +225,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public void info(String url, String thingId, int limit) {
+	public void info(String url, String thingId, int limit) throws RedditEngineException {
 		mLinkCommentApi.info(url, thingId, limit);
 	}
 

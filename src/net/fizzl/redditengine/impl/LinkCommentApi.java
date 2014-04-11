@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.message.BasicNameValuePair;
@@ -120,8 +121,48 @@ public class LinkCommentApi extends BaseApi {
 		postUrlWithId(url, thingId);
 	}
 
-	public void info(String url, String thingId, int limit){
-		throw new UnimplementedException();
+	/**
+	 * Get a link by fullname or a list of links by URL.</p>
+	 * If both url and id are provided, id will take precedence.
+	 * 
+	 * @param url		a valid URL
+	 * @param thingId	fullname of a thing
+	 * @param limit		the maximum number of items desired (default: 25, maximum: 100)
+	 * @throws RedditEngineException 
+	 */
+	public void info(String url, String thingId, int limit) throws RedditEngineException{
+		// GET [/r/subreddit]/api/info
+		StringBuilder sb = new StringBuilder();
+		sb.append(UrlUtils.BASE_URL);		
+		// TODO subreddit parameter: if (subreddit != null) { sb.append("/r/" + subreddit); }
+		sb.append("/api/info");		
+		String path = sb.toString();
+		
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		if (thingId != null) {
+			params.add(new BasicNameValuePair("id", thingId));
+		}
+		if (url != null) {
+			params.add(new BasicNameValuePair("url", url));
+		}
+		params.add(new BasicNameValuePair("limit", String.valueOf(limit)));
+		
+		try {
+			// TODO response is HTML, what should params be?
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream is = client.get(path, params);
+			java.io.StringWriter sr = new java.io.StringWriter();
+			IOUtils.copy(is, sr, "UTF-8");
+			String response = sr.toString();
+			//Object retval = GsonTemplate.fromInputStream(is, Object.class);
+			is.close();
+		} catch (ClientProtocolException e) {
+			throw new RedditEngineException(e);
+		} catch (IOException e) {
+			throw new RedditEngineException(e);
+		} catch (UnexpectedHttpResponseException e) {
+			throw new RedditEngineException(e);
+		}		
 	}
 
 	/**
