@@ -7,6 +7,7 @@ import net.fizzl.redditengine.data.AuthResponse;
 import net.fizzl.redditengine.data.CommentListing;
 import net.fizzl.redditengine.data.CommentResponse;
 import net.fizzl.redditengine.data.ComposeResponse;
+import net.fizzl.redditengine.data.EditResponse;
 import net.fizzl.redditengine.data.FlairListing;
 import net.fizzl.redditengine.data.JsonResponse;
 import net.fizzl.redditengine.data.LabeledMulti;
@@ -209,7 +210,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public CommentResponse edit(String thingId, String text) throws RedditEngineException {
+	public EditResponse edit(String thingId, String text) throws RedditEngineException {
 		return mLinkCommentApi.edit(thingId, text);
 	}
 

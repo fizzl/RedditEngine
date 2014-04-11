@@ -11,6 +11,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import net.fizzl.redditengine.data.CommentListing;
 import net.fizzl.redditengine.data.CommentResponse;
+import net.fizzl.redditengine.data.EditResponse;
 import net.fizzl.redditengine.data.GsonTemplate;
 import net.fizzl.redditengine.data.SubmitResponse;
 
@@ -25,7 +26,29 @@ public class LinkCommentApi extends BaseApi {
 	 */
 	public CommentResponse comment(String parentId, String text) throws RedditEngineException{
 		String url = String.format("%s/api/comment", UrlUtils.BASE_URL);
-		return commentOrEdit(url, parentId, text);
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		if (text != null) {
+			params.add(new BasicNameValuePair("text", text));
+		}
+		if (parentId != null) {
+			params.add(new BasicNameValuePair("thing_id", parentId));
+		}
+		params.add(new BasicNameValuePair("api_type", "json"));
+
+		CommentResponse retval = null;
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream is = client.post(url, params);
+			retval = GsonTemplate.fromInputStream(is, CommentResponse.class);
+			is.close();
+		} catch (ClientProtocolException e) {
+			throw new RedditEngineException(e);
+		} catch (IOException e) {
+			throw new RedditEngineException(e);
+		} catch (UnexpectedHttpResponseException e) {
+			throw new RedditEngineException(e);
+		}
+		return retval;
 	}
 
 	/**
@@ -46,14 +69,10 @@ public class LinkCommentApi extends BaseApi {
 	 * @param text		raw markdown text
 	 * @throws RedditEngineException 
 	 */
-	public CommentResponse edit(String thingId, String text) throws RedditEngineException{
+	public EditResponse edit(String thingId, String text) throws RedditEngineException{
 		// possible answers:
 		// {json={errors=[[NOT_AUTHOR, you can't do that, thing_id]]}}
 		String url = String.format("%s/api/editusertext", UrlUtils.BASE_URL);
-		return commentOrEdit(url, thingId, text);
-	}
-	
-	private CommentResponse commentOrEdit(String url, String thingId, String text) throws RedditEngineException {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		if (text != null) {
 			params.add(new BasicNameValuePair("text", text));
@@ -63,11 +82,11 @@ public class LinkCommentApi extends BaseApi {
 		}
 		params.add(new BasicNameValuePair("api_type", "json"));
 
-		CommentResponse retval = null;
+		EditResponse retval = null;
 		try {
 			SimpleHttpClient client = SimpleHttpClient.getInstance();
 			InputStream is = client.post(url, params);
-			retval = GsonTemplate.fromInputStream(is, CommentResponse.class);
+			retval = GsonTemplate.fromInputStream(is, EditResponse.class);
 			is.close();
 		} catch (ClientProtocolException e) {
 			throw new RedditEngineException(e);

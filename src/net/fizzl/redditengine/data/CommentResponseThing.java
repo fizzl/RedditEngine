@@ -4,7 +4,7 @@ package net.fizzl.redditengine.data;
  * Comment posting response
  * @see CommentThingData
  */
-public class CommentThing {
+public class CommentResponseThing {
 	Thing<CommentThingData>[] things;
 	
 	/**

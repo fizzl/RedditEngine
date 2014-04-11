@@ -6,6 +6,7 @@ import net.fizzl.redditengine.data.AuthResponse;
 import net.fizzl.redditengine.data.CommentListing;
 import net.fizzl.redditengine.data.CommentResponse;
 import net.fizzl.redditengine.data.ComposeResponse;
+import net.fizzl.redditengine.data.EditResponse;
 import net.fizzl.redditengine.data.FlairListing;
 import net.fizzl.redditengine.data.JsonResponse;
 import net.fizzl.redditengine.data.LabeledMulti;
@@ -65,7 +66,7 @@ public interface RedditApi {
 	// Links & Comments
 	public CommentResponse comment(String parentId, String text) throws RedditEngineException;
 	public void delete(String thingId) throws RedditEngineException;
-	public CommentResponse edit(String thingId, String text) throws RedditEngineException;
+	public EditResponse edit(String thingId, String text) throws RedditEngineException;
 	public void hide(String thingId) throws RedditEngineException;
 	public void unhide(String thingId) throws RedditEngineException;
 	public void info(String url, String thingId, int limit) throws RedditEngineException;
