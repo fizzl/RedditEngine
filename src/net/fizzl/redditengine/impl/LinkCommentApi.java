@@ -25,29 +25,7 @@ public class LinkCommentApi extends BaseApi {
 	 */
 	public CommentResponse comment(String parentId, String text) throws RedditEngineException{
 		String url = String.format("%s/api/comment", UrlUtils.BASE_URL);
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		if (text != null) {
-			params.add(new BasicNameValuePair("text", text));
-		}
-		if (parentId != null) {
-			params.add(new BasicNameValuePair("thing_id", parentId));
-		}
-		params.add(new BasicNameValuePair("api_type", "json"));
-		CommentResponse retval = null;
-		try {
-			SimpleHttpClient client = SimpleHttpClient.getInstance();
-			InputStream is = client.post(url, params);
-			retval = GsonTemplate.fromInputStream(is, CommentResponse.class);
-			is.close();
-		} catch (ClientProtocolException e) {
-			throw new RedditEngineException(e);
-		} catch (IOException e) {
-			throw new RedditEngineException(e);
-		} catch (UnexpectedHttpResponseException e) {
-			throw new RedditEngineException(e);
-		}
-		
-		return retval;
+		return commentOrEdit(url, parentId, text);
 	}
 
 	/**
@@ -58,23 +36,7 @@ public class LinkCommentApi extends BaseApi {
 	 */
 	public void delete(String thingId) throws RedditEngineException{
 		String url = String.format("%s/api/del", UrlUtils.BASE_URL);
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		if (thingId != null) {
-			params.add(new BasicNameValuePair("id", thingId));
-		}
-		params.add(new BasicNameValuePair("api_type", "json"));  // needed?
-		try {
-			SimpleHttpClient client = SimpleHttpClient.getInstance();
-			InputStream is = client.post(url, params);
-			Object retval = GsonTemplate.fromInputStream(is, Object.class);  // response is {}
-			is.close();
-		} catch (ClientProtocolException e) {
-			throw new RedditEngineException(e);
-		} catch (IOException e) {
-			throw new RedditEngineException(e);
-		} catch (UnexpectedHttpResponseException e) {
-			throw new RedditEngineException(e);
-		}
+		postUrlWithId(url, thingId);
 	}
 
 	/**
@@ -85,8 +47,13 @@ public class LinkCommentApi extends BaseApi {
 	 * @throws RedditEngineException 
 	 */
 	public CommentResponse edit(String thingId, String text) throws RedditEngineException{
-		// TODO more specific return type
+		// possible answers:
+		// {json={errors=[[NOT_AUTHOR, you can't do that, thing_id]]}}
 		String url = String.format("%s/api/editusertext", UrlUtils.BASE_URL);
+		return commentOrEdit(url, thingId, text);
+	}
+	
+	private CommentResponse commentOrEdit(String url, String thingId, String text) throws RedditEngineException {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		if (text != null) {
 			params.add(new BasicNameValuePair("text", text));
@@ -96,8 +63,6 @@ public class LinkCommentApi extends BaseApi {
 		}
 		params.add(new BasicNameValuePair("api_type", "json"));
 
-		// possible answers
-		// {json={errors=[[NOT_AUTHOR, you can't do that, thing_id]]}}
 		CommentResponse retval = null;
 		try {
 			SimpleHttpClient client = SimpleHttpClient.getInstance();
@@ -122,27 +87,7 @@ public class LinkCommentApi extends BaseApi {
 	 */
 	public void hide(String thingId) throws RedditEngineException{
 		String url = String.format("%s/api/hide", UrlUtils.BASE_URL);
-		hideOrUnhide(url, thingId);
-	}
-	
-	private void hideOrUnhide(String url, String thingId) throws RedditEngineException {
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		if (thingId != null) {
-			params.add(new BasicNameValuePair("id", thingId));
-		}
-		params.add(new BasicNameValuePair("api_type", "json"));  // needed?
-		try {
-			SimpleHttpClient client = SimpleHttpClient.getInstance();
-			InputStream is = client.post(url, params);
-			Object retval = GsonTemplate.fromInputStream(is, Object.class);  // response is {}
-			is.close();
-		} catch (ClientProtocolException e) {
-			throw new RedditEngineException(e);
-		} catch (IOException e) {
-			throw new RedditEngineException(e);
-		} catch (UnexpectedHttpResponseException e) {
-			throw new RedditEngineException(e);
-		}		
+		postUrlWithId(url, thingId);
 	}
 
 	/**
@@ -153,7 +98,7 @@ public class LinkCommentApi extends BaseApi {
 	 */
 	public void unhide(String thingId) throws RedditEngineException{
 		String url = String.format("%s/api/unhide", UrlUtils.BASE_URL);
-		hideOrUnhide(url, thingId);
+		postUrlWithId(url, thingId);
 	}
 
 	public void info(String url, String thingId, int limit){
@@ -167,19 +112,35 @@ public class LinkCommentApi extends BaseApi {
 	 * @throws RedditEngineException 
 	 */
 	public void markNSFW(String thingId) throws RedditEngineException{
+		// TODO returns 403, how to test?
 		String url = String.format("%s/api/marknsfw", UrlUtils.BASE_URL);
 		postUrlWithId(url, thingId);
 	}
 	
+	/**
+	 * Call POST method with no specific response JSON type
+	 * 
+	 * @param url		API url
+	 * @param thingId	fullname of a thing
+	 * @throws RedditEngineException
+	 */
 	private void postUrlWithId(String url, String thingId) throws RedditEngineException {
-		// TODO remove duplicated code
-		// TODO returns 403, how to test?
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		if (thingId != null) {
 			params.add(new BasicNameValuePair("id", thingId));
 		}
 		params.add(new BasicNameValuePair("api_type", "json"));
-
+		postUrlWithParams(url, params);
+	}
+	
+	/**
+	 * Call POST method with no specific response JSON type
+	 * 
+	 * @param url		API url
+	 * @param params	list of POST parameters
+	 * @throws RedditEngineException
+	 */
+	private void postUrlWithParams(String url, List<NameValuePair> params) throws RedditEngineException {
 		try {
 			SimpleHttpClient client = SimpleHttpClient.getInstance();
 			InputStream is = client.post(url, params);
@@ -191,7 +152,7 @@ public class LinkCommentApi extends BaseApi {
 			throw new RedditEngineException(e);
 		} catch (UnexpectedHttpResponseException e) {
 			throw new RedditEngineException(e);
-		}
+		}		
 	}
 
 	/**
@@ -201,6 +162,7 @@ public class LinkCommentApi extends BaseApi {
 	 * @throws RedditEngineException 
 	 */
 	public void unmarkNSFW(String thingId) throws RedditEngineException{
+		// TODO returns 403, how to test?
 		String url = String.format("%s/api/unmarknsfw", UrlUtils.BASE_URL);
 		postUrlWithId(url, thingId);
 	}
@@ -216,24 +178,7 @@ public class LinkCommentApi extends BaseApi {
 	 */
 	public void report(String thingId) throws RedditEngineException{
 		String url = String.format("%s/api/report", UrlUtils.BASE_URL);
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		if (thingId != null) {
-			params.add(new BasicNameValuePair("id", thingId));
-		}
-		params.add(new BasicNameValuePair("api_type", "json"));
-
-		try {
-			SimpleHttpClient client = SimpleHttpClient.getInstance();
-			InputStream is = client.post(url, params);
-			Object retval = GsonTemplate.fromInputStream(is, Object.class);  // response is {}
-			is.close();
-		} catch (ClientProtocolException e) {
-			throw new RedditEngineException(e);
-		} catch (IOException e) {
-			throw new RedditEngineException(e);
-		} catch (UnexpectedHttpResponseException e) {
-			throw new RedditEngineException(e);
-		}
+		postUrlWithId(url, thingId);
 	}
 
 	/**
@@ -254,18 +199,7 @@ public class LinkCommentApi extends BaseApi {
 		}
 		params.add(new BasicNameValuePair("api_type", "json"));
 
-		try {
-			SimpleHttpClient client = SimpleHttpClient.getInstance();
-			InputStream is = client.post(url, params);
-			Object retval = GsonTemplate.fromInputStream(is, Object.class);  // response is {}
-			is.close();
-		} catch (ClientProtocolException e) {
-			throw new RedditEngineException(e);
-		} catch (IOException e) {
-			throw new RedditEngineException(e);
-		} catch (UnexpectedHttpResponseException e) {
-			throw new RedditEngineException(e);
-		}
+		postUrlWithParams(url, params);
 	}
 
 	/**
@@ -276,24 +210,7 @@ public class LinkCommentApi extends BaseApi {
 	 */
 	public void unsave(String thingId) throws RedditEngineException{
 		String url = String.format("%s/api/unsave", UrlUtils.BASE_URL);
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		if (thingId != null) {
-			params.add(new BasicNameValuePair("id", thingId));
-		}
-		params.add(new BasicNameValuePair("api_type", "json"));
-
-		try {
-			SimpleHttpClient client = SimpleHttpClient.getInstance();
-			InputStream is = client.post(url, params);
-			Object retval = GsonTemplate.fromInputStream(is, Object.class);  // response is {}
-			is.close();
-		} catch (ClientProtocolException e) {
-			throw new RedditEngineException(e);
-		} catch (IOException e) {
-			throw new RedditEngineException(e);
-		} catch (UnexpectedHttpResponseException e) {
-			throw new RedditEngineException(e);
-		}
+		postUrlWithId(url, thingId);
 	}
 
 	public void setContestMode(String thingId, boolean state){
@@ -316,18 +233,7 @@ public class LinkCommentApi extends BaseApi {
 		params.add(new BasicNameValuePair("id", thingId));
 		params.add(new BasicNameValuePair("state", String.valueOf(state)));
 		
-		try {
-			SimpleHttpClient client = SimpleHttpClient.getInstance();
-			InputStream is = client.post(url, params);
-			Object retval = GsonTemplate.fromInputStream(is, Object.class);
-			is.close();
-		} catch (ClientProtocolException e) {
-			throw new RedditEngineException(e);
-		} catch (IOException e) {
-			throw new RedditEngineException(e);
-		} catch (UnexpectedHttpResponseException e) {
-			throw new RedditEngineException(e);
-		}
+		postUrlWithParams(url, params);
 	}
 
 	/**
@@ -400,18 +306,7 @@ public class LinkCommentApi extends BaseApi {
 		params.add(new BasicNameValuePair("dir", String.valueOf(dir)));
 		params.add(new BasicNameValuePair("id", thingId));
 		
-		try {
-			SimpleHttpClient client = SimpleHttpClient.getInstance();
-			InputStream is = client.post(url, params);
-			Object retval = GsonTemplate.fromInputStream(is, Object.class);
-			is.close();
-		} catch (ClientProtocolException e) {
-			throw new RedditEngineException(e);
-		} catch (IOException e) {
-			throw new RedditEngineException(e);
-		} catch (UnexpectedHttpResponseException e) {
-			throw new RedditEngineException(e);
-		}
+		postUrlWithParams(url, params);
 	}
 
 }
