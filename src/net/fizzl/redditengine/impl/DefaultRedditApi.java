@@ -229,12 +229,12 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public void markNSFW(String thingId) {
+	public void markNSFW(String thingId) throws RedditEngineException {
 		mLinkCommentApi.markNSFW(thingId);
 	}
 
 	@Override
-	public void unmarkNSFW(String thingId) {
+	public void unmarkNSFW(String thingId) throws RedditEngineException {
 		mLinkCommentApi.unmarkNSFW(thingId);
 	}
 
@@ -245,7 +245,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public void report(String thingId) {
+	public void report(String thingId) throws RedditEngineException {
 		mLinkCommentApi.report(thingId);
 	}
 

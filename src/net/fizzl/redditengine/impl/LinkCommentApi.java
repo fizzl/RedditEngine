@@ -15,6 +15,14 @@ import net.fizzl.redditengine.data.GsonTemplate;
 import net.fizzl.redditengine.data.SubmitResponse;
 
 public class LinkCommentApi extends BaseApi {
+	/**
+	 * Submit a new comment or reply to a message.
+	 * 
+	 * @param parentId	parent is the fullname of the thing being replied to
+	 * @param text		raw markdown text
+	 * @return			{@link CommentResponse}
+	 * @throws RedditEngineException
+	 */
 	public CommentResponse comment(String parentId, String text) throws RedditEngineException{
 		String url = String.format("%s/api/comment", UrlUtils.BASE_URL);
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -42,8 +50,13 @@ public class LinkCommentApi extends BaseApi {
 		return retval;
 	}
 
+	/**
+	 * Delete a Link or Comment.
+	 * 
+	 * @param thingId	fullname of a thing created by the user
+	 * @throws RedditEngineException
+	 */
 	public void delete(String thingId) throws RedditEngineException{
-		// POST /api/del
 		String url = String.format("%s/api/del", UrlUtils.BASE_URL);
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		if (thingId != null) {
@@ -147,20 +160,80 @@ public class LinkCommentApi extends BaseApi {
 		throw new UnimplementedException();
 	}
 
-	public void markNSFW(String thingId){
-		throw new UnimplementedException();
+	/**
+	 * Mark a link NSFW.
+	 * 
+	 * @param thingId	fullname of a thing
+	 * @throws RedditEngineException 
+	 */
+	public void markNSFW(String thingId) throws RedditEngineException{
+		String url = String.format("%s/api/marknsfw", UrlUtils.BASE_URL);
+		postUrlWithId(url, thingId);
+	}
+	
+	private void postUrlWithId(String url, String thingId) throws RedditEngineException {
+		// TODO remove duplicated code
+		// TODO returns 403, how to test?
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		if (thingId != null) {
+			params.add(new BasicNameValuePair("id", thingId));
+		}
+		params.add(new BasicNameValuePair("api_type", "json"));
+
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream is = client.post(url, params);
+			Object retval = GsonTemplate.fromInputStream(is, Object.class);
+			is.close();
+		} catch (ClientProtocolException e) {
+			throw new RedditEngineException(e);
+		} catch (IOException e) {
+			throw new RedditEngineException(e);
+		} catch (UnexpectedHttpResponseException e) {
+			throw new RedditEngineException(e);
+		}
 	}
 
-	public void unmarkNSFW(String thingId){
-		throw new UnimplementedException();
+	/**
+	 * Remove the NSFW marking from a link.
+	 * 
+	 * @param thingId	fullname of a thing
+	 * @throws RedditEngineException 
+	 */
+	public void unmarkNSFW(String thingId) throws RedditEngineException{
+		String url = String.format("%s/api/unmarknsfw", UrlUtils.BASE_URL);
+		postUrlWithId(url, thingId);
 	}
 
 	public CommentListing moreChildren(String linkId, String children, String moreId, String sort){
 		throw new UnimplementedException();
 	}
 
-	public void report(String thingId){
-		throw new UnimplementedException();
+	/**
+	 * 
+	 * @param thingId		fullname of a thing
+	 * @throws RedditEngineException 
+	 */
+	public void report(String thingId) throws RedditEngineException{
+		String url = String.format("%s/api/report", UrlUtils.BASE_URL);
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		if (thingId != null) {
+			params.add(new BasicNameValuePair("id", thingId));
+		}
+		params.add(new BasicNameValuePair("api_type", "json"));
+
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream is = client.post(url, params);
+			Object retval = GsonTemplate.fromInputStream(is, Object.class);  // response is {}
+			is.close();
+		} catch (ClientProtocolException e) {
+			throw new RedditEngineException(e);
+		} catch (IOException e) {
+			throw new RedditEngineException(e);
+		} catch (UnexpectedHttpResponseException e) {
+			throw new RedditEngineException(e);
+		}
 	}
 
 	/**
