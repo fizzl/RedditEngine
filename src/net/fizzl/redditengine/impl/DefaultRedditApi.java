@@ -261,7 +261,7 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public void setContestMode(String thingId, boolean state) {
+	public void setContestMode(String thingId, boolean state) throws RedditEngineException {
 		mLinkCommentApi.setContestMode(thingId, state);
 	}
 

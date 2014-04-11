@@ -273,8 +273,23 @@ public class LinkCommentApi extends BaseApi {
 		postUrlWithId(url, thingId);
 	}
 
-	public void setContestMode(String thingId, boolean state){
-		throw new UnimplementedException();
+	/**
+	 * Set or unset "contest mode" for a link's comments.
+	 * 
+	 * @param id		fullname of a thing
+	 * @param state		boolean value
+	 * @throws RedditEngineException 
+	 */
+	public void setContestMode(String thingId, boolean state) throws RedditEngineException{
+		// TODO returns 403
+		String url = String.format("%s/api/set_contest_mode", UrlUtils.BASE_URL);
+		
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("api_type", "json"));
+		params.add(new BasicNameValuePair("id", thingId));
+		params.add(new BasicNameValuePair("state", String.valueOf(state)));
+		
+		postUrlWithParams(url, params);
 	}
 
 	/**

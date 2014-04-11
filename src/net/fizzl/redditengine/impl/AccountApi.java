@@ -79,13 +79,15 @@ public class AccountApi extends BaseApi {
 		params.add(new BasicNameValuePair("passwd", passwd));
 		params.add(new BasicNameValuePair("api_type", API_TYPE_JSON));
 		params.add(new BasicNameValuePair("rem", Boolean.toString(remember)));
-		
+				
+		// TODO POST requests to /api/login must now not include a reddit_session cookie along in the request. If a reddit_session cookie exists, the request may fail with a 409 status.
 		// The HTTP status code of the response will always be a 200 (OK) regardless of authentication success.
 		// To see if login was successful, check the JSON response.
 		
 		AuthResponse ret = null;
 		try {
 			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			//client.clear();
 			InputStream is = client.post(url, params);
 			//Log.i(AccountApi.class.getCanonicalName(), is.toString());
 			ret = AuthResponse.fromInputStream(is);

@@ -292,6 +292,10 @@ public class SimpleHttpClient {
 		mHttpContext = new BasicHttpContext();
 		mHttpContext.setAttribute(ClientContext.COOKIE_STORE, mCookieStore);
 	}
+	
+	public void clear() {
+		mCookieStore.clear();
+	}
 
 	/**
 	 * Returns a (singleton) instance of this class
