@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
@@ -26,12 +27,14 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 
 import com.google.gson.Gson;
+
 import android.net.http.AndroidHttpClient;
 import android.util.Log;
 
@@ -293,8 +296,8 @@ public class SimpleHttpClient {
 		mHttpContext.setAttribute(ClientContext.COOKIE_STORE, mCookieStore);
 	}
 	
-	public void clear() {
-		mCookieStore.clear();
+	public BasicCookieStore getCookieStore() {
+		return (BasicCookieStore)this.mCookieStore;
 	}
 
 	/**

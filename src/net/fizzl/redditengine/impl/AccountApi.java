@@ -5,10 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
+import org.apache.http.cookie.Cookie;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.message.BasicNameValuePair;
 
 import android.util.Log;
-
 import net.fizzl.redditengine.data.AuthResponse;
 import net.fizzl.redditengine.data.JsonResponse;
 import net.fizzl.redditengine.data.User;
@@ -79,25 +80,32 @@ public class AccountApi extends BaseApi {
 		params.add(new BasicNameValuePair("passwd", passwd));
 		params.add(new BasicNameValuePair("api_type", API_TYPE_JSON));
 		params.add(new BasicNameValuePair("rem", Boolean.toString(remember)));
-				
-		// TODO POST requests to /api/login must now not include a reddit_session cookie along in the request. If a reddit_session cookie exists, the request may fail with a 409 status.
-		// The HTTP status code of the response will always be a 200 (OK) regardless of authentication success.
+		
+		// The HTTP status code of the response will almost always be a 200 (OK) regardless of authentication success.
 		// To see if login was successful, check the JSON response.
+		// POST requests to /api/login must not include a reddit_session cookie along in the request. If a reddit_session cookie exists, the request may fail with a 409 status.
 		
 		AuthResponse ret = null;
+		SimpleHttpClient client = SimpleHttpClient.getInstance();
+		// TODO should SimpleHttpClient have some kind of save/restore cookies function instead of accessing the cookiestore directly?
+		BasicCookieStore cookieStore = client.getCookieStore();
+		List<Cookie> cookies = cookieStore.getCookies();
+		Cookie[] cookieArray = cookies.toArray(new Cookie[cookies.size()]);
 		try {
-			SimpleHttpClient client = SimpleHttpClient.getInstance();
-			//client.clear();
+			cookieStore.clear();
 			InputStream is = client.post(url, params);
-			//Log.i(AccountApi.class.getCanonicalName(), is.toString());
 			ret = AuthResponse.fromInputStream(is);
 			if (ret.getJson().getData() != null) {
 				lastPassword = passwd;
+			} else {
+				// an error occurred
+				cookieStore.addCookies(cookieArray);
 			}
 			is.close();
 		} catch (Exception e) {
-			RedditEngineException re = new RedditEngineException(e);
-			throw re;
+			// if failed, put the cookies back
+			cookieStore.addCookies(cookieArray);
+			throw new RedditEngineException(e);
 		}
 		return ret;
 	}
