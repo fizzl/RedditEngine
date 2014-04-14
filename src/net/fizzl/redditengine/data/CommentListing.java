@@ -3,7 +3,6 @@ package net.fizzl.redditengine.data;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
-
 import net.fizzl.redditengine.data.type.EditedType;
 import net.fizzl.redditengine.data.type.LikedType;
 
@@ -34,7 +33,7 @@ public class CommentListing extends Listing<CommentListingData> {
 		IOUtils.copy(is, writer, "UTF-8");
 		return fromString(writer.toString());
 	}
-
+	
 	/**
 	 * Returns a {@link #CommentListing} from a JSON string
 	 * 
@@ -45,14 +44,12 @@ public class CommentListing extends Listing<CommentListingData> {
 		GsonBuilder builder = new GsonBuilder();
 		builder.registerTypeAdapter(EditedType.class, new EditedType.TypeAdapter());
 		builder.registerTypeAdapter(LikedType.class, new LikedType.TypeAdapter());
+		builder.registerTypeAdapter(Comment.class, new Comment.TypeAdapter());
 		Gson gson = builder.create();
 		JSONArray arr = new JSONArray(str);
-		String justcomments = removeEmptyReplies(arr.getJSONObject(1).toString());
+		String justcomments = arr.getJSONObject(1).toString();
 		CommentListing ret = gson.fromJson(justcomments, CommentListing.class);
 		return ret;
 	}
 
-	private static String removeEmptyReplies(String str) {
-		return str.replace("\"replies\":\"\",", "");
-	}
 }
