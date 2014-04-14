@@ -3,13 +3,12 @@ package net.fizzl.redditengine.data;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+
 import net.fizzl.redditengine.data.type.EditedType;
 import net.fizzl.redditengine.data.type.LikedType;
 
 import org.apache.commons.io.IOUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -42,14 +41,19 @@ public class CommentListing extends Listing<CommentListingData> {
 	 */
 	public static CommentListing fromString(String str) throws JSONException {
 		GsonBuilder builder = new GsonBuilder();
+		
+		// regular type adapters
 		builder.registerTypeAdapter(EditedType.class, new EditedType.TypeAdapter());
 		builder.registerTypeAdapter(LikedType.class, new LikedType.TypeAdapter());
 		builder.registerTypeAdapter(Comment.class, new Comment.TypeAdapter());
-		Gson gson = builder.create();
-		JSONArray arr = new JSONArray(str);
-		String justcomments = arr.getJSONObject(1).toString();
-		CommentListing ret = gson.fromJson(justcomments, CommentListing.class);
-		return ret;
+		// special type adapter to pick a t1 listing from the response array
+		builder.registerTypeAdapter(CommentListingArray.class, new CommentListingArray.TypeAdapter());
+		// everything must be registered before create()
+		
+		Gson gson = builder.create();		
+		CommentListingArray arrayResponse = gson.fromJson(str, CommentListingArray.class);
+		
+		return arrayResponse.getCommentListing();
 	}
 
 }
