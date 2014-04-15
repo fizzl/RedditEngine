@@ -35,7 +35,7 @@ public interface RedditApi {
 	public AuthResponse login(String user, String passwd, boolean remember) throws RedditEngineException;
 	public User me() throws RedditEngineException;
 	public void register(String user, String passwd1, String passwd2, boolean remember, String email, String captcha, String captcha_iden) throws RedditEngineException;
-	public void updateUser(String passwd, String email, String newpass1, String newpass2, boolean verify) throws RedditEngineException;
+	public JsonResponse<?> updateUser(String passwd, String email, String newpass1, String newpass2, boolean verify) throws RedditEngineException;
 	
 	// Apps
 	public void addDeveloper(String appId, String user) throws RedditEngineException;

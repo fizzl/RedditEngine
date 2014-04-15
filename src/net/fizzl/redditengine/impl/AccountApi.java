@@ -11,6 +11,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import android.util.Log;
 import net.fizzl.redditengine.data.AuthResponse;
+import net.fizzl.redditengine.data.GsonTemplate;
 import net.fizzl.redditengine.data.JsonResponse;
 import net.fizzl.redditengine.data.User;
 
@@ -138,8 +139,54 @@ public class AccountApi extends BaseApi {
 		throw new UnimplementedException();
 	}
 
-	public void updateUser(String passwd, String email, String newpass1, String newpass2, boolean verify)  {
-		throw new UnimplementedException();
+	/**
+	 * Update account email address and password.
+	 * Called by /prefs/update on the site. For frontend form verification purposes, newpass and verpass must be equal for a password change to succeed.
+	 * 
+	 * @param curpass	
+	 * @param dest		destination url (must be same-domain)
+	 * @param email
+	 * @param newpass		the new password
+	 * @param verify		boolean value
+	 * @param verpass		the password again (for verification)
+	 * @throws RedditEngineException 
+	 */
+	public JsonResponse<?> updateUser(String passwd, String email, String newpass1, String newpass2, boolean verify) throws RedditEngineException  {
+		StringBuilder path = new StringBuilder();
+		path.append(UrlUtils.REDDIT_SSL);
+		path.append("/api/update");
+		String url = path.toString();
+		
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("api_type", API_TYPE_JSON));		
+		if (passwd != null) {
+			params.add(new BasicNameValuePair("curpass", passwd));
+		}
+		if (email != null) {
+			params.add(new BasicNameValuePair("email", email));
+		}
+		if (newpass1 != null) {
+			params.add(new BasicNameValuePair("newpass", newpass1));
+		}
+		if (newpass2 != null) {
+			params.add(new BasicNameValuePair("verpass", newpass2));
+		}
+		params.add(new BasicNameValuePair("verify", String.valueOf(verify)));
+		
+		// response can be:
+		// {"json": {"errors": [["WRONG_PASSWORD", "invalid password", "curpass"]]}}
+		// {"json": {"errors": []}}
+		JsonResponse<?> retval;
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream is = client.post(url, params);
+			retval = GsonTemplate.fromInputStream(is, JsonResponse.class);
+			is.close();
+		} catch (Exception e) {
+			throw new RedditEngineException(e);
+		}
+		
+		return retval;
 	}
 	
 	private String lastPassword;  // last known password the user has entered

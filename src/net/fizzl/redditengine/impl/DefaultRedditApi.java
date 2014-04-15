@@ -87,9 +87,9 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public void updateUser(String passwd, String email, String newpass1,
-			String newpass2, boolean verify) {
-		mAccountApi.updateUser(passwd, email, newpass1, newpass2, verify);
+	public JsonResponse<?> updateUser(String passwd, String email, String newpass1,
+			String newpass2, boolean verify) throws RedditEngineException {
+		return mAccountApi.updateUser(passwd, email, newpass1, newpass2, verify);
 	}
 
 	@Override
