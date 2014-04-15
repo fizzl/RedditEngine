@@ -58,6 +58,15 @@ public class AccountApi extends BaseApi {
 		return response;
 	}
 	
+	/**
+	 * Delete the currently logged in account.
+	 * 
+	 * @param user		a username
+	 * @param passwd	the user's password
+	 * @param message	a string no longer than 500 characters
+	 * @return {@link JsonResponse}
+	 * @throws RedditEngineException
+	 */
 	public JsonResponse<?> deleteUser(String user, String passwd, String message) throws RedditEngineException  {
 		StringBuilder path = new StringBuilder();
 		path.append(UrlUtils.REDDIT_SSL);
@@ -164,6 +173,19 @@ public class AccountApi extends BaseApi {
 		return response;
 	}
 
+	/**
+	 * Register a new user.
+	 * 
+	 * @param user			a valid, unused, username
+	 * @param passwd1		password for new user
+	 * @param passwd2		password for new user (again)
+	 * @param remember		specifies whether or not the session cookie returned should last beyond the current browser session 
+	 * @param email			(optional) the user's email address
+	 * @param captcha		the user's response to the CAPTCHA challenge
+	 * @param captchaIden	the identifier of the CAPTCHA challenge
+	 * @return {@link AuthResponse}
+	 * @throws RedditEngineException
+	 */
 	public AuthResponse register(String user, String passwd1, String passwd2, boolean remember, String email, String captcha, String captcha_iden) throws RedditEngineException  {
 		StringBuilder path = new StringBuilder();
 		path.append(UrlUtils.REDDIT_SSL);
@@ -200,14 +222,14 @@ public class AccountApi extends BaseApi {
 
 	/**
 	 * Update account email address and password.
-	 * Called by /prefs/update on the site. For frontend form verification purposes, newpass and verpass must be equal for a password change to succeed.
+	 * newpass1 and newpass2 must be equal for a password change to succeed.
 	 * 
-	 * @param curpass	
-	 * @param dest		destination url (must be same-domain)
+	 * @param passwd	the current password	
 	 * @param email
-	 * @param newpass		the new password
-	 * @param verify		boolean value
-	 * @param verpass		the password again (for verification)
+	 * @param newpass1	the new password
+	 * @param newpass2	the password again (for verification)
+	 * @param verify	boolean value
+	 * @return {@link JsonResponse}
 	 * @throws RedditEngineException 
 	 */
 	public JsonResponse<?> updateUser(String passwd, String email, String newpass1, String newpass2, boolean verify) throws RedditEngineException  {
