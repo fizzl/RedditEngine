@@ -65,8 +65,8 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public void deleteUser(String user, String passwd, String message) {
-		mAccountApi.deleteUser(user, passwd, message);
+	public JsonResponse<?> deleteUser(String user, String passwd, String message) throws RedditEngineException {
+		return mAccountApi.deleteUser(user, passwd, message);
 	}
 
 	@Override
@@ -80,9 +80,9 @@ public class DefaultRedditApi implements RedditApi {
 	}
 
 	@Override
-	public void register(String user, String passwd1, String passwd2,
-			boolean remember, String email, String captcha, String captcha_iden) {
-		mAccountApi.register(user, passwd1, passwd2, remember, email, captcha,
+	public AuthResponse register(String user, String passwd1, String passwd2,
+			boolean remember, String email, String captcha, String captcha_iden) throws RedditEngineException {
+		return mAccountApi.register(user, passwd1, passwd2, remember, email, captcha,
 				captcha_iden);
 	}
 

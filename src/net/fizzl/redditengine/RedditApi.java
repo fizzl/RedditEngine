@@ -31,10 +31,10 @@ import android.content.Context;
 public interface RedditApi {
 	// Account
 	public JsonResponse<?> clearSessions(String passwd) throws RedditEngineException;
-	public void deleteUser(String user, String passwd, String message) throws RedditEngineException;
+	public JsonResponse<?> deleteUser(String user, String passwd, String message) throws RedditEngineException;
 	public AuthResponse login(String user, String passwd, boolean remember) throws RedditEngineException;
 	public User me() throws RedditEngineException;
-	public void register(String user, String passwd1, String passwd2, boolean remember, String email, String captcha, String captcha_iden) throws RedditEngineException;
+	public AuthResponse register(String user, String passwd1, String passwd2, boolean remember, String email, String captcha, String captcha_iden) throws RedditEngineException;
 	public JsonResponse<?> updateUser(String passwd, String email, String newpass1, String newpass2, boolean verify) throws RedditEngineException;
 	
 	// Apps

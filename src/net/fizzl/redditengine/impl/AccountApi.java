@@ -58,8 +58,37 @@ public class AccountApi extends BaseApi {
 		return response;
 	}
 	
-	public void deleteUser(String user, String passwd, String message)  {
-		throw new UnimplementedException();
+	public JsonResponse<?> deleteUser(String user, String passwd, String message) throws RedditEngineException  {
+		StringBuilder path = new StringBuilder();
+		path.append(UrlUtils.REDDIT_SSL);
+		path.append("/api/delete_user");
+		String url = path.toString();
+		
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("api_type", API_TYPE_JSON));		
+		params.add(new BasicNameValuePair("user", user));
+		if (passwd != null) {
+			params.add(new BasicNameValuePair("passwd", passwd));
+		}
+		if (message != null) {
+			params.add(new BasicNameValuePair("delete_message", message));
+		}
+		params.add(new BasicNameValuePair("confirm", String.valueOf(true)));
+		
+		// possible responses:
+		// {"json": {"errors": [["USER_REQUIRED", "please login to do that", null]]}}
+		// {"json": {"errors": []}}
+		JsonResponse<?> retval;
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream is = client.post(url, params);
+			retval = GsonTemplate.fromInputStream(is, JsonResponse.class);
+			is.close();
+		} catch (Exception e) {
+			throw new RedditEngineException(e);
+		}
+		
+		return retval;
 	}
 	
 	/**
@@ -135,8 +164,38 @@ public class AccountApi extends BaseApi {
 		return response;
 	}
 
-	public void register(String user, String passwd1, String passwd2, boolean remember, String email, String captcha, String captcha_iden)  {
-		throw new UnimplementedException();
+	public AuthResponse register(String user, String passwd1, String passwd2, boolean remember, String email, String captcha, String captcha_iden) throws RedditEngineException  {
+		StringBuilder path = new StringBuilder();
+		path.append(UrlUtils.REDDIT_SSL);
+		path.append("/api/register");
+		String url = path.toString();
+		
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("api_type", API_TYPE_JSON));		
+		params.add(new BasicNameValuePair("user", user));
+		params.add(new BasicNameValuePair("passwd", passwd1));
+		params.add(new BasicNameValuePair("passwd2", passwd2));
+		if (captcha != null) {
+			params.add(new BasicNameValuePair("captcha", captcha));
+		}
+		if (captcha_iden != null) {
+			params.add(new BasicNameValuePair("iden", captcha_iden));
+		}
+		params.add(new BasicNameValuePair("rem", String.valueOf(remember)));
+		if (email != null) {
+			params.add(new BasicNameValuePair("email", email));
+		}
+		
+		AuthResponse retval;
+		try {
+			SimpleHttpClient client = SimpleHttpClient.getInstance();
+			InputStream is = client.post(url, params);
+			retval = AuthResponse.fromInputStream(is);
+			is.close();
+		} catch (Exception e) {
+			throw new RedditEngineException(e);
+		}
+		return retval;
 	}
 
 	/**
