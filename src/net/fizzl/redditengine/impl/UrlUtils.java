@@ -4,8 +4,8 @@ package net.fizzl.redditengine.impl;
  * This is a helper class that specifies the base URL for the reddit API
  */
 public class UrlUtils {
-	public static final String BASE_URL = "http://reddit.local";
-	public static final String REDDIT_SSL = BASE_URL;
+	public static final String BASE_URL = "http://www.reddit.com";
+	public static final String REDDIT_SSL = "https://ssl.reddit.com";
 	public static final String MODE_URL = ".json";
 	public static final String X_MODHASH = "X-Modhash";
 
