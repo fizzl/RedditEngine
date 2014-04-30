@@ -244,6 +244,7 @@ public class SimpleHttpClient {
 	 * @return			value of find (if found, otherwise null)
 	 */
 	private Object findKeyRecursion (Object object, Object find) {
+		// TODO what if there are two modhashes
 		if (object == null || find == null) {
 			return null;
 		}
