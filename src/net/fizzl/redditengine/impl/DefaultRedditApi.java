@@ -27,8 +27,13 @@ import android.content.Context;
  * This class implements the whole RedditApi interface
  */
 public class DefaultRedditApi implements RedditApi {
-	public static RedditApi newInstance() {
-		return new DefaultRedditApi();  // TODO should be a singleton?
+	// Singleton
+	private static RedditApi me;
+	public static RedditApi getInstance() {
+		if(me == null) {
+			me = new DefaultRedditApi();
+		}
+		return me;
 	}
 	
 	private DefaultRedditApi() {
@@ -72,6 +77,11 @@ public class DefaultRedditApi implements RedditApi {
 	@Override
 	public AuthResponse login(String user, String passwd, boolean remember) throws RedditEngineException {
 		return mAccountApi.login(user, passwd, remember);
+	}
+
+	@Override
+	public void logout() {
+		mAccountApi.logout();
 	}
 
 	@Override

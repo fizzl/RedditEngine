@@ -33,6 +33,7 @@ public interface RedditApi {
 	public JsonResponse<?> clearSessions(String passwd) throws RedditEngineException;
 	public JsonResponse<?> deleteUser(String user, String passwd, String message) throws RedditEngineException;
 	public AuthResponse login(String user, String passwd, boolean remember) throws RedditEngineException;
+	public void logout();
 	public User me() throws RedditEngineException;
 	public AuthResponse register(String user, String passwd1, String passwd2, boolean remember, String email, String captcha, String captcha_iden) throws RedditEngineException;
 	public JsonResponse<?> updateUser(String passwd, String email, String newpass1, String newpass2, boolean verify) throws RedditEngineException;

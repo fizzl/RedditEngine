@@ -1,12 +1,14 @@
 package net.fizzl.redditengine.data;
 
+import java.io.Serializable;
+
 import net.fizzl.redditengine.data.type.EditedType;
 import net.fizzl.redditengine.data.type.LikedType;
 
 /**
  * Holds all data in a Link
  */
-public class LinkData {
+public class LinkData implements Serializable {
 	String domain;
 	String banned_by;
 	MediaEmbed media_embed;
@@ -284,4 +286,5 @@ public class LinkData {
 		this.distinguished = distinguished;
 	}
 	
+	private static final long serialVersionUID = -6940538177631332574L;
 }

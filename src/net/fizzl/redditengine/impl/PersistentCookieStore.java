@@ -51,7 +51,7 @@ public class PersistentCookieStore extends BasicCookieStore {
 	 * Load Cookies from a file
 	 */
 	private void load() {
-		RedditApi api = DefaultRedditApi.newInstance();
+		RedditApi api = DefaultRedditApi.getInstance();
 		Context ctx = api.getContext();
 		try {
 			FileInputStream fis = ctx.openFileInput(cookiestore);
@@ -76,7 +76,7 @@ public class PersistentCookieStore extends BasicCookieStore {
 	 * Save cookies to a file
 	 */
 	private void save() {
-		RedditApi api = DefaultRedditApi.newInstance();
+		RedditApi api = DefaultRedditApi.getInstance();
 		Context ctx = api.getContext();
 		try {
 			FileOutputStream fos = ctx.openFileOutput(cookiestore, Context.MODE_PRIVATE);

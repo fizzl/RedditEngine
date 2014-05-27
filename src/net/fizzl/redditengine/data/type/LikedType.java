@@ -1,5 +1,6 @@
 package net.fizzl.redditengine.data.type;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 
 import com.google.gson.JsonDeserializationContext;
@@ -10,7 +11,8 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-public class LikedType {
+public class LikedType implements Serializable {
+	private static final long serialVersionUID = 7716692876769642655L;
 	boolean liked_boolean = false;
 	int liked = 0;
 	public static class TypeAdapter implements JsonSerializer<LikedType>, JsonDeserializer<LikedType> {

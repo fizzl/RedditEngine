@@ -1,5 +1,6 @@
 package net.fizzl.redditengine.data.type;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 
 import com.google.gson.JsonDeserializationContext;
@@ -14,7 +15,8 @@ import com.google.gson.JsonSerializer;
  * A class for representing the <tt>edited</tt> field in the JSON representation
  * @see TypeAdapter
  */
-public class EditedType {
+public class EditedType implements Serializable {
+	private static final long serialVersionUID = 6801282971549899590L;
 	boolean edited = false;
 	double editTime = 0;
 	

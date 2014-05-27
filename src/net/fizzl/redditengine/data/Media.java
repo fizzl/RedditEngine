@@ -1,6 +1,9 @@
 package net.fizzl.redditengine.data;
 
-public class Media {
+import java.io.Serializable;
+
+public class Media implements Serializable {
+	private static final long serialVersionUID = -1755908534760519352L;
 	OEmbed oembed;
 	
 	public OEmbed getOembed() {
@@ -11,7 +14,8 @@ public class Media {
 		this.oembed = oembed;
 	}
 
-	static class OEmbed {
+	static class OEmbed implements Serializable {
+		private static final long serialVersionUID = -1842619655794448130L;
 		String provider_url;
 		String description;
 		String title;

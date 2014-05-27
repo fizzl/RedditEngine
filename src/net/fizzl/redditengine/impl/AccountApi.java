@@ -148,6 +148,14 @@ public class AccountApi extends BaseApi {
 		}
 		return ret;
 	}
+	
+	/**
+	 * Log out of reddit. Clears the cookie store
+	 */
+	public void logout() {
+		SimpleHttpClient client = SimpleHttpClient.getInstance();
+		client.getCookieStore().clear();
+	}
 
 	/**
 	 * Get info about the currently authenticated user
