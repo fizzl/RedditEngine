@@ -19,7 +19,9 @@ public class CommentData {
 	int gilded;
 	String author;
 	String parent_id;
+	int score;
 	String approved_by;
+	int controversiality;
 	String body;
 	EditedType edited;
 	String author_flair_css_class;
@@ -95,11 +97,23 @@ public class CommentData {
 	public void setParent_id(String parent_id) {
 		this.parent_id = parent_id;
 	}
+	public int getScore() {
+		return score;
+	}
+	public void setScore(int score) {
+		this.score = score;
+	}
 	public String getApproved_by() {
 		return approved_by;
 	}
 	public void setApproved_by(String approved_by) {
 		this.approved_by = approved_by;
+	}
+	public int getControversiality() {
+		return controversiality;
+	}
+	public void setControversiality(int controversiality) {
+		this.controversiality = controversiality;
 	}
 	public String getBody() {
 		return body;
